@@ -1,4 +1,4 @@
-# 5iveBit (Planspiel Company, Group 05)
+# Group05-5iveBit
 
 This is the GitLab repository of 5iveBit. This company is a part of our TU Chemnitz MSc Web Engineering Planspiel module (2024-25) and not a real company.
 
