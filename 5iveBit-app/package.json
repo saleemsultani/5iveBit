@@ -1,10 +1,10 @@
 {
   "name": "5ivebit-app",
   "version": "1.0.0",
-  "description": "An Electron application with React",
+  "description": "AI-powered assistant for cybersecurity assessment by 5iveBit",
   "main": "./out/main/index.js",
-  "author": "example.com",
-  "homepage": "https://electron-vite.org",
+  "author": "5iveBit",
+  "homepage": "https://5ivebit.vercel.app/",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
