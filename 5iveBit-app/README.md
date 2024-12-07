@@ -1,6 +1,6 @@
-# 5ivebit-app
+# 5iveBit-app
 
-An Electron application with React
+AI-powered assistant for cybersecurity assessment by 5iveBit
 
 ## Recommended IDE Setup
 
