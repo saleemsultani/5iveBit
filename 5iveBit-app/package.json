@@ -19,7 +19,12 @@
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",
-    "@electron-toolkit/utils": "^3.0.0"
+    "@electron-toolkit/utils": "^3.0.0",
+    "@emotion/react": "^11.13.5",
+    "@emotion/styled": "^11.13.5",
+    "@mui/icons-material": "^6.1.10",
+    "@mui/joy": "^5.0.0-beta.48",
+    "@mui/material": "^6.1.10"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config": "^1.0.2",
