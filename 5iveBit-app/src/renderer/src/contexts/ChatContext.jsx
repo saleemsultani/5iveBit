@@ -1,10 +1,10 @@
-import React, { useState, createContext, useContext, useEffect } from 'react';
+import { useState, createContext, useContext, useEffect } from "react";
 
 const ChatsContext = createContext();
 
 function generateRandomId(length = 32) {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
   for (let i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * characters.length));
   }
@@ -12,7 +12,7 @@ function generateRandomId(length = 32) {
 }
 
 function ChatsProvider({ children }) {
-  const [question, setQuestion] = useState('');
+  const [question, setQuestion] = useState("");
   const [chats, setChats] = useState([]);
   const [currChat, setCurrChat] = useState({
     id: generateRandomId(15),
@@ -26,7 +26,7 @@ function ChatsProvider({ children }) {
     });
   };
 
-  const updateChats = function (id) {
+  const updateChats = function () {
     const obj = chats.find((chat) => currChat.id === chat.id);
     console.log(obj);
   };
