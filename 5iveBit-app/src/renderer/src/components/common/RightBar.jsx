@@ -6,8 +6,7 @@ import { useChats } from "../../contexts/ChatContext";
 import styles from "./RightBar.module.css";
 
 function generateRandomId(length = 32) {
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   let result = "";
   for (let i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * characters.length));
@@ -32,7 +31,7 @@ function RightBar() {
     setCurrChat({
       id: generateRandomId(),
       questions: [],
-      answers: [],
+      answers: []
     });
     setQuestion("");
   };
@@ -48,17 +47,12 @@ function RightBar() {
         <Box className={styles.topSection}>
           <RightbarButton buttonText="New Chat" onClick={handleNewChat} />
           <RightbarButton buttonText="Reports" />
-          <RightbarButton
-            onClick={() => setOpenHistory(!openHistory)}
-            buttonText="Chat History"
-          >
+          <RightbarButton onClick={() => setOpenHistory(!openHistory)} buttonText="Chat History">
             {openHistory ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </RightbarButton>
 
           {/* Chat History */}
-          <Box
-            className={`${styles.chatHistory} ${openHistory ? styles.open : ""}`}
-          >
+          <Box className={`${styles.chatHistory} ${openHistory ? styles.open : ""}`}>
             {chats.map((c, i) => (
               <Button
                 key={c.id}

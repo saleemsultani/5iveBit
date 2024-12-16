@@ -1,64 +1,63 @@
 /* Main container for the RightBar */
 .rightBarContainer {
-    flex: 20;
-    display: flex;
-  }
-  
-  /* Main content area of the RightBar */
-  .rightBarContent {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
-  }
-  
-  /* Top section of the RightBar */
-  .topSection {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  /* Style for individual buttons in the RightBar */
-  .rightbarButton {
-    border-radius: 10px;
-    color: white;
-    padding: 10px;
-    background: linear-gradient(to right, #862e9c, #c10281);
-    text-transform: capitalize;
-  }
-  
-  /* Chat history container */
-  .chatHistory {
-    display: none;
-    flex-direction: column;
-    gap: 0.5rem;
-    color: white;
-    align-items: center;
-    height: 100px;
-    overflow-y: scroll;
-  }
-  
-  /* Open state for chat history */
-  .chatHistory.open {
-    display: flex;
-  }
-  
-  /* Individual chat history buttons */
-  .chatHistoryButton {
-    width: 70%;
-    padding: 5px;
-    color: white;
-    text-align: center;
-    border: 1px solid white;
-    border-radius: 5px;
-    background-color: transparent;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .chatHistoryButton:hover {
-    background-color: #862e9c;
-    color: white;
-  }
-  
+  flex: 20;
+  display: flex;
+}
+
+/* Main content area of the RightBar */
+.rightBarContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+/* Top section of the RightBar */
+.topSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Style for individual buttons in the RightBar */
+.rightbarButton {
+  border-radius: 10px;
+  color: white;
+  padding: 10px;
+  background: linear-gradient(to right, #862e9c, #c10281);
+  text-transform: capitalize;
+}
+
+/* Chat history container */
+.chatHistory {
+  display: none;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: white;
+  align-items: center;
+  height: 100px;
+  overflow-y: scroll;
+}
+
+/* Open state for chat history */
+.chatHistory.open {
+  display: flex;
+}
+
+/* Individual chat history buttons */
+.chatHistoryButton {
+  width: 70%;
+  padding: 5px;
+  color: white;
+  text-align: center;
+  border: 1px solid white;
+  border-radius: 5px;
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.chatHistoryButton:hover {
+  background-color: #862e9c;
+  color: white;
+}

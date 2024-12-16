@@ -15,11 +15,7 @@ function NavBar() {
         </Box>
 
         {/* Right Side Button */}
-        <Button
-          className={styles.navbarButton}
-          variant="outlined"
-          startIcon={<PersonIcon />}
-        >
+        <Button className={styles.navbarButton} variant="outlined" startIcon={<PersonIcon />}>
           Senior Analyst
         </Button>
       </Box>

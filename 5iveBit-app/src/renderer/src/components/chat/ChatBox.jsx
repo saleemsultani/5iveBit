@@ -18,7 +18,7 @@ function ChatBox() {
       return {
         ...curr,
         questions: newQuestions,
-        answers: newAnswers,
+        answers: newAnswers
       };
     });
   };

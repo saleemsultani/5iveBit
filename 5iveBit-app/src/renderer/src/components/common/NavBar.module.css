@@ -1,47 +1,46 @@
 /* Main container for the NavBar */
 .navbarContainer {
-    display: flex;
-    justify-content: center;
-    height: 10%;
-  }
-  
-  /* Inner content box */
-  .navbarContent {
-    width: 95%;
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  /* Links container */
-  .navbarLinks {
-    display: flex;
-    gap: 1.25rem;
-    align-items: center;
-  }
-  
-  /* Individual link styles */
-  .navbarLink {
-    margin: 0;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: color 0.3s ease-in-out;
-  }
-  
-  .navbarLink:hover {
-    color: #c10281;
-  }
-  
-  /* Button styles */
-  .navbarButton {
-    border-radius: 10px;
-    height: 60%;
-    width: 18%;
-    padding: 10px;
-    color: white;
-    background: linear-gradient(to right, #862e9c, #c10281);
-    font-size: 0.9rem;
-    text-transform: capitalize;
-  }
-  
+  display: flex;
+  justify-content: center;
+  height: 10%;
+}
+
+/* Inner content box */
+.navbarContent {
+  width: 95%;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Links container */
+.navbarLinks {
+  display: flex;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+/* Individual link styles */
+.navbarLink {
+  margin: 0;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+}
+
+.navbarLink:hover {
+  color: #c10281;
+}
+
+/* Button styles */
+.navbarButton {
+  border-radius: 10px;
+  height: 60%;
+  width: 18%;
+  padding: 10px;
+  color: white;
+  background: linear-gradient(to right, #862e9c, #c10281);
+  font-size: 0.9rem;
+  text-transform: capitalize;
+}
