@@ -4,9 +4,10 @@ module.exports = {
     "plugin:react/recommended",
     "plugin:react/jsx-runtime",
     "@electron-toolkit",
-    "@electron-toolkit/eslint-config-prettier"
+    "@electron-toolkit/eslint-config-prettier",
+    "plugin:prettier/recommended"
   ],
   rules: {
-    quotes: "off" // Disables the quotes rule entirely
+    semi: ["error", "always"]
   }
 };
