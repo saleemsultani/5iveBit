@@ -7,7 +7,7 @@
 }
 
 /* Chat history box */
-.chatHistory {
+.chatBoxContainer .chatHistory {
   height: 90%;
   border-radius: 20px;
   background-color: #212121;
@@ -18,9 +18,9 @@
 }
 
 /* User messages */
-.userMessage {
+.chatBoxContainer .userMessage {
   align-self: flex-end;
-  margin: 0 50px 10px;
+  margin: 0 5% 2% auto;
   width: 50%;
   padding: 10px;
   word-wrap: break-word;
@@ -30,9 +30,9 @@
 }
 
 /* Bot messages */
-.botMessage {
+.chatBoxContainer .botMessage {
   align-self: flex-start;
-  margin: 0 50px 10px;
+  margin: 0 auto 2% 5%;
   width: 50%;
   padding: 10px;
   word-wrap: break-word;
@@ -42,7 +42,7 @@
 }
 
 /* Textarea input */
-.textarea {
+.chatBoxContainer .textarea {
   background-color: #212121;
   border: solid 1px black;
   border-radius: 10px;
@@ -51,6 +51,6 @@
 }
 
 /* Buttons (send and other icons) */
-.iconButton {
+.chatBoxContainer .iconButton {
   color: white;
 }
