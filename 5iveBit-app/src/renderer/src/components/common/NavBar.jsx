@@ -1,6 +1,6 @@
-import { Box, Button } from "@mui/material";
-import PersonIcon from "@mui/icons-material/Person";
-import styles from "./NavBar.module.css";
+import { Box, Button } from '@mui/material';
+import PersonIcon from '@mui/icons-material/Person';
+import styles from './NavBar.module.css';
 
 function NavBar() {
   return (

@@ -1,13 +1,13 @@
-import { useState } from "react";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { Box, Button } from "@mui/material";
-import { useChats } from "../../contexts/ChatContext";
-import styles from "./RightBar.module.css";
+import { useState } from 'react';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { Box, Button } from '@mui/material';
+import { useChats } from '../../contexts/ChatContext';
+import styles from './RightBar.module.css';
 
 function generateRandomId(length = 32) {
-  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let result = "";
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
   for (let i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * characters.length));
   }
@@ -25,19 +25,19 @@ function RightbarButton({ children, buttonText, onClick }) {
 
 function RightBar() {
   const [openHistory, setOpenHistory] = useState(false);
-  const { chats, currChat, setCurrChat, setQuestion } = useChats();
+  const { chats, setcurrentChat, setQuestion } = useChats();
 
   const handleNewChat = () => {
-    setCurrChat({
+    setcurrentChat({
       id: generateRandomId(),
       questions: [],
       answers: []
     });
-    setQuestion("");
+    setQuestion('');
   };
 
-  const handleSetCurrChat = (id) => {
-    setCurrChat(chats.find((chat) => chat.id === id));
+  const handleSetcurrentChat = (id) => {
+    setcurrentChat(chats.find((chat) => chat.id === id));
   };
 
   return (
@@ -52,12 +52,12 @@ function RightBar() {
           </RightbarButton>
 
           {/* Chat History */}
-          <Box className={`${styles.chatHistory} ${openHistory ? styles.open : ""}`}>
+          <Box className={`${styles.chatHistory} ${openHistory ? styles.open : ''}`}>
             {chats.map((c, i) => (
               <Button
                 key={c.id}
                 className={styles.chatHistoryButton}
-                onClick={() => handleSetCurrChat(c.id)}
+                onClick={() => handleSetcurrentChat(c.id)}
               >
                 {`Chat ${i + 1}`}
               </Button>
