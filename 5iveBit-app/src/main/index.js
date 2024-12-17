@@ -33,6 +33,9 @@ function createWindow() {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'));
   }
+
+  // Open the DevTools. For development purposes only. Comment out when not used.
+  //mainWindow.webContents.openDevTools();
 }
 
 // This method will be called when Electron has finished
