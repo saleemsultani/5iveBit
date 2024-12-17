@@ -31,6 +31,58 @@ function ChatsProvider({ children }) {
     console.log(obj);
   };
 
+  const generateAnswer = async (promptInput) => {
+    try {
+      console.log('Making API request with prompt:', promptInput);
+      console.log('Request body:', JSON.stringify({
+        model: "llama3.2",
+        prompt: promptInput,
+        stream: false
+      }, null, 2));
+
+      const response = await fetch('http://localhost:11434/api/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: "llama3.2",
+          prompt: promptInput,
+          stream: false
+        })
+      });
+      
+      console.log('Response status:', response.status);
+      console.log('Response headers:', [...response.headers.entries()]);
+      
+      const text = await response.text();
+      console.log('Raw response text:', text);
+      
+      let data;
+      try {
+        data = JSON.parse(text);
+        console.log('Parsed response data:', data);
+      } catch (parseError) {
+        console.error('JSON parse error:', parseError);
+        throw new Error('Invalid JSON response');
+      }
+
+      if (!data.response) {
+        console.error('No response field in data:', data);
+        throw new Error('No response field in data');
+      }
+
+      return data.response;
+    } catch (error) {
+      console.error('Full error details:', {
+        name: error.name,
+        message: error.message,
+        stack: error.stack
+      });
+      return 'Sorry, I encountered an error processing your request.';
+    }
+  };
+
   useEffect(() => {
     setChats((prevChats) => {
       const chatIndex = prevChats.findIndex((chat) => chat.id === currentChat.id);
@@ -56,7 +108,8 @@ function ChatsProvider({ children }) {
         updateChats,
         generateRandomId,
         question,
-        setQuestion
+        setQuestion,
+        generateAnswer
       }}
     >
       {children}

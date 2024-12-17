@@ -6,21 +6,33 @@ import { useChats } from '../../contexts/ChatContext';
 import styles from './ChatBox.module.css';
 
 function ChatBox() {
-  const { currentChat, setcurrentChat, question, setQuestion } = useChats();
+  const { currentChat, setcurrentChat, question, setQuestion, generateAnswer } = useChats();
 
-  const handleSubmitQuestion = () => {
+  const handleSubmitQuestion = async () => {
+    const currentQuestion = question;
+    console.log('Submitting question:', currentQuestion);
     setQuestion('');
 
     setcurrentChat((current) => {
-      const newQuestions = [...current.questions, question];
-      const newAnswers = [
-        ...current.answers,
-        `${current.questions.length}: here is your random answer`
-      ];
-
+      console.log('Updating chat with thinking message');
+      const newQuestions = [...current.questions, currentQuestion];
       return {
         ...current,
         questions: newQuestions,
+        answers: [...current.answers, 'Thinking...']
+      };
+    });
+
+    console.log('Waiting for API response...');
+    const answer = await generateAnswer(currentQuestion);
+    console.log('Received answer:', answer);
+
+    setcurrentChat((current) => {
+      console.log('Updating chat with final answer');
+      const newAnswers = [...current.answers];
+      newAnswers[newAnswers.length - 1] = answer;
+      return {
+        ...current,
         answers: newAnswers
       };
     });
