@@ -16,8 +16,7 @@ function ChatsProvider({ children }) {
   const [chats, setChats] = useState([]);
   const [currentChat, setcurrentChat] = useState({
     id: generateRandomId(15),
-    questions: [],
-    answers: []
+    messages: [] // Changed from questions/answers to messages array
   });
 
   const addChat = function (newChat) {
@@ -33,21 +32,20 @@ function ChatsProvider({ children }) {
 
   const generateAnswer = async (promptInput) => {
     try {
-      console.log('Making API request with prompt:', promptInput);
-      console.log('Request body:', JSON.stringify({
-        model: "llama3.2",
-        prompt: promptInput,
-        stream: false
-      }, null, 2));
+      // Add the new user message to the conversation
+      const updatedMessages = [
+        ...currentChat.messages,
+        { role: "user", content: promptInput }
+      ];
 
-      const response = await fetch('http://localhost:11434/api/generate', {
+      const response = await fetch('http://localhost:11434/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          model: "llama3.2",
-          prompt: promptInput,
+          model: "5iveBit-ca-1",
+          messages: updatedMessages,
           stream: false
         })
       });
@@ -67,19 +65,28 @@ function ChatsProvider({ children }) {
         throw new Error('Invalid JSON response');
       }
 
-      if (!data.response) {
-        console.error('No response field in data:', data);
-        throw new Error('No response field in data');
+      if (!data.message || !data.message.content) {
+        console.error('No message content in data:', data);
+        throw new Error('No message content in data');
       }
 
-      return data.response;
+      // Update the conversation with the assistant's response
+      setcurrentChat(current => ({
+        ...current,
+        messages: [
+          ...updatedMessages,
+          { role: "assistant", content: data.message.content }
+        ]
+      }));
+
+      return data.message.content;
     } catch (error) {
       console.error('Full error details:', {
         name: error.name,
         message: error.message,
         stack: error.stack
       });
-      return 'Sorry, I encountered an error processing your request.';
+      return 'Sorry, I encountered an error processing your request. If the issue persists, please contact support.';
     }
   };
 

@@ -10,42 +10,31 @@ function ChatBox() {
 
   const handleSubmitQuestion = async () => {
     const currentQuestion = question;
-    console.log('Submitting question:', currentQuestion);
     setQuestion('');
 
-    setcurrentChat((current) => {
-      console.log('Updating chat with thinking message');
-      const newQuestions = [...current.questions, currentQuestion];
-      return {
-        ...current,
-        questions: newQuestions,
-        answers: [...current.answers, 'Thinking...']
-      };
-    });
+    // Add thinking message
+    setcurrentChat((current) => ({
+      ...current,
+      messages: [
+        ...current.messages,
+        { role: "user", content: currentQuestion },
+        { role: "assistant", content: "Thinking..." }
+      ]
+    }));
 
-    console.log('Waiting for API response...');
     const answer = await generateAnswer(currentQuestion);
-    console.log('Received answer:', answer);
 
-    setcurrentChat((current) => {
-      console.log('Updating chat with final answer');
-      const newAnswers = [...current.answers];
-      newAnswers[newAnswers.length - 1] = answer;
-      return {
-        ...current,
-        answers: newAnswers
-      };
-    });
+    // The answer is now handled in generateAnswer function
   };
 
   return (
     <Box className={styles.chatBoxContainer}>
-      {/* Chat history */}
       <Box className={styles.chatHistory}>
-        {currentChat.questions?.map((item, index) => (
+        {currentChat.messages?.map((message, index) => (
           <div key={index}>
-            <p className={styles.userMessage}>{item}</p>
-            <p className={styles.botMessage}>{currentChat.answers[index]}</p>
+            <p className={message.role === 'user' ? styles.userMessage : styles.botMessage}>
+              {message.content}
+            </p>
           </div>
         ))}
       </Box>
