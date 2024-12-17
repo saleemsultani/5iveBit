@@ -25,10 +25,10 @@ function RightbarButton({ children, buttonText, onClick }) {
 
 function RightBar() {
   const [openHistory, setOpenHistory] = useState(false);
-  const { chats, currChat, setCurrChat, setQuestion } = useChats();
+  const { chats, currentChat, setcurrentChat, setQuestion } = useChats();
 
   const handleNewChat = () => {
-    setCurrChat({
+    setcurrentChat({
       id: generateRandomId(),
       questions: [],
       answers: []
@@ -36,8 +36,8 @@ function RightBar() {
     setQuestion("");
   };
 
-  const handleSetCurrChat = (id) => {
-    setCurrChat(chats.find((chat) => chat.id === id));
+  const handleSetcurrentChat = (id) => {
+    setcurrentChat(chats.find((chat) => chat.id === id));
   };
 
   return (
@@ -57,7 +57,7 @@ function RightBar() {
               <Button
                 key={c.id}
                 className={styles.chatHistoryButton}
-                onClick={() => handleSetCurrChat(c.id)}
+                onClick={() => handleSetcurrentChat(c.id)}
               >
                 {`Chat ${i + 1}`}
               </Button>

@@ -14,44 +14,44 @@ function generateRandomId(length = 32) {
 function ChatsProvider({ children }) {
   const [question, setQuestion] = useState("");
   const [chats, setChats] = useState([]);
-  const [currChat, setCurrChat] = useState({
+  const [currentChat, setcurrentChat] = useState({
     id: generateRandomId(15),
     questions: [],
     answers: []
   });
 
   const addChat = function (newChat) {
-    setChats((curr) => {
-      return [...curr, { id: generateRandomId(15), ...newChat }];
+    setChats((current) => {
+      return [...current, { id: generateRandomId(15), ...newChat }];
     });
   };
 
   const updateChats = function () {
-    const obj = chats.find((chat) => currChat.id === chat.id);
+    const obj = chats.find((chat) => currentChat.id === chat.id);
     console.log(obj);
   };
 
   useEffect(() => {
     setChats((prevChats) => {
-      const chatIndex = prevChats.findIndex((chat) => chat.id === currChat.id);
+      const chatIndex = prevChats.findIndex((chat) => chat.id === currentChat.id);
 
       if (chatIndex === -1) {
-        // If currChat is not in chats, add it
-        return [...prevChats, currChat];
+        // If currentChat is not in chats, add it
+        return [...prevChats, currentChat];
       } else {
-        // If currChat exists, update it
-        return prevChats.map((chat, index) => (index === chatIndex ? currChat : chat));
+        // If currentChat exists, update it
+        return prevChats.map((chat, index) => (index === chatIndex ? currentChat : chat));
       }
     });
-  }, [currChat]);
+  }, [currentChat]);
 
   return (
     <ChatsContext.Provider
       value={{
         chats,
         setChats,
-        currChat,
-        setCurrChat,
+        currentChat,
+        setcurrentChat,
         addChat,
         updateChats,
         generateRandomId,
