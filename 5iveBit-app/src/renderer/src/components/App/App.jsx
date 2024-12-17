@@ -1,9 +1,9 @@
-import { Box, Stack } from "@mui/material";
-import { ChatsProvider } from "../../contexts/ChatContext";
-import styles from "./App.module.css";
-import ChatBox from "../chat/ChatBox";
-import NavBar from "../common/NavBar";
-import RightBar from "../common/RightBar";
+import { Box, Stack } from '@mui/material';
+import { ChatsProvider } from '../../contexts/ChatContext';
+import styles from './App.module.css';
+import ChatBox from '../chat/ChatBox';
+import NavBar from '../common/NavBar';
+import RightBar from '../common/RightBar';
 
 function App() {
   return (

@@ -1,19 +1,22 @@
-import { Box, Button, Stack } from "@mui/material";
-import SendIcon from "@mui/icons-material/Send";
-import GraphicEqIcon from "@mui/icons-material/GraphicEq";
-import Textarea from "@mui/joy/Textarea";
-import { useChats } from "../../contexts/ChatContext";
-import styles from "./ChatBox.module.css";
+import { Box, Button, Stack } from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
+import GraphicEqIcon from '@mui/icons-material/GraphicEq';
+import Textarea from '@mui/joy/Textarea';
+import { useChats } from '../../contexts/ChatContext';
+import styles from './ChatBox.module.css';
 
 function ChatBox() {
   const { currentChat, setcurrentChat, question, setQuestion } = useChats();
 
   const handleSubmitQuestion = () => {
-    setQuestion("");
+    setQuestion('');
 
     setcurrentChat((current) => {
       const newQuestions = [...current.questions, question];
-      const newAnswers = [...current.answers, `${current.questions.length}: here is your random answer`];
+      const newAnswers = [
+        ...current.answers,
+        `${current.questions.length}: here is your random answer`
+      ];
 
       return {
         ...current,
@@ -51,7 +54,7 @@ function ChatBox() {
               </Button>
               <Button
                 onClick={handleSubmitQuestion}
-                disabled={question === ""}
+                disabled={question === ''}
                 className={styles.iconButton}
               >
                 <SendIcon />
