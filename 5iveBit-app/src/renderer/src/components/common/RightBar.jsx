@@ -40,6 +40,10 @@ function RightBar() {
     setcurrentChat(chats.find((chat) => chat.id === id));
   };
 
+  const handleSupport = () => {
+    window.location.href = 'mailto:contact.5iveBit@gmail.com';
+  };
+
   return (
     <Box className={styles.rightBarContainer}>
       <Box className={styles.rightBarContent}>
@@ -66,7 +70,7 @@ function RightBar() {
         </Box>
 
         {/* Bottom Button */}
-        <RightbarButton buttonText="Support" />
+        <RightbarButton buttonText="Support" onClick={handleSupport} />
       </Box>
     </Box>
   );
