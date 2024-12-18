@@ -41,21 +41,23 @@ function ChatBox() {
   return (
     <Box className={styles.chatBoxContainer}>
       <Box className={styles.chatHistory}>
-        {currentChat.messages?.map((message, index) => (
-          <div key={index} className={styles.messageContainer}>
-            <p className={message.role === 'user' ? styles.userMessage : styles.botMessage}>
-              {message.content}
-              {message.role === 'assistant' && (
-                <IconButton 
-                  onClick={() => copyToClipboard(message.content)} 
-                  className={styles.copyButton}
-                >
-                  <ContentCopyIcon className={styles.copyIcon} />
-                </IconButton>
-              )}
-            </p>
-          </div>
-        ))}
+        <Box className={styles.chatHistoryContent}>
+          {currentChat.messages?.map((message, index) => (
+            <div key={index} className={styles.messageContainer}>
+              <p className={message.role === 'user' ? styles.userMessage : styles.botMessage}>
+                {message.content}
+                {message.role === 'assistant' && (
+                  <IconButton 
+                    onClick={() => copyToClipboard(message.content)} 
+                    className={styles.copyButton}
+                  >
+                    <ContentCopyIcon className={styles.copyIcon} />
+                  </IconButton>
+                )}
+              </p>
+            </div>
+          ))}
+        </Box>
       </Box>
 
       {/* Input area */}
