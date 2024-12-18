@@ -6,25 +6,12 @@ import { useChats } from '../../contexts/ChatContext';
 import styles from './ChatBox.module.css';
 
 function ChatBox() {
-  const { currentChat, setcurrentChat, question, setQuestion, generateAnswer } = useChats();
+  const { currentChat, question, setQuestion, generateAnswer } = useChats();
 
   const handleSubmitQuestion = async () => {
     const currentQuestion = question;
     setQuestion('');
-
-    // Add thinking message
-    setcurrentChat((current) => ({
-      ...current,
-      messages: [
-        ...current.messages,
-        { role: "user", content: currentQuestion },
-        { role: "assistant", content: "Thinking..." }
-      ]
-    }));
-
-    const answer = await generateAnswer(currentQuestion);
-
-    // The answer is now handled in generateAnswer function
+    await generateAnswer(currentQuestion);
   };
 
   return (

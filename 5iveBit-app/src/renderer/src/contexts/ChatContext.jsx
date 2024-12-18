@@ -16,12 +16,16 @@ function ChatsProvider({ children }) {
   const [chats, setChats] = useState([]);
   const [currentChat, setcurrentChat] = useState({
     id: generateRandomId(15),
-    messages: [] // Changed from questions/answers to messages array
+    messages: [] // Ensure this is always initialized as an empty array
   });
 
   const addChat = function (newChat) {
     setChats((current) => {
-      return [...current, { id: generateRandomId(15), ...newChat }];
+      return [...current, { 
+        id: generateRandomId(15), 
+        messages: [], // Ensure new chats have messages array
+        ...newChat 
+      }];
     });
   };
 
@@ -32,11 +36,21 @@ function ChatsProvider({ children }) {
 
   const generateAnswer = async (promptInput) => {
     try {
-      // Add the new user message to the conversation
+      // Get current messages and add new user message
+      const currentMessages = [...(currentChat.messages || [])];
       const updatedMessages = [
-        ...currentChat.messages,
+        ...currentMessages,
         { role: "user", content: promptInput }
       ];
+
+      // Update UI with thinking message
+      setcurrentChat(current => ({
+        ...current,
+        messages: [
+          ...updatedMessages,
+          { role: "assistant", content: "Thinking..." }
+        ]
+      }));
 
       const response = await fetch('http://localhost:11434/api/chat', {
         method: 'POST',
@@ -45,17 +59,17 @@ function ChatsProvider({ children }) {
         },
         body: JSON.stringify({
           model: "5iveBit-ca-1",
-          messages: updatedMessages,
+          messages: updatedMessages, // Send full message history
           stream: false
         })
       });
-      
+
       console.log('Response status:', response.status);
       console.log('Response headers:', [...response.headers.entries()]);
-      
+
       const text = await response.text();
       console.log('Raw response text:', text);
-      
+
       let data;
       try {
         data = JSON.parse(text);
@@ -70,7 +84,7 @@ function ChatsProvider({ children }) {
         throw new Error('No message content in data');
       }
 
-      // Update the conversation with the assistant's response
+      // Update the conversation with the real response
       setcurrentChat(current => ({
         ...current,
         messages: [
