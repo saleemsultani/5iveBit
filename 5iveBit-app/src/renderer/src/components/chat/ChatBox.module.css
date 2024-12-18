@@ -39,6 +39,24 @@
   background-color: #57575b;
   border-radius: 10px;
   color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.copyButton {
+  padding: 4px !important;
+  min-width: 0 !important;
+}
+
+.copyIcon {
+  font-size: 1rem !important;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.copyIcon:hover {
+  color: white;
 }
 
 /* Textarea input */
@@ -53,4 +71,18 @@
 /* Buttons (send and other icons) */
 .chatBoxContainer .iconButton {
   color: white;
+}
+
+/* White icon color */
+.iconWhite {
+  color: white;
+  margin-left: 1rem;
+}
+
+/* Snackbar styling */
+.snackbar {
+  & :global(.MuiSnackbarContent-root) {
+    background-color: #424242;
+    color: white;
+  }
 }
