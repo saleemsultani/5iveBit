@@ -45,8 +45,10 @@ function ChatBox() {
           {currentChat.messages?.map((message, index) => (
             <div key={index} className={styles.messageContainer}>
               <p className={message.role === 'user' ? styles.userMessage : styles.botMessage}>
-                {message.content}
-                {message.role === 'assistant' && (
+                <span className={message.isThinking ? styles.thinking : ''}>
+                  {message.content}
+                </span>
+                {message.role === 'assistant' && !message.isThinking && (
                   <IconButton 
                     onClick={() => copyToClipboard(message.content)} 
                     className={styles.copyButton}

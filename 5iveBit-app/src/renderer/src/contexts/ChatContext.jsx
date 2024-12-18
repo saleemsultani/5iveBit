@@ -48,7 +48,7 @@ function ChatsProvider({ children }) {
         ...current,
         messages: [
           ...updatedMessages,
-          { role: "assistant", content: "Thinking..." }
+          { role: "assistant", content: "Thinking...", isThinking: true } // Add isThinking flag
         ]
       }));
 

@@ -99,3 +99,17 @@
     color: white;
   }
 }
+
+.thinking {
+  display: inline-block;
+  animation: glow 0.25s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    opacity: 0.5;
+  }
+  to {
+    opacity: 1;
+  }
+}
