@@ -9,9 +9,17 @@ function ChatBox() {
   const { currentChat, question, setQuestion, generateAnswer } = useChats();
 
   const handleSubmitQuestion = async () => {
+    if (question.trim() === '') return;  // Stop if question is empty or only whitespace
     const currentQuestion = question;
     setQuestion('');
     await generateAnswer(currentQuestion);
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      handleSubmitQuestion();
+    }
   };
 
   return (
@@ -31,8 +39,9 @@ function ChatBox() {
         <Textarea
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
+          onKeyDown={handleKeyPress}
           multiline
-          placeholder="Message 5iveBot"
+          placeholder="Message 5iveBot (Enter to send, Shift+Enter for new line)"
           maxRows={3}
           className={styles.textarea}
           endDecorator={
