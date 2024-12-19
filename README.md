@@ -20,7 +20,7 @@ Somayeh Rasoli (671776) | GitHub: [CelineRasoli](https://github.com/CelineRasoli
 
 `/website` : This directory contains code for the Group05-5iveBit's company website.
 
-`/app` : This directory contains code for the Group05-5iveBit's AI Application.
+`/5iveBit-app` : This directory contains code for the Group05-5iveBit's AI Application.
 
 Future directories or files that are not strictly specific to the website or the app will also go here.
 
