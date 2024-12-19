@@ -6,34 +6,22 @@ import { useChats } from '../../contexts/ChatContext';
 import styles from './ChatBox.module.css';
 
 function ChatBox() {
-  const { currentChat, setcurrentChat, question, setQuestion } = useChats();
+  const { currentChat, question, setQuestion, generateAnswer } = useChats();
 
-  const handleSubmitQuestion = () => {
+  const handleSubmitQuestion = async () => {
+    const currentQuestion = question;
     setQuestion('');
-
-    setcurrentChat((current) => {
-      const newQuestions = [...current.questions, question];
-      const newAnswers = [
-        ...current.answers,
-        `${current.questions.length}: here is your random answer`
-      ];
-
-      return {
-        ...current,
-        questions: newQuestions,
-        answers: newAnswers
-      };
-    });
+    await generateAnswer(currentQuestion);
   };
 
   return (
     <Box className={styles.chatBoxContainer}>
-      {/* Chat history */}
       <Box className={styles.chatHistory}>
-        {currentChat.questions?.map((item, index) => (
+        {currentChat.messages?.map((message, index) => (
           <div key={index}>
-            <p className={styles.userMessage}>{item}</p>
-            <p className={styles.botMessage}>{currentChat.answers[index]}</p>
+            <p className={message.role === 'user' ? styles.userMessage : styles.botMessage}>
+              {message.content}
+            </p>
           </div>
         ))}
       </Box>
