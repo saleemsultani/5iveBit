@@ -1,11 +1,10 @@
-import { useState, createContext, useContext, useEffect } from "react";
+import { useState, createContext, useContext, useEffect } from 'react';
 const ChatsContext = createContext();
 
 // Utility function to generate unique IDs for chats and messages
 function generateRandomId(length = 32) {
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let result = "";
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
   for (let i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * characters.length));
   }
@@ -14,11 +13,11 @@ function generateRandomId(length = 32) {
 
 // Provider component that wraps the app and manages chat-related state
 function ChatsProvider({ children }) {
-  const [question, setQuestion] = useState("");
+  const [question, setQuestion] = useState('');
   const [chats, setChats] = useState([]);
   const [currentChat, setcurrentChat] = useState({
     id: generateRandomId(15),
-    messages: [],
+    messages: []
   });
 
   // Creates a new chat session with a unique ID
@@ -29,8 +28,8 @@ function ChatsProvider({ children }) {
         {
           id: generateRandomId(15),
           messages: [],
-          ...newChat,
-        },
+          ...newChat
+        }
       ];
     });
   };
@@ -46,91 +45,80 @@ function ChatsProvider({ children }) {
     try {
       // Add user message to the current chat
       const currentMessages = [...(currentChat.messages || [])];
-      const updatedMessages = [
-        ...currentMessages,
-        { role: "user", content: promptInput },
-      ];
+      const updatedMessages = [...currentMessages, { role: 'user', content: promptInput }];
 
       // Show a temporary "Thinking..." message while waiting for response
       setcurrentChat((current) => ({
         ...current,
         messages: [
           ...updatedMessages,
-          { role: "assistant", content: "Thinking...", isThinking: true },
-        ],
+          { role: 'assistant', content: 'Thinking...', isThinking: true }
+        ]
       }));
 
       // Send request to the local LLM server
-      const response = await fetch("http://localhost:11434/api/chat", {
-        method: "POST",
+      const response = await fetch('http://localhost:11434/api/chat', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          model: "llama3.2",
-          // model: "5iveBit-ca-1",
+          model: '5iveBit-ca-1',
           messages: updatedMessages,
-          stream: false,
-        }),
+          stream: false
+        })
       });
 
-      console.log("Response received:", response);
+      console.log('Response received:', response);
 
       // Debug logging for API response
-      console.log("Response status:", response.status);
-      console.log("Response headers:", [...response.headers.entries()]);
+      console.log('Response status:', response.status);
+      console.log('Response headers:', [...response.headers.entries()]);
 
       const text = await response.text();
-      console.log("Raw response text:", text);
+      console.log('Raw response text:', text);
 
       let data;
       try {
         data = JSON.parse(text);
-        console.log("Parsed response data:", data);
+        console.log('Parsed response data:', data);
       } catch (parseError) {
-        console.error("JSON parse error:", parseError);
-        throw new Error("Invalid JSON response");
+        console.error('JSON parse error:', parseError);
+        throw new Error('Invalid JSON response');
       }
 
       if (!data.message || !data.message.content) {
-        console.error("No message content in data:", data);
-        throw new Error("No message content in data");
+        console.error('No message content in data:', data);
+        throw new Error('No message content in data');
       }
 
       // Update chat with the AI's response
       setcurrentChat((current) => ({
         ...current,
-        messages: [
-          ...updatedMessages,
-          { role: "assistant", content: data.message.content },
-        ],
+        messages: [...updatedMessages, { role: 'assistant', content: data.message.content }]
       }));
 
       return data.message.content;
     } catch (error) {
       // Detailed error logging for debugging
-      console.error("Full error details:", {
+      console.error('Full error details:', {
         name: error.name,
         message: error.message,
-        stack: error.stack,
+        stack: error.stack
       });
-      return "Sorry, I encountered an error processing your request. If the issue persists, please contact support.";
+      return 'Sorry, I encountered an error processing your request. If the issue persists, please contact support.';
     }
   };
 
   // Effect hook to sync currentChat with the chats array
   useEffect(() => {
     setChats((prevChats) => {
-      const chatIndex = prevChats.findIndex(
-        (chat) => chat.id === currentChat.id,
-      );
+      const chatIndex = prevChats.findIndex((chat) => chat.id === currentChat.id);
 
       if (chatIndex === -1) {
         return [...prevChats, currentChat];
       } else {
-        return prevChats.map((chat, index) =>
-          index === chatIndex ? currentChat : chat,
-        );
+        return prevChats.map((chat, index) => (index === chatIndex ? currentChat : chat));
       }
     });
   }, [currentChat]);
@@ -148,7 +136,7 @@ function ChatsProvider({ children }) {
         generateRandomId,
         question,
         setQuestion,
-        generateAnswer,
+        generateAnswer
       }}
     >
       {children}

@@ -1,23 +1,23 @@
-import { app, shell, BrowserWindow, ipcMain, dialog } from "electron";
-import { join } from "path";
-import fs from "fs";
-import os from "os";
-import { electronApp, optimizer, is } from "@electron-toolkit/utils";
-import icon from "../../resources/icon.png?asset";
+import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron';
+import { join } from 'path';
+import fs from 'fs';
+import os from 'os';
+import { electronApp, optimizer, is } from '@electron-toolkit/utils';
+import icon from '../../resources/icon.png?asset';
 
 // Function to get the default download folder based on the operating system
 const getDownloadsFolder = () => {
   const homeDir = os.homedir(); // Get the user's home directory
   // Check for OS platform and return appropriate path
-  if (os.platform() === "win32") {
+  if (os.platform() === 'win32') {
     // On Windows, the Downloads folder is under the user's home directory
-    return join(homeDir, "Downloads");
-  } else if (os.platform() === "darwin") {
+    return join(homeDir, 'Downloads');
+  } else if (os.platform() === 'darwin') {
     // On macOS, the Downloads folder is also in the user's home directory
-    return join(homeDir, "Downloads");
+    return join(homeDir, 'Downloads');
   } else {
     // On Linux and other Unix-like systems, it's usually the Downloads folder under home
-    return join(homeDir, "Downloads");
+    return join(homeDir, 'Downloads');
   }
 };
 
@@ -29,62 +29,60 @@ function createWindow() {
     height: 670,
     show: false,
     autoHideMenuBar: true,
-    ...(process.platform === "linux" ? { icon } : {}),
+    ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
-      preload: join(__dirname, "../preload/index.js"),
+      preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
       contextIsolation: true,
-      nodeIntegration: false,
-    },
+      nodeIntegration: false
+    }
   });
 
   // Set up proper CSP headers
-  mainWindow.webContents.session.webRequest.onHeadersReceived(
-    (details, callback) => {
-      callback({
-        responseHeaders: {
-          ...details.responseHeaders,
-          "Content-Security-Policy": [
-            `default-src 'self';
+  mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+    callback({
+      responseHeaders: {
+        ...details.responseHeaders,
+        'Content-Security-Policy': [
+          `default-src 'self';
            connect-src 'self' http://localhost:11434;
            script-src 'self' 'unsafe-inline';
            style-src 'self' 'unsafe-inline';
            img-src 'self' data: https:;
-           font-src 'self' data:;`,
-          ],
-        },
-      });
-    },
-  );
+           font-src 'self' data:;`
+        ]
+      }
+    });
+  });
 
   //Configure CORS for the session
   mainWindow.webContents.session.webRequest.onBeforeSendHeaders(
-    { urls: ["http://localhost:11434/*"] },
+    { urls: ['http://localhost:11434/*'] },
     (details, callback) => {
       callback({
         requestHeaders: {
           ...details.requestHeaders,
-          Origin: "electron://app",
-        },
+          Origin: 'electron://app'
+        }
       });
-    },
+    }
   );
 
-  mainWindow.on("ready-to-show", () => {
+  mainWindow.on('ready-to-show', () => {
     mainWindow.show();
   });
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url);
-    return { action: "deny" };
+    return { action: 'deny' };
   });
 
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
-  if (is.dev && process.env["ELECTRON_RENDERER_URL"]) {
-    mainWindow.loadURL(process.env["ELECTRON_RENDERER_URL"]);
+  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL']);
   } else {
-    mainWindow.loadFile(join(__dirname, "../renderer/index.html"));
+    mainWindow.loadFile(join(__dirname, '../renderer/index.html'));
   }
 
   // Open the DevTools. For development purposes only. Comment out when not used.
@@ -96,21 +94,21 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   // Set app user model id for windows
-  electronApp.setAppUserModelId("com.electron");
+  electronApp.setAppUserModelId('com.electron');
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
   // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
-  app.on("browser-window-created", (_, window) => {
+  app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window);
   });
 
   // IPC test
-  ipcMain.on("ping", () => console.log("pong"));
+  ipcMain.on('ping', () => console.log('pong'));
 
   createWindow();
 
-  app.on("activate", function () {
+  app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
@@ -120,8 +118,8 @@ app.whenReady().then(() => {
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
     app.quit();
   }
 });
@@ -130,32 +128,32 @@ app.on("window-all-closed", () => {
 // code. You can also put them in separate files and require them here.
 
 // Handle save-file event from renderer process
-ipcMain.handle("save-file", async (_, content) => {
+ipcMain.handle('save-file', async (_, content) => {
   try {
     // Get the default Downloads folder path based on the platform
     const downloadsFolder = getDownloadsFolder();
 
     // Show Save File dialog with dynamic default path
     const { filePath } = await dialog.showSaveDialog({
-      title: "Download Chat",
-      defaultPath: join(downloadsFolder, "content.txt"), // Set default path to the Downloads folder
-      buttonLabel: "Save",
+      title: 'Download Chat',
+      defaultPath: join(downloadsFolder, 'content.txt'), // Set default path to the Downloads folder
+      buttonLabel: 'Save',
       filters: [
-        { name: "Text Files", extensions: ["txt"] },
-        { name: "PDF Files", extensions: ["pdf"] },
-        { name: "Log Files", extensions: ["log"] },
-      ],
+        { name: 'Text Files', extensions: ['txt'] },
+        { name: 'PDF Files', extensions: ['pdf'] },
+        { name: 'Log Files', extensions: ['log'] }
+      ]
     });
 
     if (filePath) {
       // Write content to the selected file
-      fs.writeFileSync(filePath, content, "utf-8");
-      return { success: true, message: "File saved successfully!" };
+      fs.writeFileSync(filePath, content, 'utf-8');
+      return { success: true, message: 'File saved successfully!' };
     } else {
-      return { success: false, message: "Save cancelled by user." };
+      return { success: false, message: 'Save cancelled by user.' };
     }
   } catch (error) {
-    console.error("Failed to save file:", error);
-    return { success: false, message: "Failed to save file." };
+    console.error('Failed to save file:', error);
+    return { success: false, message: 'Failed to save file.' };
   }
 });

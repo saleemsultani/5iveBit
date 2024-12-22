@@ -1,10 +1,10 @@
-import { contextBridge, ipcRenderer } from "electron";
-import { electronAPI } from "@electron-toolkit/preload";
+import { contextBridge, ipcRenderer } from 'electron';
+import { electronAPI } from '@electron-toolkit/preload';
 
 // Custom APIs for renderer
 const api = {
   // custom API for saving file
-  saveFile: (content) => ipcRenderer.invoke("save-file", content),
+  saveFile: (content) => ipcRenderer.invoke('save-file', content)
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to
@@ -12,8 +12,8 @@ const api = {
 // just add to the DOM global.
 if (process.contextIsolated) {
   try {
-    contextBridge.exposeInMainWorld("electron", electronAPI);
-    contextBridge.exposeInMainWorld("api", api);
+    contextBridge.exposeInMainWorld('electron', electronAPI);
+    contextBridge.exposeInMainWorld('api', api);
   } catch (error) {
     console.error(error);
   }
