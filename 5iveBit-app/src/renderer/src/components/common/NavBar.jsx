@@ -1,5 +1,6 @@
 import { Box, Button } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
+import { Link } from 'react-router-dom'; 
 import styles from './NavBar.module.css';
 
 function NavBar() {
@@ -11,6 +12,7 @@ function NavBar() {
           <p className={styles.navbarLink}>5iveBit.</p>
           <p className={styles.navbarLink}>Latest CVEs</p>
           <p className={styles.navbarLink}>Best Practices</p>
+          <p className={styles.navbarLink}>Log Out</p>
         </Box>
 
         {/* Right Side Button */}

@@ -1,0 +1,76 @@
+/* Main container for the Dashboard SideBar */
+.sideBarContainer {
+  display: flex;
+  flex-direction: column; 
+  align-items: stretch;  
+  padding: 20px;        
+  gap: 15px;           
+}
+
+/* Main content area of the SideBar */
+.sideBarContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;  
+}
+
+/* Style for individual buttons in the SideBar */
+.sideBarButton {
+  width: 200px;
+  height: 45px;
+  border-radius: 10px;
+  padding: 15px;
+  background: linear-gradient(to right, #862e9c, #c10281); 
+  text-align: center;
+  border: none; 
+  cursor: pointer;
+  color: white;   
+}
+
+/* Add spacing between buttons */
+.sideBarButton + .sideBarButton {
+  margin-top: 30px;
+  color: white;   
+}
+
+/* Add spacing between the last button in the top section and the bottom button */
+.topSection > *:last-child {
+  margin-bottom: 30px; 
+  
+}
+
+/* Hover effect for buttons */
+.sideBarButton:hover {
+  transition: background-color 0.3s ease;
+}
+
+/*LOWER BUTTONS ICON BUTTONS*/
+.lowerLinks {
+  margin-top: 40px; 
+}
+
+.lowerLink {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: white;
+  margin-bottom: 10px; 
+}
+
+.lowerLink svg {
+  margin-right: 5px; 
+}
+
+/*USER PROFILE BUTTON*/
+.userProfileButton {
+  margin-top: 50px;
+  width: 200px;
+  height: 45px;
+  border-radius: 10px;
+  padding: 15px;
+  background: linear-gradient(to right, #862e9c, #c10281); 
+  text-align: center;
+  border: none; 
+  cursor: pointer;
+  color: white;
+}

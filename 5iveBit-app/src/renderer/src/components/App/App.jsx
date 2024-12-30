@@ -5,8 +5,7 @@ import styles from './App.module.css';
 import ChatBox from '../chat/ChatBox';
 import NavBar from '../common/NavBar';
 import RightBar from '../common/RightBar';
-// import Login from '../auth/Login';  // Commented out for now
-// import SignUp from '../auth/SignUp';  // Commented out for now
+import Dashboard from '../dashboard/Dashboard';
 // import PrivateRoute from '../common/PrivateRoute'; // PrivateRoute for secured routes (commented out for now)
 
 function App() {
@@ -16,8 +15,11 @@ function App() {
         <Box className={styles.container}>
           <Routes>
             {/* Define routes for login and signup */}
-            {/* <Route path="/login" element={<Login />} /> */}
-            {/* <Route path="/signup" element={<SignUp />} /> */}
+            {/*Dashboard Route*/}
+            <Route path="/dashboard" element={<Dashboard />}/>
+
+            {/* App Route */}
+            <Route path="/app" element={<App />} />
 
             {/* Main app content route */}
             <Route

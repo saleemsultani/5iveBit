@@ -33,15 +33,3 @@
   color: #c10281;
 }
 
-/* Button styles */
-.navbarContainer .navbarButton {
-  border-radius: 10px;
-  height: 60%;
-  width: 20%;
-  padding: 10px;
-  color: white !important;
-  background: linear-gradient(to right, #862e9c, #c10281);
-  font-size: 0.9rem;
-  text-transform: none;
-}
-
