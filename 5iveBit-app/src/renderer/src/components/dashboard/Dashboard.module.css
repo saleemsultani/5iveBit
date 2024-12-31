@@ -41,20 +41,20 @@
 
 /* Header section */
 .dashboardHeader {
-  margin-bottom: 20px;
+  margin-top: 60px;
+  margin-bottom: 50px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
+ 
 }
 
 .welcomeText {
   font-weight: bold;
   color: white;
-  margin-right: 100px;
  
 }
 
-.startChatButton {
+.startchatButton {
   width: 300px;
   height: 65px;
   border-radius: 10px;

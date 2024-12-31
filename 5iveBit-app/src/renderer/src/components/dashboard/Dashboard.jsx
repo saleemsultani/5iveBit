@@ -1,13 +1,13 @@
 import styles from './Dashboard.module.css';
 import { Box, Button, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import NavBar from '../common/NavBar';
-import SideBar from './SideBar';
+import DashNavBar from '../common/DashNavBar';
+import SideBar from '../common/DashSideBar';
 
 function Dashboard() {
   return (
     <Box className={styles.dashboardWrapper}>
-      <NavBar />
+      <DashNavBar />
       <Box className={styles.dashboardLayout}>
         <DashboardMain />
         <Sidebar />
@@ -25,15 +25,15 @@ function DashboardMain() {
         {/* Header Section */}
         <Box className={styles.dashboardHeader}>
           <Typography variant="h1" className={styles.welcomeText}>
-            Welcome Back!
+            Welcome Back
           </Typography>
           <Button
             variant="contained"
             color="primary"
-            className={styles.startChatButton}
-            onClick={() => navigate('/chat')}
+            className={styles.startchatButton}
+            onClick={() => navigate('/app')}
           >
-            Start Chat
+            Start New Chat
           </Button>
         </Box>
 
