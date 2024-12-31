@@ -1,41 +1,65 @@
-import { Box, Button, Stack } from '@mui/material';
+import { Box, Button, Stack, IconButton, Snackbar } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import GraphicEqIcon from '@mui/icons-material/GraphicEq';
 import Textarea from '@mui/joy/Textarea';
 import { useChats } from '../../contexts/ChatContext';
 import styles from './ChatBox.module.css';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { useState } from 'react';
 
 function ChatBox() {
-  const { currentChat, setcurrentChat, question, setQuestion } = useChats();
+  const { currentChat, question, setQuestion, generateAnswer } = useChats();
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
-  const handleSubmitQuestion = () => {
+  const handleSubmitQuestion = async () => {
+    if (question.trim() === '') return;  // Stop if question is empty or only whitespace
+    const currentQuestion = question;
     setQuestion('');
+    await generateAnswer(currentQuestion);
+  };
 
-    setcurrentChat((current) => {
-      const newQuestions = [...current.questions, question];
-      const newAnswers = [
-        ...current.answers,
-        `${current.questions.length}: here is your random answer`
-      ];
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      handleSubmitQuestion();
+    }
+  };
 
-      return {
-        ...current,
-        questions: newQuestions,
-        answers: newAnswers
-      };
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+      console.log('Copied to clipboard:', text);
+      setSnackbarOpen(true);
+    }).catch((err) => {
+      console.error('Failed to copy:', err);
     });
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
   };
 
   return (
     <Box className={styles.chatBoxContainer}>
-      {/* Chat history */}
       <Box className={styles.chatHistory}>
-        {currentChat.questions?.map((item, index) => (
-          <div key={index}>
-            <p className={styles.userMessage}>{item}</p>
-            <p className={styles.botMessage}>{currentChat.answers[index]}</p>
-          </div>
-        ))}
+        <Box className={styles.chatHistoryContent}>
+          {currentChat.messages?.map((message, index) => (
+            <div key={index} className={styles.messageContainer}>
+              <p className={message.role === 'user' ? styles.userMessage : styles.botMessage}>
+                <span className={message.isThinking ? styles.thinking : ''}>
+                  {message.content}
+                </span>
+                {message.role === 'assistant' && !message.isThinking && (
+                  <IconButton 
+                    onClick={() => copyToClipboard(message.content)} 
+                    className={styles.copyButton}
+                  >
+                    <ContentCopyIcon className={styles.copyIcon} />
+                  </IconButton>
+                )}
+              </p>
+            </div>
+          ))}
+        </Box>
       </Box>
 
       {/* Input area */}
@@ -43,8 +67,9 @@ function ChatBox() {
         <Textarea
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
+          onKeyDown={handleKeyPress}
           multiline
-          placeholder="Message 5iveBot"
+          placeholder="Message 5iveBot (Enter to send, Shift+Enter for new line)"
           maxRows={3}
           className={styles.textarea}
           endDecorator={
@@ -63,6 +88,14 @@ function ChatBox() {
           }
         />
       </Box>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        message="Copied to clipboard"
+        anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
+        className={styles.snackbar}
+      />
     </Box>
   );
 }
