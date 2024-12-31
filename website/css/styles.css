@@ -11162,6 +11162,11 @@ footer a:hover, footer a:active, footer a:focus {
   font-weight: bold;
   font-style: normal;
 }
+
+.footer-icon {
+  text-decoration: none; 
+}
+
 /* Team Page Style */
 #team {
   padding: 50px 20px;
