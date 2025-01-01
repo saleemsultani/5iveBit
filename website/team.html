@@ -16,6 +16,18 @@
         <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,400;1,400&amp;display=swap" rel="stylesheet" crossorigin="anonymous" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
+        <style>
+            #team img {
+                width: auto; /* Allow proportional resizing */
+                height: 200px; /* Adjusted height for consistency */
+                object-fit: cover; /* Ensures the image fits inside the circle */
+                border-radius: 50%; /* Makes it circular */
+            }
+
+            header.masthead {
+                padding-top: 9rem; /* Ensure the top part of the team page is visible */
+            }
+        </style>
     </head>
     <body id="page-top">
         <!-- Navigation-->
@@ -32,7 +44,7 @@
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
                         <li class="nav-item"><a class="nav-link me-lg-3" href="#aboutus">About</a></li>
-                        <li class="nav-item"><a class="nav-link me-lg-3" href="team.html">our team</a></li>
+                        <li class="nav-item"><a class="nav-link me-lg-3" href="team.html">Our team</a></li>
                         <li class="nav-item"><a class="nav-link me-lg-3" href="#whychooseus">Why Us</a></li>
                     </ul>
                     <a class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" href="mailto:contact.5iveBit@gmail.com" rel="noopener noreferrer">
@@ -45,49 +57,84 @@
             </div>
         </nav>
         <!-- Team Section -->
-        <section id="team">
+        <section id="team" class="py-5">
+            <header class="masthead bg-white py-5">
+                <div class="container text-center">
+                    <h1 class="display-1 lh-1 mb-3">Meet Our Team</h1>
+                    <p class="lead fw-normal text-muted mb-5">The visionaries behind 5iveBit</p>
+                </div>
+            </header>
             <div class="container">
-                <h1 class="section-title">Meet Our Team</h1>
-                <div class="team-members">
-
+                <div class="row justify-content-center d-flex align-items-stretch">
                     <!-- Team Member 1 -->
-                    <div class="team-member">
-                        <img src="assets/images/neel.png" alt="Neel Sudhir Koshti – Chief Commercial Officer">
-                        <h3>Neel Sudhir Koshti</h3>
-                        <p>Chief Commercial Officer</p>
+                    <div class="col-md-4 text-center mb-5">
+                        <img src="assets/images/neel.jpg" alt="Neel Sudhir Koshti – Chief Commercial Officer" class="rounded-circle mb-3">
+                        <h5>Neel Sudhir Koshti</h5>
+                        <p class="text-muted">Chief Commercial Officer</p>
+                        <p>Neel leads our commercial strategy and ensures seamless business growth.</p>
+                        <div>
+                            <a href="#" target="_blank" class="text-dark me-2"><i class="bi bi-instagram"></i></a>
+                            <a href="#" target="_blank" class="text-dark me-2"><i class="bi bi-twitter"></i></a>
+                            <a href="#" target="_blank" class="text-dark"><i class="bi bi-linkedin"></i></a>
+                        </div>
                     </div>
-
                     <!-- Team Member 2 -->
-                    <div class="team-member">
-                        <img src="assets/images/ashlyn.png" alt="Ashlyn Higgins – Chief Executive Officer">
-                        <h3>Ashlyn Higgins</h3>
-                        <p>Chief Executive Officer</p>
+                    <div class="col-md-4 text-center mb-5">
+                        <img src="assets/images/ashlyn.png" alt="Ashlyn Higgins – Chief Executive Officer" class="rounded-circle mb-3">
+                        <h5>Ashlyn Higgins</h5>
+                        <p class="text-muted">Chief Executive Officer</p>
+                        <p>Ashlyn drives the vision and oversees all aspects of the company's success.</p>
+                        <div>
+                            <a href="#" target="_blank" class="text-dark me-2"><i class="bi bi-instagram"></i></a>
+                            <a href="#" target="_blank" class="text-dark me-2"><i class="bi bi-twitter"></i></a>
+                            <a href="#" target="_blank" class="text-dark"><i class="bi bi-linkedin"></i></a>
+                        </div>
                     </div>
-
+                </div>
+                <!-- Add a horizontal line between rows -->
+                <hr class="my-4" style="border: 0px solid #ddd;">
+                <div class="row justify-content-center d-flex align-items-stretch">
                     <!-- Team Member 3 -->
-                    <div class="team-member">
-                        <img src="assets/images/amey.png" alt="Amey Rajesh Shaligram – Chief Technology Officer">
-                        <h3>Amey Rajesh Shaligram</h3>
-                        <p>Chief Technology Officer</p>
+                    <div class="col-md-4 text-center mb-5">
+                        <img src="assets/images/amey.png" alt="Amey Rajesh Shaligram – Chief Technology Officer" class="rounded-circle mb-3">
+                        <h5>Amey Rajesh Shaligram</h5>
+                        <p class="text-muted">Chief Technology Officer</p>
+                        <p>Amey is the driving force behind our innovative technological solutions.</p>
+                        <div>
+                            <a href="#" target="_blank" class="text-dark me-2"><i class="bi bi-instagram"></i></a>
+                            <a href="#" target="_blank" class="text-dark me-2"><i class="bi bi-twitter"></i></a>
+                            <a href="#" target="_blank" class="text-dark"><i class="bi bi-linkedin"></i></a>
+                        </div>
                     </div>
-
                     <!-- Team Member 4 -->
-                    <div class="team-member">
-                        <img src="assets/images/celine.jpg" alt="Somayeh Rasoli – Chief Operating Officer">
-                        <h3>Celine Rasoli </h3>
-                        <p>Chief Operating Office</p>
+                    <div class="col-md-4 text-center mb-5">
+                        <img src="assets/images/celine.jpg" alt="Celine Rasoli – Chief Operating Officer" class="rounded-circle mb-3">
+                        <h5>Celine Rasoli</h5>
+                        <p class="text-muted">Chief Operating Officer</p>
+                        <p>Celine ensures operational excellence and smooth company workflows.</p>
+                        <div>
+                            <a href="#" target="_blank" class="text-dark me-2"><i class="bi bi-instagram"></i></a>
+                            <a href="#" target="_blank" class="text-dark me-2"><i class="bi bi-twitter"></i></a>
+                            <a href="#" target="_blank" class="text-dark"><i class="bi bi-linkedin"></i></a>
+                        </div>
                     </div>
-
                     <!-- Team Member 5 -->
-                    <div class="team-member">
-                        <img src="assets/images/saleem.jpg" alt="Saleem Sultani – Chief Product Officer">
-                        <h3>Saleem Sultani</h3>
-                        <p>Chief Product Officer</p>
+                    <div class="col-md-4 text-center mb-5">
+                        <img src="assets/images/saleem.jpg" alt="Saleem Sultani – Chief Product Officer" class="rounded-circle mb-3">
+                        <h5>Saleem Sultani</h5>
+                        <p class="text-muted">Chief Product Officer</p>
+                        <p>Saleem leads product innovation, bringing our ideas to life.</p>
+                        <div>
+                            <a href="#" target="_blank" class="text-dark me-2"><i class="bi bi-instagram"></i></a>
+                            <a href="#" target="_blank" class="text-dark me-2"><i class="bi bi-twitter"></i></a>
+                            <a href="#" target="_blank" class="text-dark"><i class="bi bi-linkedin"></i></a>
+                        </div>
                     </div>
-
                 </div>
             </div>
         </section>
+                    
+                    
         <!-- Team Section -->
         <!-- Footer-->
         <footer class="bg-black text-center py-5">
