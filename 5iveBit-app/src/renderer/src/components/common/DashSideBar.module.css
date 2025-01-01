@@ -2,8 +2,7 @@
 .dashSideBarContainer {
   display: flex;
   flex-direction: column; 
-  align-items: stretch;  
-  margin-top: 50px;               
+  align-items: stretch;              
 }
 
 /* Main content area of the SideBar */
@@ -57,7 +56,7 @@
 
 /*USER PROFILE BUTTON*/
 .userProfileContainer {
-  margin-top: 350px;
+  margin-top: 330px;
 }
 .userProfileButton {
   width: 100%;

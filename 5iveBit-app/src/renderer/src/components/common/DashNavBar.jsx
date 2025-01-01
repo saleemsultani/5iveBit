@@ -1,17 +1,15 @@
-import { Box, Button } from '@mui/material';
-import PersonIcon from '@mui/icons-material/Person';
-import { Link } from 'react-router-dom'; 
+import { Box, Button } from '@mui/material'; 
 import styles from './DashNavBar.module.css';
-import logo from '../../assets/images/Final_logo.png';
+import Logo from './images/Final_logo.png'
 
 function DashNavBar() {
   return (
     <Box className={styles.dashNavbarContainer}>
       <Box className={styles.dashNavbarContent}>
 
-        {/* Left Side Links */}
+        {/*Logo Dashboard Link */}
         <Box className={styles.dashNavbarLinks}>
-          <img src="../assets/images/Final_logo.png" alt="5iveBit Logo" style={{ height: "80px" }} />
+          <img src={Logo} alt='Logo' style={{ height: '100px' }} />
         </Box>
 
       </Box>

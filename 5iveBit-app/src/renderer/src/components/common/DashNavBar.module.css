@@ -1,41 +1,5 @@
 /* Main container for the NavBar */
 .navbarContainer {
   display: flex;
-  justify-content: center;
-  height: 50px;
 }
 
-/* Inner content box */
-.navbarContainer .navbarContent {
-  width: 95%;
-  color: white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* Links container */
-.navbarContainer .navbarLinks {
-  display: flex;
-  gap: 1.25rem;
-  align-items: center;
-  color: white;
-}
-
-/* Individual link styles */
-.navbarContainer .navbarLink {
-  margin: 0;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: color 0.3s ease-in-out;
-  color: white;
-}
-
-.navbarContainer .navbarLink:hover {
-  color: #c10281;
-}
-
-/*LOGO STYLE*/
-.dashNavBarLinks {
-  display: flex;
-}
