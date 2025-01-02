@@ -36,7 +36,7 @@ function createWindow() {
     });
   });
 
-  // Optional: Configure CORS for the session
+  //Configure CORS for the session
   mainWindow.webContents.session.webRequest.onBeforeSendHeaders(
     { urls: ['http://localhost:11434/*'] },
     (details, callback) => {
@@ -105,5 +105,3 @@ app.on('window-all-closed', () => {
   }
 });
 
-// In this file you can include the rest of your app"s specific main process
-// code. You can also put them in separate files and require them here.
