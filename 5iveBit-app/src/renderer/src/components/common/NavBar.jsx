@@ -2,6 +2,7 @@ import { Box, Button } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import { Link } from 'react-router-dom'; 
 import styles from './NavBar.module.css';
+import Logo from '../../assets/5iveBitLogo.png';
 
 function NavBar() {
   return (
@@ -9,7 +10,9 @@ function NavBar() {
       <Box className={styles.navbarContent}>
         {/* Left Side Links */}
         <Box className={styles.navbarLinks}>
-          <p className={styles.navbarLink}>5iveBit.</p>
+          <a href="https://5ivebit.vercel.app" target="_blank" rel="noopener noreferrer">
+            <img src={Logo} alt="5iveBit Logo" className={`${styles.navbarLogo} ${styles.tinyLogo}`} />
+          </a>
           <p className={styles.navbarLink}>Latest CVEs</p>
           <p className={styles.navbarLink}>Best Practices</p>
           <p className={styles.navbarLink}>Log Out</p>

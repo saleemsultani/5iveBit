@@ -13,9 +13,41 @@ function createWindow() {
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
+      sandbox: false,
+      contextIsolation: true,
+      nodeIntegration: false
     }
   });
+
+  // Set up proper CSP headers
+  mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+    callback({
+      responseHeaders: {
+        ...details.responseHeaders,
+        'Content-Security-Policy': [
+          `default-src 'self';
+           connect-src 'self' http://localhost:11434;
+           script-src 'self' 'unsafe-inline';
+           style-src 'self' 'unsafe-inline';
+           img-src 'self' data: https:;
+           font-src 'self' data:;`
+        ]
+      }
+    });
+  });
+
+  // Optional: Configure CORS for the session
+  mainWindow.webContents.session.webRequest.onBeforeSendHeaders(
+    { urls: ['http://localhost:11434/*'] },
+    (details, callback) => {
+      callback({
+        requestHeaders: {
+          ...details.requestHeaders,
+          'Origin': 'electron://app'
+        }
+      });
+    }
+  );
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show();
