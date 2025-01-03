@@ -18,18 +18,16 @@ function Dashboard() {
 
 function DashboardMain() {
   const navigate = useNavigate();
-
   return (
     <Box className={styles.dashboardMain}>
       <Box className={styles.dashboardContainer}>
+
         {/* Header Section */}
         <Box className={styles.dashboardHeader}>
-          <Typography variant="h1" className={styles.welcomeText}>
+          <Typography variant='h3' className={styles.welcomeText}>
             Welcome Back
           </Typography>
-          <Button
-            variant="contained"
-            color="primary"
+          <Button variant='contained'
             className={styles.startchatButton}
             onClick={() => navigate('/app')}
           >
@@ -44,8 +42,8 @@ function DashboardMain() {
             onClick={() => navigate('/latest-cves')}
           >
             <img
-              src="https://via.placeholder.com/300x140"
-              alt="Latest CVEs"
+              src='https://via.placeholder.com/300x140'
+              alt='Latest CVEs'
               className={styles.cardImage}
             />
           </Box>

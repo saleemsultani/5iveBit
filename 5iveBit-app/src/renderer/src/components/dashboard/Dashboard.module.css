@@ -40,23 +40,24 @@
 }
 
 /* Header section */
-.dashboardHeader {
-  margin-top: 60px;
-  margin-bottom: 50px;
+.dashboardContainer .dashboardHeader {
+  margin-top: 20px;
+  margin-bottom: 40px;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
+  gap: 50px;
  
 }
 
-.welcomeText {
+.dashboardContainer .welcomeText {
   font-weight: bold;
   color: white;
  
 }
 
-.startchatButton {
-  width: 300px;
-  height: 65px;
+.dashboardContainer .dashboardHeader .startchatButton {
+  width: 200px;
+  height: 50px;
   border-radius: 10px;
   color: white;
   padding: 10px;
@@ -65,7 +66,7 @@
 }
 
 /* Feature Cards section */
-.dashboardCards {
+.dashboardContainer .dashboardCards {
   display: flex;
   flex-wrap: wrap;
   gap: 50px;
@@ -73,7 +74,7 @@
 }
 
 /* Individual card styling */
-.dashboardCard {
+.dashboardContainer .dashboardCard {
   width: 300px;
   height: 400px;
   background-color: white;
@@ -84,15 +85,15 @@
   transition: transform 0.2s ease-in-out;
   cursor: pointer;
   color: black;
-  margin-top: 100px;
+  margin-top: 155px;
 }
 
-.dashboardCard:hover {
+.dashboardContainer .dashboardCard:hover {
   transform: scale(1.05);
 }
 
 /* Card image styling */
-.cardImage {
+.dashboardContainer .cardImage {
   border-radius: 8px;
   margin-bottom: 10px;
 }

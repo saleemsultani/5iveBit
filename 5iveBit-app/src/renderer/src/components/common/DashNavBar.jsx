@@ -1,4 +1,4 @@
-import { Box, Button } from '@mui/material'; 
+import { Box } from '@mui/material'; 
 import styles from './DashNavBar.module.css';
 import Logo from './images/Final_logo.png'
 
@@ -9,7 +9,7 @@ function DashNavBar() {
 
         {/*Logo Dashboard Link */}
         <Box className={styles.dashNavbarLinks}>
-          <img src={Logo} alt='Logo' style={{ height: '100px' }} />
+          <img src={Logo} alt='Logo' style={{ height: '50px', marginLeft:'50px', marginTop:'5px'}} />
         </Box>
 
       </Box>
