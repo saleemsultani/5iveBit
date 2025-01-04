@@ -11601,3 +11601,18 @@ footer a:focus {
   font-weight: bold;
   font-style: normal;
 }
+
+.footer-icon {
+  text-decoration: none; 
+}
+
+/* Team Page Style */
+#team img {
+  width: auto; /* Allow proportional resizing */
+  height: 200px; /* Adjusted height for consistency */
+}
+
+header.masthead {
+  padding-top: 9rem; /* Ensure the top part of the team page is visible */
+}
+
