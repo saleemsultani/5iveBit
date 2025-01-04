@@ -23,11 +23,14 @@ function ChatsProvider({ children }) {
   // Creates a new chat session with a unique ID
   const addChat = function (newChat) {
     setChats((current) => {
-      return [...current, { 
-        id: generateRandomId(15), 
-        messages: [],
-        ...newChat 
-      }];
+      return [
+        ...current,
+        {
+          id: generateRandomId(15),
+          messages: [],
+          ...newChat
+        }
+      ];
     });
   };
 
@@ -42,17 +45,14 @@ function ChatsProvider({ children }) {
     try {
       // Add user message to the current chat
       const currentMessages = [...(currentChat.messages || [])];
-      const updatedMessages = [
-        ...currentMessages,
-        { role: "user", content: promptInput }
-      ];
+      const updatedMessages = [...currentMessages, { role: 'user', content: promptInput }];
 
       // Show a temporary "Thinking..." message while waiting for response
-      setcurrentChat(current => ({
+      setcurrentChat((current) => ({
         ...current,
         messages: [
           ...updatedMessages,
-          { role: "assistant", content: "Thinking...", isThinking: true }
+          { role: 'assistant', content: 'Thinking...', isThinking: true }
         ]
       }));
 
@@ -63,11 +63,13 @@ function ChatsProvider({ children }) {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          model: "5iveBit-ca-1",
-          messages: updatedMessages, 
+          model: '5iveBit-ca-1',
+          messages: updatedMessages,
           stream: false
         })
       });
+
+      console.log('Response received:', response);
 
       // Debug logging for API response
       console.log('Response status:', response.status);
@@ -91,12 +93,9 @@ function ChatsProvider({ children }) {
       }
 
       // Update chat with the AI's response
-      setcurrentChat(current => ({
+      setcurrentChat((current) => ({
         ...current,
-        messages: [
-          ...updatedMessages,
-          { role: "assistant", content: data.message.content }
-        ]
+        messages: [...updatedMessages, { role: 'assistant', content: data.message.content }]
       }));
 
       return data.message.content;

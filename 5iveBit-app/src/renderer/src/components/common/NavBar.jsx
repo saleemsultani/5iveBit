@@ -10,7 +10,11 @@ function NavBar() {
         {/* Left Side Links */}
         <Box className={styles.navbarLinks}>
           <a href="https://5ivebit.vercel.app" target="_blank" rel="noopener noreferrer">
-            <img src={Logo} alt="5iveBit Logo" className={`${styles.navbarLogo} ${styles.tinyLogo}`} />
+            <img
+              src={Logo}
+              alt="5iveBit Logo"
+              className={`${styles.navbarLogo} ${styles.tinyLogo}`}
+            />
           </a>
           <p className={styles.navbarLink}>Latest CVEs</p>
           <p className={styles.navbarLink}>Best Practices</p>
