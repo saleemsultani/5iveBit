@@ -44,3 +44,8 @@
   font-size: 0.9rem;
   text-transform: none;
 }
+
+.tinyLogo {
+  height: 40px;
+  vertical-align: middle;
+}
