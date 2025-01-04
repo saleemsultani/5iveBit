@@ -1,7 +1,7 @@
 import { useState, createContext, useContext, useEffect } from 'react';
-
 const ChatsContext = createContext();
 
+// Utility function to generate unique IDs for chats and messages
 function generateRandomId(length = 32) {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let result = '';
@@ -11,59 +11,67 @@ function generateRandomId(length = 32) {
   return result;
 }
 
+// Provider component that wraps the app and manages chat-related state
 function ChatsProvider({ children }) {
   const [question, setQuestion] = useState('');
   const [chats, setChats] = useState([]);
   const [currentChat, setcurrentChat] = useState({
     id: generateRandomId(15),
-    messages: [] // Ensure this is always initialized as an empty array
+    messages: []
   });
 
+  // Creates a new chat session with a unique ID
   const addChat = function (newChat) {
     setChats((current) => {
-      return [...current, { 
-        id: generateRandomId(15), 
-        messages: [], // Ensure new chats have messages array
-        ...newChat 
-      }];
+      return [
+        ...current,
+        {
+          id: generateRandomId(15),
+          messages: [],
+          ...newChat
+        }
+      ];
     });
   };
 
+  // Updates the chats array when the current chat changes
   const updateChats = function () {
     const obj = chats.find((chat) => currentChat.id === chat.id);
     console.log(obj);
   };
 
+  // Handles the API communication with the local LLM server
   const generateAnswer = async (promptInput) => {
     try {
-      // Get current messages and add new user message
+      // Add user message to the current chat
       const currentMessages = [...(currentChat.messages || [])];
-      const updatedMessages = [
-        ...currentMessages,
-        { role: "user", content: promptInput }
-      ];
+      const updatedMessages = [...currentMessages, { role: 'user', content: promptInput }];
 
-      // Update UI with thinking message
-      setcurrentChat(current => ({
+      // Show a temporary "Thinking..." message while waiting for response
+      setcurrentChat((current) => ({
         ...current,
         messages: [
           ...updatedMessages,
-          { role: "assistant", content: "Thinking...", isThinking: true } // Add isThinking flag
+          { role: 'assistant', content: 'Thinking...', isThinking: true }
         ]
       }));
 
+      // Send request to the local LLM server
       const response = await fetch('http://localhost:11434/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          model: "5iveBit-ca-1",
-          messages: updatedMessages, // Send full message history
+          model: '5iveBit-ca-1',
+          messages: updatedMessages,
           stream: false
         })
       });
 
+      console.log('Response received:', response);
+
+      // Debug logging for API response
       console.log('Response status:', response.status);
       console.log('Response headers:', [...response.headers.entries()]);
 
@@ -84,17 +92,15 @@ function ChatsProvider({ children }) {
         throw new Error('No message content in data');
       }
 
-      // Update the conversation with the real response
-      setcurrentChat(current => ({
+      // Update chat with the AI's response
+      setcurrentChat((current) => ({
         ...current,
-        messages: [
-          ...updatedMessages,
-          { role: "assistant", content: data.message.content }
-        ]
+        messages: [...updatedMessages, { role: 'assistant', content: data.message.content }]
       }));
 
       return data.message.content;
     } catch (error) {
+      // Detailed error logging for debugging
       console.error('Full error details:', {
         name: error.name,
         message: error.message,
@@ -104,20 +110,20 @@ function ChatsProvider({ children }) {
     }
   };
 
+  // Effect hook to sync currentChat with the chats array
   useEffect(() => {
     setChats((prevChats) => {
       const chatIndex = prevChats.findIndex((chat) => chat.id === currentChat.id);
 
       if (chatIndex === -1) {
-        // If currentChat is not in chats, add it
         return [...prevChats, currentChat];
       } else {
-        // If currentChat exists, update it
         return prevChats.map((chat, index) => (index === chatIndex ? currentChat : chat));
       }
     });
   }, [currentChat]);
 
+  // Provide chat-related state and functions to child components
   return (
     <ChatsContext.Provider
       value={{
@@ -138,6 +144,7 @@ function ChatsProvider({ children }) {
   );
 }
 
+// Custom hook for accessing chat context in components
 function useChats() {
   const context = useContext(ChatsContext);
   return context;

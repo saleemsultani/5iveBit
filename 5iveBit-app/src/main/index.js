@@ -1,8 +1,27 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron';
+import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron';
 import { join } from 'path';
+import fs from 'fs';
+import os from 'os';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
 
+// Function to get the default download folder based on the operating system
+const getDownloadsFolder = () => {
+  const homeDir = os.homedir(); // Get the user's home directory
+  // Check for OS platform and return appropriate path
+  if (os.platform() === 'win32') {
+    // On Windows, the Downloads folder is under the user's home directory
+    return join(homeDir, 'Downloads');
+  } else if (os.platform() === 'darwin') {
+    // On macOS, the Downloads folder is also in the user's home directory
+    return join(homeDir, 'Downloads');
+  } else {
+    // On Linux and other Unix-like systems, it's usually the Downloads folder under home
+    return join(homeDir, 'Downloads');
+  }
+};
+
+// Creating Main Window
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -36,14 +55,14 @@ function createWindow() {
     });
   });
 
-  // Optional: Configure CORS for the session
+  //Configure CORS for the session
   mainWindow.webContents.session.webRequest.onBeforeSendHeaders(
     { urls: ['http://localhost:11434/*'] },
     (details, callback) => {
       callback({
         requestHeaders: {
           ...details.requestHeaders,
-          'Origin': 'electron://app'
+          Origin: 'electron://app'
         }
       });
     }
@@ -107,3 +126,34 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
+
+// Handle save-file event from renderer process
+ipcMain.handle('save-file', async (_, content) => {
+  try {
+    // Get the default Downloads folder path based on the platform
+    const downloadsFolder = getDownloadsFolder();
+
+    // Show Save File dialog with dynamic default path
+    const { filePath } = await dialog.showSaveDialog({
+      title: 'Download Chat',
+      defaultPath: join(downloadsFolder, 'content.txt'), // Set default path to the Downloads folder
+      buttonLabel: 'Save',
+      filters: [
+        { name: 'Text Files', extensions: ['txt'] },
+        { name: 'PDF Files', extensions: ['pdf'] },
+        { name: 'Log Files', extensions: ['log'] }
+      ]
+    });
+
+    if (filePath) {
+      // Write content to the selected file
+      fs.writeFileSync(filePath, content, 'utf-8');
+      return { success: true, message: 'File saved successfully!' };
+    } else {
+      return { success: false, message: 'Save cancelled by user.' };
+    }
+  } catch (error) {
+    console.error('Failed to save file:', error);
+    return { success: false, message: 'Failed to save file.' };
+  }
+});

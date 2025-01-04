@@ -15,22 +15,23 @@
   display: flex;
   flex-direction: column;
   padding: 1rem;
-  overflow: hidden; /* Ensure the parent container hides overflow */
-  position: relative; /* Add this line */
+  overflow: hidden;
+  position: relative;
 }
 
+/* Container for scrollable chat content */
 .chatBoxContainer .chatHistoryContent {
-  overflow-y: auto; /* Ensure the inner container allows vertical scrolling */
+  overflow-y: auto;
   height: 100%;
-  border-radius: 20px; /* Add this line to ensure the inner container has rounded corners */
-  position: absolute; /* Add this line */
-  top: 0; /* Add this line */
-  right: 0; /* Add this line */
-  bottom: 0; /* Add this line */
-  left: 0; /* Add this line */
+  border-radius: 20px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 }
 
-/* User messages */
+/* User messages styling */
 .chatBoxContainer .userMessage {
   align-self: flex-end;
   margin: 2% 5% 2% auto;
@@ -42,7 +43,7 @@
   color: white;
 }
 
-/* Bot messages */
+/* Bot messages styling with copy button */
 .chatBoxContainer .botMessage {
   align-self: flex-start;
   margin: 2% auto 2% 5%;
@@ -58,21 +59,24 @@
   gap: 8px;
 }
 
+/* Copy button size adjustment */
 .copyButton {
   padding: 4px !important;
   min-width: 0 !important;
 }
 
+/* Copy icon styling and opacity */
 .copyIcon {
   font-size: 1rem !important;
   color: rgba(255, 255, 255, 0.7);
 }
 
+/* Copy icon hover effect */
 .copyIcon:hover {
   color: white;
 }
 
-/* Textarea input */
+/* Chat input textarea styling */
 .chatBoxContainer .textarea {
   background-color: #212121;
   border: solid 1px black;
@@ -81,18 +85,18 @@
   width: 100%;
 }
 
-/* Buttons (send and other icons) */
+/* Action buttons styling */
 .chatBoxContainer .iconButton {
   color: white;
 }
 
-/* White icon color */
+/* Generic white icon style */
 .iconWhite {
   color: white;
   margin-left: 1rem;
 }
 
-/* Snackbar styling */
+/* Custom snackbar notification styling */
 .snackbar {
   & :global(.MuiSnackbarContent-root) {
     background-color: #424242;
@@ -100,11 +104,13 @@
   }
 }
 
+/* Animation class for thinking/loading state */
 .thinking {
   display: inline-block;
   animation: glow 0.25s ease-in-out infinite alternate;
 }
 
+/* Keyframe animation for thinking effect */
 @keyframes glow {
   from {
     opacity: 0.5;
