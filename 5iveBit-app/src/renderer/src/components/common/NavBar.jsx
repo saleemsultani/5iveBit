@@ -18,7 +18,6 @@ function NavBar() {
           </a>
           <p className={styles.navbarLink}>Latest CVEs</p>
           <p className={styles.navbarLink}>Best Practices</p>
-          <p className={styles.navbarLink}>Log Out</p>
         </Box>
 
         {/* Right Side Button */}
