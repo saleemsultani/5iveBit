@@ -1,5 +1,6 @@
 import { Box, Button } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import styles from './NavBar.module.css';
 import Logo from '../../assets/5iveBitLogo.png';
 
@@ -9,6 +10,10 @@ function NavBar() {
       <Box className={styles.navbarContent}>
         {/* Left Side Links */}
         <Box className={styles.navbarLinks}>
+          <ArrowBackIcon
+            className={styles.backArrow}
+            onClick={() => (window.location.href = '/dashboard')}
+          />
           <a href="https://5ivebit.vercel.app" target="_blank" rel="noopener noreferrer">
             <img
               src={Logo}

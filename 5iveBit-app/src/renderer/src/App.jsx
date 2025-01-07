@@ -12,6 +12,7 @@ function App() {
         <Box className={styles.container}>
           <Routes>
             <Route path="/chat" element={<ChatWindow />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/" element={<Dashboard />} />
           </Routes>
         </Box>
