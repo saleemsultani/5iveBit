@@ -29,7 +29,7 @@ function DashboardMain() {
           <Button
             variant="contained"
             className={styles.startchatButton}
-            onClick={() => navigate('/app')}
+            onClick={() => navigate('/chat')}
           >
             Start New Chat
           </Button>
