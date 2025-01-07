@@ -1,6 +1,5 @@
 import { Box, Button } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
-import { Link } from 'react-router-dom'; 
 import styles from './NavBar.module.css';
 import Logo from '../../assets/5iveBitLogo.png';
 
