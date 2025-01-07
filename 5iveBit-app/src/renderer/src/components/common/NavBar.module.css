@@ -45,6 +45,13 @@
   text-transform: none;
 }
 
+/* Back arrow styles */
+.navbarContainer .backArrow {
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-right: 1rem;
+}
+
 .tinyLogo {
   height: 40px;
   vertical-align: middle;
