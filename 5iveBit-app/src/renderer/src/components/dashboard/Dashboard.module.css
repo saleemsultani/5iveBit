@@ -1,0 +1,99 @@
+/* Wrapper for the entire dashboard */
+.dashboardWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden; 
+}
+
+/* Main layout: Sidebar and content area */
+.dashboardLayout {
+  display: flex;
+  flex: 1; 
+  overflow: hidden;
+}
+
+/* Main content area */
+.dashboardMain {
+  flex: 3; 
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  overflow-y: auto; 
+  background-color: #000;
+}
+
+/*Dashboard Sidebar */
+.dashboardSidebar {
+  width: 250px;
+  background-color: #000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  overflow-y: auto; 
+}
+
+/* Container for main dashboard content */
+.dashboardContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* Header section */
+.dashboardContainer .dashboardHeader {
+  margin-top: 20px;
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+ 
+}
+
+.dashboardContainer .welcomeText {
+  font-weight: bold;
+  color: white;
+ 
+}
+
+.dashboardContainer .dashboardHeader .startchatButton {
+  width: 200px;
+  height: 50px;
+  border-radius: 10px;
+  color: white;
+  padding: 10px;
+  background: linear-gradient(to right, #862e9c, #c10281);
+  transition: background-color 0.3s ease;
+}
+
+/* Feature Cards section */
+.dashboardContainer .dashboardCards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 50px;
+  justify-content: center;
+}
+
+/* Individual card styling */
+.dashboardContainer .dashboardCard {
+  width: 300px;
+  height: 400px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+  color: black;
+  margin-top: 155px;
+}
+
+.dashboardContainer .dashboardCard:hover {
+  transform: scale(1.05);
+}
+
+/* Card image styling */
+.dashboardContainer .cardImage {
+  border-radius: 8px;
+  margin-bottom: 10px;
+}

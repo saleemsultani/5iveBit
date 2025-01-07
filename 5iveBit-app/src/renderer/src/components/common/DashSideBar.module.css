@@ -1,0 +1,77 @@
+/* Main container for the Dashboard SideBar */
+.dashSideBarContainer {
+   display: flex;
+   flex-direction: column; 
+   align-items: stretch; 
+   width: 220px; }
+  
+  /* Main content area of the SideBar */
+  .dashSideBarContainer .dashSideBarContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; 
+  }
+  
+  /* Style for individual buttons in the SideBar */
+  .dashSideBarContainer .dashSideBarButton {
+    width: 100%;
+   border-radius: 10px;
+   padding: 15px;
+   background: linear-gradient(to right, #862e9c, #c10281); 
+   text-align: center;
+   border: none; 
+   cursor: pointer;
+   color: white;
+  }
+
+  /*new chat button*/
+  .dashSideBarContainer .dashSideBarButton .newChatButton {
+    color: white;
+  }
+  
+  /* Add spacing between buttons */
+  .dashSideBarContainer .dashSideBarButton + .dashSideBarButton {
+    margin-top: 20px;
+    color: white;  
+  }
+  
+  /* Hover effect for buttons */
+  .dashSideBarContainer .dashSideBarButton:hover {
+   transition: background-color 0.3s ease;
+  }
+  
+  /*LOWER BUTTONS ICON BUTTONS*/
+  .dashSideBarContainer .lowerLinks {
+   margin-top: 40px; 
+  }
+  
+  .dashSideBarContainer .lowerLink {
+   display: flex;
+   align-items: center;
+  text-decoration: none;
+   margin-bottom: 10px; 
+   color: white;
+  }
+  
+  .dashSideBarContainer .lowerLink svg {
+    margin-right: 15px;
+    }
+  
+  /*USER PROFILE BUTTON*/
+  .dashSideBarContainer .userProfileContainer {
+   margin-top: 270px;
+  }
+  .dashSideBarContainer .userProfileButton {
+   width: 100%;
+   border-radius: 10px;
+   padding: 15px;
+   background: linear-gradient(to right, #862e9c, #c10281); 
+   text-align: center;
+   border: none; 
+   cursor: pointer;
+  }
+  
+  .dashSideBarContainer .profileIcon {
+    color: white;
+  }
+  
