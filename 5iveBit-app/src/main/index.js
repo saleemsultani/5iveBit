@@ -34,35 +34,43 @@ function createWindow() {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
       contextIsolation: true,
-      nodeIntegration: false
+      nodeIntegration: false,
+      webSecurity: true //Enabled web security
     }
   });
 
   // Set up proper CSP headers
   mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+    const responseHeaders = {
+      ...details.responseHeaders,
+      'Content-Security-Policy': [
+        `default-src 'self';
+         connect-src 'self' http://localhost:11434 https://cve.circl.lu;
+         script-src 'self' 'unsafe-inline';
+         style-src 'self' 'unsafe-inline';
+         img-src 'self' data: https:;
+         font-src 'self' data:;`
+      ]
+    };
+
+    // Ensure only one value for 'Access-Control-Allow-Origin'
+    if (responseHeaders['Access-Control-Allow-Origin']) {
+      responseHeaders['Access-Control-Allow-Origin'] = 'http://localhost:5173';
+    }
+
     callback({
-      responseHeaders: {
-        ...details.responseHeaders,
-        'Content-Security-Policy': [
-          `default-src 'self';
-           connect-src 'self' http://localhost:11434;
-           script-src 'self' 'unsafe-inline';
-           style-src 'self' 'unsafe-inline';
-           img-src 'self' data: https:;
-           font-src 'self' data:;`
-        ]
-      }
+      responseHeaders
     });
   });
 
-  //Configure CORS for the session
+  // Configure CORS for the session
   mainWindow.webContents.session.webRequest.onBeforeSendHeaders(
-    { urls: ['http://localhost:11434/*'] },
+    { urls: ['http://localhost:11434/*', 'https://cve.circl.lu/*'] },
     (details, callback) => {
       callback({
         requestHeaders: {
           ...details.requestHeaders,
-          Origin: 'electron://app'
+          Origin: 'http://localhost:5173'
         }
       });
     }
@@ -86,7 +94,7 @@ function createWindow() {
   }
 
   // Open the DevTools. For development purposes only. Comment out when not used.
-  //mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 }
 
 // This method will be called when Electron has finished

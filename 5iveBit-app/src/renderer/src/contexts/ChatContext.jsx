@@ -1,4 +1,5 @@
 import { useState, createContext, useContext, useEffect } from 'react';
+import { fetchCVEByID } from '../CVE/cveSearchAPI';
 const ChatsContext = createContext();
 
 // Utility function to generate unique IDs for chats and messages
@@ -55,6 +56,47 @@ function ChatsProvider({ children }) {
           { role: 'assistant', content: 'Thinking...', isThinking: true }
         ]
       }));
+
+      // Check if the promptInput contains a CVE-related query
+      const cveMatch = promptInput.match(/CVE-\d{4}-\d{4,7}/i);
+      if (cveMatch) {
+        const cveId = cveMatch[0];
+        const cveData = await fetchCVEByID(cveId);
+
+        // Extract only the important information from the response
+        const cveInfo = cveData
+          ? {
+              cveId: cveData.cveMetadata.cveId,
+              description: cveData.containers.cna.descriptions[0]?.value,
+              affectedProduct: cveData.containers.cna.affected[0]?.product,
+              affectedVendor: cveData.containers.cna.affected[0]?.vendor,
+              datePublished: cveData.cveMetadata.datePublished,
+              references: cveData.containers.cna.references.map((ref) => ({
+                name: ref.name,
+                url: ref.url
+              }))
+            }
+          : null;
+
+        // Prepare the content to be displayed
+        const cveResponse = cveInfo
+          ? `CVE ID: ${cveInfo.cveId}\n` +
+            `Description: ${cveInfo.description}\n` +
+            `Affected Product: ${cveInfo.affectedProduct}\n` +
+            `Affected Vendor: ${cveInfo.affectedVendor}\n` +
+            `Date Published: ${cveInfo.datePublished}\n` +
+            `References:\n` +
+            cveInfo.references.map((ref) => `- ${ref.name}: ${ref.url}`).join('\n')
+          : 'No data found for the specified CVE ID.';
+
+        // Update chat with the CVE information
+        setcurrentChat((current) => ({
+          ...current,
+          messages: [...updatedMessages, { role: 'assistant', content: cveResponse }]
+        }));
+
+        return cveResponse;
+      }
 
       // Send request to the local LLM server
       const response = await fetch('http://localhost:11434/api/chat', {
