@@ -1,5 +1,6 @@
 import { useState, createContext, useContext, useEffect } from 'react';
 import { fetchCVEByID } from '../CVE/cveSearchAPI';
+import { WrapperPrompt } from './prompts';
 const ChatsContext = createContext();
 
 // Utility function to generate unique IDs for chats and messages
@@ -56,10 +57,6 @@ function ChatsProvider({ children }) {
           { role: 'assistant', content: 'Thinking...', isThinking: true }
         ]
       }));
-
-      // Add WrapperPrompt to every promptInput
-      const WrapperPrompt =
-        'You are a cybersecurity expert. Please be polite with each interaction. Do not hallucinate or make up information.';
 
       // Check if the promptInput contains relevant terms
       const relevantTerms = /vulnerability|CVE|vuln/i;
