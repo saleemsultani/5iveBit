@@ -57,6 +57,10 @@ function ChatsProvider({ children }) {
         ]
       }));
 
+      // Add WrapperPrompt to every promptInput
+      const WrapperPrompt =
+        'You are a cybersecurity expert. Please be polite with each interaction. Do not hallucinate or make up information.';
+
       // Check if the promptInput contains relevant terms
       const relevantTerms = /vulnerability|CVE|vuln/i;
       if (relevantTerms.test(promptInput)) {
@@ -94,8 +98,8 @@ function ChatsProvider({ children }) {
             cveInfo.references.map((ref) => `- ${ref.name}: ${ref.url}`).join('\n')
           : '';
 
-        // Combine the promptInput and CVE details
-        const combinedMessage = `${promptInput}\n\n${cveResponse}`.trim();
+        // Combine the promptInput, CVE details, and WrapperPrompt
+        const combinedMessage = `${WrapperPrompt}\n\n${promptInput}\n\n${cveResponse}`.trim();
 
         // Send request to the local LLM server
         const response = await fetch('http://localhost:11434/api/chat', {
@@ -141,7 +145,9 @@ function ChatsProvider({ children }) {
 
         return data.message.content;
       } else {
-        // If no relevant terms, send the promptInput as is
+        // If no relevant terms, send the promptInput with WrapperPrompt
+        const combinedMessage = `${WrapperPrompt}\n\n${promptInput}`.trim();
+
         const response = await fetch('http://localhost:11434/api/chat', {
           method: 'POST',
           headers: {
@@ -149,7 +155,7 @@ function ChatsProvider({ children }) {
           },
           body: JSON.stringify({
             model: '5iveBit-ca-1',
-            messages: [...updatedMessages, { role: 'user', content: promptInput }],
+            messages: [...updatedMessages, { role: 'user', content: combinedMessage }],
             stream: false
           })
         });
