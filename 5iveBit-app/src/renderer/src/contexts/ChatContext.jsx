@@ -59,12 +59,13 @@ function ChatsProvider({ children }) {
 
       // Check if the promptInput contains a CVE-related query
       const cveMatch = promptInput.match(/CVE-\d{4}-\d{4,7}/i);
+      let cveInfo = null;
       if (cveMatch) {
         const cveId = cveMatch[0];
         const cveData = await fetchCVEByID(cveId);
 
         // Extract only the important information from the response
-        const cveInfo = cveData
+        cveInfo = cveData
           ? {
               cveId: cveData.cveMetadata.cveId,
               description: cveData.containers.cna.descriptions[0]?.value,
@@ -77,26 +78,21 @@ function ChatsProvider({ children }) {
               }))
             }
           : null;
-
-        // Prepare the content to be displayed
-        const cveResponse = cveInfo
-          ? `CVE ID: ${cveInfo.cveId}\n` +
-            `Description: ${cveInfo.description}\n` +
-            `Affected Product: ${cveInfo.affectedProduct}\n` +
-            `Affected Vendor: ${cveInfo.affectedVendor}\n` +
-            `Date Published: ${cveInfo.datePublished}\n` +
-            `References:\n` +
-            cveInfo.references.map((ref) => `- ${ref.name}: ${ref.url}`).join('\n')
-          : 'No data found for the specified CVE ID.';
-
-        // Update chat with the CVE information
-        setcurrentChat((current) => ({
-          ...current,
-          messages: [...updatedMessages, { role: 'assistant', content: cveResponse }]
-        }));
-
-        return cveResponse;
       }
+
+      // Prepare the content to be displayed
+      const cveResponse = cveInfo
+        ? `CVE ID: ${cveInfo.cveId}\n` +
+          `Description: ${cveInfo.description}\n` +
+          `Affected Product: ${cveInfo.affectedProduct}\n` +
+          `Affected Vendor: ${cveInfo.affectedVendor}\n` +
+          `Date Published: ${cveInfo.datePublished}\n` +
+          `References:\n` +
+          cveInfo.references.map((ref) => `- ${ref.name}: ${ref.url}`).join('\n')
+        : '';
+
+      // Combine the promptInput and CVE details
+      const combinedMessage = cveResponse ? `${promptInput}\n\n${cveResponse}` : promptInput;
 
       // Send request to the local LLM server
       const response = await fetch('http://localhost:11434/api/chat', {
@@ -106,7 +102,7 @@ function ChatsProvider({ children }) {
         },
         body: JSON.stringify({
           model: '5iveBit-ca-1',
-          messages: updatedMessages,
+          messages: [...updatedMessages, { role: 'user', content: combinedMessage }],
           stream: false
         })
       });
