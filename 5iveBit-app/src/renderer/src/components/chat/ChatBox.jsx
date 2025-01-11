@@ -6,8 +6,9 @@ import Textarea from '@mui/joy/Textarea';
 import { useChats } from '../../contexts/ChatContext';
 import styles from './ChatBox.module.css';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
+import AttachFileOutlinedIcon from '@mui/icons-material/AttachFileOutlined';
 import CancelIcon from '@mui/icons-material/Cancel';
+//import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import { useState, useRef } from 'react';
 
 // ChatBox component handles the chat interface including message display and input
@@ -15,6 +16,10 @@ function ChatBox() {
   const { currentChat, question, setQuestion, generateAnswer } = useChats(); // Get chat-related functions and state from context
   const [snackbarOpen, setSnackbarOpen] = useState(false); // State for managing clipboard copy notification
   const contentRef = useRef(null); // state for targeting the element which contains current chat
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [file, setFile] = useState(null); //stores user files
+  const fileUploadRef = useRef(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // download chat as .txt or as .log
   async function handleDownloadChatFile() {
@@ -27,54 +32,66 @@ function ChatBox() {
       console.error('An error occurred while saving the file:', error);
     }
   }
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [file, setFile] = useState(null); //stores user files
-  const fileUploadRef = useRef(null);
 
   const handleFileUpload = (e) => {
-    setSnackbarMessage('File uploaded');
     const uploadedFile = e.target.files[0];
-    if (uploadedFile) {
-      setFile(uploadedFile); 
+      if (uploadedFile) {
+        setFile(uploadedFile); 
+        setSnackbarMessage('File uploaded');
       setSnackbarOpen(true); // Notify the user that the file is ready
     }
-  };
-
+  }; 
+  
   const removeFileUpload = () => {
     setFile(null);
-    setSnackbarMessage('File removed');
-    setSnackbarOpen(true);
-
     if (fileUploadRef.current) {
       fileUploadRef.current.value = '';
     }
+    setSnackbarMessage('File removed');
+    setSnackbarOpen(true);
   };
 
   // Handle sending messages when the user submits a question or uploading text file
    const handleSubmitQuestion = async () => {
-    if (!question.trim() && !file) return; // Prevent empty submissions
+    if ((!question.trim() && !file) || isSubmitting) return; // Prevent empty submissions
 
-    // If file is uploaded, process and send its content
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = async (event) => {
-        const fileContent = event.target.result; // Get file content
-        const fileMessage = `Uploaded file: ${file.name}\n\n${fileContent}`;
-        await generateAnswer(fileMessage); // Send file content to chatbot
-        setFile(null); // Clear the file after submission
+    try {
+      setIsSubmitting(true); // Prevent multiple submissions
 
-        if (fileUploadRef.current) {
-          fileUploadRef.current.value = '';
+      if (file) {
+        const reader = new FileReader();
+        
+        // Convert FileReader to Promise for better control flow
+        const readFileContent = new Promise((resolve, reject) => {
+          reader.onload = (event) => resolve(event.target.result);
+          reader.onerror = (error) => reject(error);
+          reader.readAsText(file);
+        });
+
+        try {
+          const fileContent = await readFileContent;
+          const fileMessage = `Uploaded file: ${file.name}\n\n${fileContent}`;
+          await generateAnswer(fileMessage);
+          
+          // Clear file state and input after successful submission
+          setFile(null);
+          if (fileUploadRef.current) {
+            fileUploadRef.current.value = '';
+          }
+        } catch (error) {
+          console.error('Error reading file:', error);
+          setSnackbarMessage('Error processing file');
+          setSnackbarOpen(true);
         }
-      };
-      reader.readAsText(file); // Reads files content as text pasted into the chatbot -change*
-    }
+      }
 
-    // If there's a text message, send it
-    if (question.trim()) {
-      const currentQuestion = question;
-      setQuestion(''); // Clear the input field
-      await generateAnswer(currentQuestion); // Send the text message
+      if (question.trim()) {
+        const currentQuestion = question;
+        setQuestion('');
+        await generateAnswer(currentQuestion);
+      }
+    } finally {
+      setIsSubmitting(false); // Reset submission state
     }
   };
 
@@ -130,7 +147,6 @@ function ChatBox() {
 
       {/* Message input area with send and voice buttons & file upload*/}
       <Box className={styles.inputContainer}>
-
         <Textarea
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
@@ -170,11 +186,11 @@ function ChatBox() {
                   ref={fileUploadRef}
                   id="file-upload"
                   type="file"
-                  accept=".js,.py,.java,.txt,.html,.css" // Restricted to code-related file types
+                  accept=".js,.py,.java,.txt,.html,.css, .pdf, .doc" 
                   onChange={handleFileUpload}
                   className={styles.fileInput}
                 />
-                <FileUploadIcon className={styles.fileUploadIcon} />
+                <AttachFileOutlinedIcon className={styles.fileUploadIcon} />
               </label>
 
               {/* Voice input button (functionality to be implemented) */}
