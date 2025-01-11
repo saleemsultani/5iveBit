@@ -105,7 +105,14 @@ function ChatBox() {
                 <DownloadIcon />
               </Button>
               {/* Voice input button (functionality to be implemented) */}
-              <Button className={styles.iconButton}>
+              <Button
+                className={styles.iconButton}
+                onClick={async () => {
+                  const options = { buttons: ['saleem', 'khan'] };
+                  const res = await window.api.askUserPopup(options);
+                  console.log(res);
+                }}
+              >
                 <GraphicEqIcon />
               </Button>
               {/* Send message button - disabled when input is empty */}

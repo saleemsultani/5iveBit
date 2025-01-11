@@ -165,3 +165,26 @@ ipcMain.handle('save-file', async (_, content) => {
     return { success: false, message: 'Failed to save file.' };
   }
 });
+
+// pop-for-user-in-loop
+ipcMain.handle('popup-for-user-in-loop', async (event, options) => {
+  const { type, title, message, buttons } = options;
+
+  const result = await dialog.showMessageBox({
+    type: type || 'question',
+    buttons: buttons || ['Yes', 'No'],
+    defaultId: 1, // Index of the default button
+    title: title || '5iveBot',
+    message: message || 'Do you want to proceed?',
+    cancelId: buttons.length
+  });
+
+  // Detect if the dialog was canceled (via close button or Esc key)
+  if (result.canceled || result.response === buttons.length) {
+    return false;
+  }
+
+  // Return the selected button's value
+  const returnValue = buttons ? buttons[result.response] : null;
+  return returnValue;
+});
