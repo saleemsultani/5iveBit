@@ -21,13 +21,13 @@ function NavBar() {
               className={`${styles.navbarLogo} ${styles.tinyLogo}`}
             />
           </a>
-          <p className={styles.navbarLink}>Latest CVEs</p>
+          <p className={styles.navbarLink}>NewsLetter</p>
           <p className={styles.navbarLink}>Best Practices</p>
         </Box>
 
         {/* Right Side Button */}
         <Button className={styles.navbarButton} variant="outlined" startIcon={<PersonIcon />}>
-          Senior Analyst
+          PROFILE
         </Button>
       </Box>
     </Box>

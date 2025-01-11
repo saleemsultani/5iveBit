@@ -26,11 +26,6 @@
   color: white;
 }
 
-/*new chat button*/
-.dashSideBarContainer .dashSideBarButton .newChatButton {
-  color: white;
-}
-
 /* Add spacing between buttons */
 .dashSideBarContainer .dashSideBarButton + .dashSideBarButton {
   margin-top: 20px;
@@ -71,6 +66,7 @@
   text-align: center;
   border: none;
   cursor: pointer;
+  margin-bottom: 20px;
 }
 
 .dashSideBarContainer .profileIcon {
