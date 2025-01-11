@@ -1,4 +1,5 @@
 import { Box, Button, Stack, IconButton, Snackbar } from '@mui/material';
+import DownloadIcon from '@mui/icons-material/Download';
 import SendIcon from '@mui/icons-material/Send';
 import GraphicEqIcon from '@mui/icons-material/GraphicEq';
 import Textarea from '@mui/joy/Textarea';
@@ -11,10 +12,21 @@ import { useState, useRef } from 'react';
 
 // ChatBox component handles the chat interface including message display and input
 function ChatBox() {
-  // Get chat-related functions and state from context
-  const { currentChat, question, setQuestion, generateAnswer } = useChats();
-  // State for managing clipboard copy notification
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const { currentChat, question, setQuestion, generateAnswer } = useChats(); // Get chat-related functions and state from context
+  const [snackbarOpen, setSnackbarOpen] = useState(false); // State for managing clipboard copy notification
+  const contentRef = useRef(null); // state for targeting the element which contains current chat
+
+  // download chat as .txt or as .log
+  async function handleDownloadChatFile() {
+    const content = contentRef.current?.innerText || '';
+
+    try {
+      await window.api.saveFile(content);
+      console.log('File saved successfully!');
+    } catch (error) {
+      console.error('An error occurred while saving the file:', error);
+    }
+  }
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [file, setFile] = useState(null); //stores user files
   const fileUploadRef = useRef(null);
@@ -76,12 +88,15 @@ function ChatBox() {
 
   // Copy message content to clipboard and show notification
   const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text).then(() => {
-      console.log('Copied to clipboard:', text);
-      setSnackbarOpen(true);
-    }).catch((err) => {
-      console.error('Failed to copy:', err);
-    });
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        console.log('Copied to clipboard:', text);
+        setSnackbarOpen(true);
+      })
+      .catch((err) => {
+        console.error('Failed to copy:', err);
+      });
   };
 
   // Close the clipboard copy notification
@@ -93,17 +108,15 @@ function ChatBox() {
     <Box className={styles.chatBoxContainer}>
       {/* Chat history section displays all messages */}
       <Box className={styles.chatHistory}>
-        <Box className={styles.chatHistoryContent}>
+        <Box className={styles.chatHistoryContent} ref={contentRef}>
           {/* Map through messages and render them with appropriate styling */}
           {currentChat.messages?.map((message, index) => (
             <div key={index} className={styles.messageContainer}>
               <p className={message.role === 'user' ? styles.userMessage : styles.botMessage}>
-                <span className={message.isThinking ? styles.thinking : ''}>
-                  {message.content}
-                </span>
+                <span className={message.isThinking ? styles.thinking : ''}>{message.content}</span>
                 {message.role === 'assistant' && !message.isThinking && (
-                  <IconButton 
-                    onClick={() => copyToClipboard(message.content)} 
+                  <IconButton
+                    onClick={() => copyToClipboard(message.content)}
                     className={styles.copyButton}
                   >
                     <ContentCopyIcon className={styles.copyIcon} />
@@ -142,6 +155,15 @@ function ChatBox() {
           }
           endDecorator={
             <Stack direction="row" width="100%" justifyContent="flex-end">
+              {/* download button for downloading chat */}
+              <Button
+                onClick={handleDownloadChatFile}
+                className={styles.iconButton}
+                // disabled={currentChat.questions.length === 0}
+              >
+                <DownloadIcon />
+              </Button>
+              
               {/* File upload button */}
               <label htmlFor="file-upload" className={styles.fileUploadIcon}>
                 <input

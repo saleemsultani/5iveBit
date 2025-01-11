@@ -1,8 +1,8 @@
 import styles from './Dashboard.module.css';
 import { Box, Button, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import DashNavBar from '../common/DashNavBar';
-import SideBar from '../common/DashSideBar';
+import DashNavBar from './DashNavBar';
+import SideBar from './DashSideBar';
 
 function Dashboard() {
   return (
@@ -21,37 +21,31 @@ function DashboardMain() {
   return (
     <Box className={styles.dashboardMain}>
       <Box className={styles.dashboardContainer}>
-
         {/* Header Section */}
         <Box className={styles.dashboardHeader}>
-          <Typography variant='h3' className={styles.welcomeText}>
-            Welcome Back
+          <Typography variant="h3" className={styles.welcomeText}>
+            Welcome
           </Typography>
-          <Button variant='contained'
+          <Button
+            variant="contained"
             className={styles.startchatButton}
-            onClick={() => navigate('/app')}
+            onClick={() => navigate('/chat')}
           >
-            Start New Chat
+            Get Started &rarr;
           </Button>
         </Box>
 
         {/* Feature Cards */}
         <Box className={styles.dashboardCards}>
-          <Box
-            className={styles.dashboardCard}
-            onClick={() => navigate('/latest-cves')}
-          >
+          <Box className={styles.dashboardCard} onClick={() => navigate('/latest-cves')}>
             <img
-              src='https://via.placeholder.com/300x140'
-              alt='Latest CVEs'
+              src="https://via.placeholder.com/300x140"
+              alt="Latest CVEs"
               className={styles.cardImage}
             />
           </Box>
 
-          <Box
-            className={styles.dashboardCard}
-            onClick={() => navigate('/best-practices')}
-          >
+          <Box className={styles.dashboardCard} onClick={() => navigate('/best-practices')}>
             <img
               src="https://via.placeholder.com/300x140"
               alt="Best Practices"
@@ -59,10 +53,7 @@ function DashboardMain() {
             />
           </Box>
 
-          <Box
-            className={styles.dashboardCard}
-            onClick={() => navigate('/best-practices')}
-          >
+          <Box className={styles.dashboardCard} onClick={() => navigate('/best-practices')}>
             <img
               src="https://via.placeholder.com/300x140"
               alt="Best Practices"
@@ -70,10 +61,7 @@ function DashboardMain() {
             />
           </Box>
 
-          <Box
-            className={styles.dashboardCard}
-            onClick={() => navigate('/best-practices')}
-          >
+          <Box className={styles.dashboardCard} onClick={() => navigate('/best-practices')}>
             <img
               src="https://via.placeholder.com/300x140"
               alt="Best Practices"
@@ -89,7 +77,7 @@ function DashboardMain() {
 function Sidebar() {
   return (
     <Box className={styles.dashboardSidebar}>
-      <SideBar /> 
+      <SideBar />
     </Box>
   );
 }

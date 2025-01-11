@@ -1,4 +1,6 @@
 import { useState, createContext, useContext, useEffect } from 'react';
+import { fetchCVEByID } from '../CVE/cveSearchAPI';
+import { WrapperPrompt } from './prompts';
 const ChatsContext = createContext();
 
 // Utility function to generate unique IDs for chats and messages
@@ -23,11 +25,14 @@ function ChatsProvider({ children }) {
   // Creates a new chat session with a unique ID
   const addChat = function (newChat) {
     setChats((current) => {
-      return [...current, { 
-        id: generateRandomId(15), 
-        messages: [],
-        ...newChat 
-      }];
+      return [
+        ...current,
+        {
+          id: generateRandomId(15),
+          messages: [],
+          ...newChat
+        }
+      ];
     });
   };
 
@@ -42,64 +47,147 @@ function ChatsProvider({ children }) {
     try {
       // Add user message to the current chat
       const currentMessages = [...(currentChat.messages || [])];
-      const updatedMessages = [
-        ...currentMessages,
-        { role: "user", content: promptInput }
-      ];
+      const updatedMessages = [...currentMessages, { role: 'user', content: promptInput }];
 
       // Show a temporary "Thinking..." message while waiting for response
-      setcurrentChat(current => ({
+      setcurrentChat((current) => ({
         ...current,
         messages: [
           ...updatedMessages,
-          { role: "assistant", content: "Thinking...", isThinking: true }
+          { role: 'assistant', content: 'Thinking...', isThinking: true }
         ]
       }));
 
-      // Send request to the local LLM server
-      const response = await fetch('http://localhost:11434/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          model: "5iveBit-ca-1",
-          messages: updatedMessages, 
-          stream: false
-        })
-      });
+      // Check if the promptInput contains relevant terms
+      const relevantTerms = /vulnerability|CVE|vuln/i;
+      if (relevantTerms.test(promptInput)) {
+        // Check if the promptInput contains a CVE-related query
+        const cveMatch = promptInput.match(/CVE-\d{4}-\d{4,7}/i);
+        let cveInfo = null;
+        if (cveMatch) {
+          const cveId = cveMatch[0];
+          const cveData = await fetchCVEByID(cveId);
 
-      // Debug logging for API response
-      console.log('Response status:', response.status);
-      console.log('Response headers:', [...response.headers.entries()]);
+          // Extract only the important information from the response
+          cveInfo = cveData
+            ? {
+                cveId: cveData.cveMetadata.cveId,
+                description: cveData.containers.cna.descriptions[0]?.value,
+                affectedProduct: cveData.containers.cna.affected[0]?.product,
+                affectedVendor: cveData.containers.cna.affected[0]?.vendor,
+                datePublished: cveData.cveMetadata.datePublished,
+                references: cveData.containers.cna.references.map((ref) => ({
+                  name: ref.name,
+                  url: ref.url
+                }))
+              }
+            : null;
+        }
 
-      const text = await response.text();
-      console.log('Raw response text:', text);
+        // Prepare the content to be displayed
+        const cveResponse = cveInfo
+          ? `CVE ID: ${cveInfo.cveId}\n` +
+            `Description: ${cveInfo.description}\n` +
+            `Affected Product: ${cveInfo.affectedProduct}\n` +
+            `Affected Vendor: ${cveInfo.affectedVendor}\n` +
+            `Date Published: ${cveInfo.datePublished}\n` +
+            `References:\n` +
+            cveInfo.references.map((ref) => `- ${ref.name}: ${ref.url}`).join('\n')
+          : '';
 
-      let data;
-      try {
-        data = JSON.parse(text);
-        console.log('Parsed response data:', data);
-      } catch (parseError) {
-        console.error('JSON parse error:', parseError);
-        throw new Error('Invalid JSON response');
+        // Combine the promptInput, CVE details, and WrapperPrompt
+        const combinedMessage = `${WrapperPrompt}\n\n${promptInput}\n\n${cveResponse}`.trim();
+
+        // Send request to the local LLM server
+        const response = await fetch('http://localhost:11434/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            model: '5iveBit-ca-1',
+            messages: [...updatedMessages, { role: 'user', content: combinedMessage }],
+            stream: false
+          })
+        });
+
+        console.log('Response received:', response);
+
+        // Debug logging for API response
+        console.log('Response status:', response.status);
+        console.log('Response headers:', [...response.headers.entries()]);
+
+        const text = await response.text();
+        console.log('Raw response text:', text);
+
+        let data;
+        try {
+          data = JSON.parse(text);
+          console.log('Parsed response data:', data);
+        } catch (parseError) {
+          console.error('JSON parse error:', parseError);
+          throw new Error('Invalid JSON response');
+        }
+
+        if (!data.message || !data.message.content) {
+          console.error('No message content in data:', data);
+          throw new Error('No message content in data');
+        }
+
+        // Update chat with the AI's response
+        setcurrentChat((current) => ({
+          ...current,
+          messages: [...updatedMessages, { role: 'assistant', content: data.message.content }]
+        }));
+
+        return data.message.content;
+      } else {
+        // If no relevant terms, send the promptInput with WrapperPrompt
+        const combinedMessage = `${WrapperPrompt}\n\n${promptInput}`.trim();
+
+        const response = await fetch('http://localhost:11434/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            model: '5iveBit-ca-1',
+            messages: [...updatedMessages, { role: 'user', content: combinedMessage }],
+            stream: false
+          })
+        });
+
+        console.log('Response received:', response);
+
+        // Debug logging for API response
+        console.log('Response status:', response.status);
+        console.log('Response headers:', [...response.headers.entries()]);
+
+        const text = await response.text();
+        console.log('Raw response text:', text);
+
+        let data;
+        try {
+          data = JSON.parse(text);
+          console.log('Parsed response data:', data);
+        } catch (parseError) {
+          console.error('JSON parse error:', parseError);
+          throw new Error('Invalid JSON response');
+        }
+
+        if (!data.message || !data.message.content) {
+          console.error('No message content in data:', data);
+          throw new Error('No message content in data');
+        }
+
+        // Update chat with the AI's response
+        setcurrentChat((current) => ({
+          ...current,
+          messages: [...updatedMessages, { role: 'assistant', content: data.message.content }]
+        }));
+
+        return data.message.content;
       }
-
-      if (!data.message || !data.message.content) {
-        console.error('No message content in data:', data);
-        throw new Error('No message content in data');
-      }
-
-      // Update chat with the AI's response
-      setcurrentChat(current => ({
-        ...current,
-        messages: [
-          ...updatedMessages,
-          { role: "assistant", content: data.message.content }
-        ]
-      }));
-
-      return data.message.content;
     } catch (error) {
       // Detailed error logging for debugging
       console.error('Full error details:', {
