@@ -166,26 +166,6 @@ ipcMain.handle('save-file', async (_, content) => {
   }
 });
 
-// // pop-for-user-in-loop
-// ipcMain.handle('popup-for-user-in-loop', async (event, options) => {
-//   const { type, title, message, buttons } = options;
-
-//   const result = await dialog.showMessageBox({
-//     type: type || 'question',
-//     buttons: buttons || ['Yes', 'No'],
-//     defaultId: -1, // Index of the default button
-//     title: title || '5iveBot',
-//     message: message || 'Do you want to proceed?'
-//   });
-
-//   // return cancelled if no the user does not select any option
-//   if (result.canceled) return 'canceled';
-
-//   // Otherwise, return the selected button value
-//   const returnValue = buttons ? buttons[result.response] : null;
-//   return returnValue;
-// });
-
 // pop-for-user-in-loop
 ipcMain.handle('popup-for-user-in-loop', async (event, options) => {
   const { type, title, message, buttons } = options;
