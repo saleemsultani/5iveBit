@@ -3,23 +3,23 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 /* Main layout: Sidebar and content area */
 .dashboardLayout {
   display: flex;
-  flex: 1; 
+  flex: 1;
   overflow: hidden;
 }
 
 /* Main content area */
 .dashboardMain {
-  flex: 3; 
+  flex: 3;
   display: flex;
   flex-direction: column;
   padding: 20px;
-  overflow-y: auto; 
+  overflow-y: auto;
   background-color: #000;
 }
 
@@ -29,7 +29,7 @@
   background-color: #000;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  overflow-y: auto; 
+  overflow-y: auto;
 }
 
 /* Container for main dashboard content */
@@ -45,14 +45,13 @@
   margin-bottom: 40px;
   display: flex;
   justify-content: center;
+  align-items: center; /* Center vertically */
   gap: 50px;
- 
 }
 
 .dashboardContainer .welcomeText {
   font-weight: bold;
   color: white;
- 
 }
 
 .dashboardContainer .dashboardHeader .startchatButton {

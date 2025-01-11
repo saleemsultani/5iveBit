@@ -24,14 +24,14 @@ function DashboardMain() {
         {/* Header Section */}
         <Box className={styles.dashboardHeader}>
           <Typography variant="h3" className={styles.welcomeText}>
-            Welcome Back
+            Welcome
           </Typography>
           <Button
             variant="contained"
             className={styles.startchatButton}
             onClick={() => navigate('/chat')}
           >
-            Start New Chat
+            Get Started &rarr;
           </Button>
         </Box>
 

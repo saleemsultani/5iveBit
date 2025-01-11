@@ -4,7 +4,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { Box, Button } from '@mui/material';
 import { useChats } from '../../contexts/ChatContext';
 import styles from './DashSideBar.module.css';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import PersonIcon from '@mui/icons-material/Person';
 import ColorLensIcon from '@mui/icons-material/ColorLens';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import InfoIcon from '@mui/icons-material/Info';
@@ -52,42 +52,27 @@ function DashSideBar() {
       <Box className={styles.dashSideBarContent}>
         {/* Top Buttons */}
         <Box className={styles.topSection}>
-          <DashSideBarButton
-            buttonText="New Chat"
-            onClick={handleNewChat}
-            className="newChatButton"
-          />{' '}
-          {/*change to route to chat bot*/}
+          {/* User Profile Button */}
+          <Button
+            className={styles.userProfileButton}
+            variant="outlined"
+            startIcon={<PersonIcon className={styles.profileIcon} />}
+            sx={{ color: 'white' }}
+          >
+            Profile
+          </Button>
           <DashSideBarButton buttonText="Reports" />
-          <DashSideBarButton buttonText="Chat History" onClick={() => setOpenHistory(!openHistory)}>
-            {openHistory ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </DashSideBarButton>
         </Box>
       </Box>
 
       {/* Lower Links */}
       <Box className={styles.lowerLinks}>
         <a href="#" className={styles.lowerLink}>
-          <ColorLensIcon /> Themes
-        </a>
-        <a href="#" className={styles.lowerLink}>
           <HelpOutlineIcon /> Help
         </a>
         <a href="#" className={styles.lowerLink}>
           <InfoIcon /> About
         </a>
-      </Box>
-
-      {/* User Profile Button */}
-      <Box className={styles.userProfileContainer}>
-        <Button
-          className={styles.userProfileButton}
-          variant="outlined"
-          startIcon={<AccountCircleIcon className={styles.profileIcon} />}
-          sx={{ color: 'white' }}
-        >
-          Profile
-        </Button>
       </Box>
     </Box>
   );
