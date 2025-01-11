@@ -4,7 +4,9 @@ import { electronAPI } from '@electron-toolkit/preload';
 // Custom APIs for renderer
 const api = {
   // custom API for saving file
-  saveFile: (content) => ipcRenderer.invoke('save-file', content)
+  saveFile: (content) => ipcRenderer.invoke('save-file', content),
+  // pop for human in the loop
+  askUserPopup: (options) => ipcRenderer.invoke('popup-for-user-in-loop', options)
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to
