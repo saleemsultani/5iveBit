@@ -8,7 +8,6 @@ import styles from './ChatBox.module.css';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import AttachFileOutlinedIcon from '@mui/icons-material/AttachFileOutlined';
 import CancelIcon from '@mui/icons-material/Cancel';
-//import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import { useState, useRef } from 'react';
 
 // ChatBox component handles the chat interface including message display and input
@@ -17,9 +16,15 @@ function ChatBox() {
   const [snackbarOpen, setSnackbarOpen] = useState(false); // State for managing clipboard copy notification
   const contentRef = useRef(null); // state for targeting the element which contains current chat
   const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [file, setFile] = useState(null); //stores user files
+  const [files, setFiles] = useState([]); 
   const fileUploadRef = useRef(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+
+  //Current accepted file types
+  const acceptedFileTypes = [
+    '.js', '.py', '.java', '.txt', '.html', '.css', '.pdf', '.doc', '.docx', '.c', '.cs', '.jsx' //update different file types
+  ];
 
   // download chat as .txt or as .log
   async function handleDownloadChatFile() {
@@ -33,55 +38,90 @@ function ChatBox() {
     }
   }
 
+  //Handles uploading users file(s)
   const handleFileUpload = (e) => {
-    const uploadedFile = e.target.files[0];
-      if (uploadedFile) {
-        setFile(uploadedFile); 
-        setSnackbarMessage('File uploaded');
-      setSnackbarOpen(true); // Notify the user that the file is ready
-    }
-  }; 
-  
-  const removeFileUpload = () => {
-    setFile(null);
-    if (fileUploadRef.current) {
-      fileUploadRef.current.value = '';
-    }
-    setSnackbarMessage('File removed');
-    setSnackbarOpen(true);
+    try {
+      const uploadedFiles = Array.from(e.target.files || []);
+      if (uploadedFiles.length === 0) 
+      {return;}
+
+      const validFiles = uploadedFiles.filter(file => {
+      const fileName = file.name.toLowerCase();
+        return acceptedFileTypes.some(ext => fileName.endsWith(ext));
+      });
+
+      if (validFiles.length > 0) {
+        setFiles(prev => [...prev, ...validFiles]);
+      
+      if (validFiles.length === uploadedFiles.length) {
+        setSnackbarMessage('File(s) uploaded'); }
+          else {
+          const rejectedCount = uploadedFiles.length - validFiles.length;
+          setSnackbarMessage('File type not supported. Please upload a valid file type.');
+          }
+        setSnackbarOpen(true);
+        }
+      }  catch (error) {
+        console.error('An error occurred when uploading file(s);', error); //add file validation later
+        setSnackbarMessage('Failed to upload file(s)');
+        setSnackbarOpen(true);
+      } 
+    };
+
+  //Read file(s) as text - file(s) is pasted into chat as text for chatbot to read - multiple files will appear as one user message
+  const readFileContent = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event) => resolve({
+        name: file.name,
+        content: event.target.result
+      });
+      reader.onerror = (error) => reject(error);
+      reader.readAsText(file);
+    });
   };
 
-  // Handle sending messages when the user submits a question or uploading text file
+  //Users can remove one uploaded file from the message input area at a time
+  const removeFileUpload = (removeFile) => {
+    try {
+    setFiles(prevFiles => prevFiles.filter(file => file !== removeFile)); 
+    setSnackbarMessage('File removed'); 
+    setSnackbarOpen(true); //notifies user that file has been removed 
+    } catch (error) {
+      console.error('An error occurred when removing the file(s)');
+      setSnackbarMessage('Failed to remove file(s)');
+      snackbarOpen(true);
+    }
+  };
+
+  // Handle sending messages when the user submits a question or uploading file(s)
    const handleSubmitQuestion = async () => {
-    if ((!question.trim() && !file) || isSubmitting) return; // Prevent empty submissions
+    if ((!question.trim() && files.length === 0) || isSubmitting) return; // Prevents empty submissions
 
     try {
-      setIsSubmitting(true); // Prevent multiple submissions
+      setIsSubmitting(true); // Prevents multiple submissions
 
-      if (file) {
-        const reader = new FileReader();
-        
-        // Convert FileReader to Promise for better control flow
-        const readFileContent = new Promise((resolve, reject) => {
-          reader.onload = (event) => resolve(event.target.result);
-          reader.onerror = (error) => reject(error);
-          reader.readAsText(file);
-        });
-
+      if (files.length > 0) {
         try {
-          const fileContent = await readFileContent;
-          const fileMessage = `Uploaded file: ${file.name}\n\n${fileContent}`;
+          const fileContentsPromises = files.map(readFileContent);
+          const fileResults = await Promise.all(fileContentsPromises);
+
+          // C
+          const fileMessage = fileResults
+            .map(({ name, content }) => `File: ${name}\n${content}`)
+            .join('\n\n==========\n\n');
+
           await generateAnswer(fileMessage);
-          
-          // Clear file state and input after successful submission
-          setFile(null);
+
+          setFiles([]);
           if (fileUploadRef.current) {
             fileUploadRef.current.value = '';
           }
         } catch (error) {
-          console.error('Error reading file:', error);
-          setSnackbarMessage('Error processing file');
+          console.error('Error submitting file(s):', error);
+          setSnackbarMessage('Error submitting file(s)'); //maybe update error message
           setSnackbarOpen(true);
+          return;
         }
       }
 
@@ -91,7 +131,7 @@ function ChatBox() {
         await generateAnswer(currentQuestion);
       }
     } finally {
-      setIsSubmitting(false); // Reset submission state
+      setIsSubmitting(false);
     }
   };
 
@@ -113,6 +153,7 @@ function ChatBox() {
       })
       .catch((err) => {
         console.error('Failed to copy:', err);
+        setSnackbarOpen(true);
       });
   };
 
@@ -156,19 +197,33 @@ function ChatBox() {
           maxRows={3}
           className={styles.textarea}
           startDecorator={
-            file && (
-              <Box className={styles.filePreview}>
-                <span className={styles.fileName}>{file.name}</span>
-                <IconButton 
-                  onClick={removeFileUpload}
-                  size="small"
-                  className={styles.removeFileUploadButton}
-                >
-                  <CancelIcon fontSize="small" />
-                </IconButton>
+            files.length > 0 && (
+              <Box className={styles.filesPreviewContainer}>
+                {files.map((file, index) => (
+                  <Box 
+                    key={index} 
+                    className={styles.filePreview}
+                  >
+                    <span className={styles.fileName}>
+                      {file.name}
+                    </span>
+                    <IconButton 
+                      onClick={() => removeFileUpload(file)}
+                      size="small"
+                      className={styles.removeFileButton}
+                      aria-label={`Remove ${file.name}`}
+                    >
+                      <CancelIcon 
+                        fontSize="small" 
+                        className={styles.cancelIcon}
+                      />
+                    </IconButton>
+                  </Box>
+                ))}
               </Box>
             )
           }
+
           endDecorator={
             <Stack direction="row" width="100%" justifyContent="flex-end">
               {/* download button for downloading chat */}
@@ -180,17 +235,18 @@ function ChatBox() {
                 <DownloadIcon />
               </Button>
               
-              {/* File upload button */}
-              <label htmlFor="file-upload" className={styles.fileUploadIcon}>
+              {/* Attach file(s) button */}
+              <label htmlFor="file-upload" className={styles.attachFileIcon}>
                 <input
                   ref={fileUploadRef}
                   id="file-upload"
                   type="file"
-                  accept=".js,.py,.java,.txt,.html,.css, .pdf, .doc" 
+                  accept={acceptedFileTypes.join(',')} 
                   onChange={handleFileUpload}
                   className={styles.fileInput}
+                  multiple
                 />
-                <AttachFileOutlinedIcon className={styles.fileUploadIcon} />
+                <AttachFileOutlinedIcon className={styles.attachFileIcon} />
               </label>
 
               {/* Voice input button (functionality to be implemented) */}
@@ -201,7 +257,7 @@ function ChatBox() {
               {/* Send button */}
               <Button
                 onClick={handleSubmitQuestion}
-                disabled={!question.trim() && !file} // Disable if no text or file is present
+                disabled={!question.trim() && files.length === 0} // Disable if no text or file is present
                 className={styles.iconButton}
               >
                 <SendIcon />

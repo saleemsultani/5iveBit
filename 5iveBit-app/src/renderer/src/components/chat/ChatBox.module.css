@@ -120,74 +120,68 @@
   }
 }
 
-/* Hide the actual file input field */
-  .fileInput {
-    display: none;
-  }
- 
-
-/* Label for the file upload button */
-.fileUploadLabel {
+/*File remove styles*/
+.filesPreviewContainer {
   display: flex;
-  align-items: center;
-  cursor: pointer;
-}
-
-.fileUploadIcon {
-  font-size: 24px;
-  color: white;
-}
-
-.fileUploadPlaceholder {
-  display: flex;
-  align-items: center;
+  flex-wrap: wrap;
   gap: 8px;
-  padding: 12px;
-  border: 1px dashed #ccc;
-  border-radius: 4px;
-  color: #666;
+  padding: 4px;
+  width: 100%;
+  border-radius: 15px;
 }
 
-.uploadedFileDisplay {
+.filePreview {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
   background-color: #f5f5f5;
-}
-
-.fileIcon {
-  font-size: 20px;
-  color: #0d47a1;
-  margin-right: 8px;
-}
-
-.fileName {
-  flex-grow: 1;
-  font-size: 14px;
-  color: #333;
-}
-
-.sendButton {
-  background-color: #0d47a1;
-  color: white;
   border-radius: 4px;
-  padding: 8px 16px;
+  padding: 4px 8px;
+  gap: 4px;
+  max-width: fit-content;
+  border-radius: 6px solid transparent; 
 }
 
-.removeFileUploadButton {
-  color: white !important;
-  cursor: pointer;
-
-}
-
-.removeFileUploadButton svg {
-  font-size: 20px;
+.filePreview:hover {
+  box-shadow: 0 0 0 2px rgba(92, 6, 6, 0.3);
+  border-color: #be0e0e;
+  background-color: #f8f9fa; 
+  transform: translateY(-1px);
 }
 
 .fileName {
-  font-size: 15px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #000;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.removeFileButton {
+  padding: 2px !important;
+  margin-left: 4px;
+}
+
+.removeFileButton:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.cancelIcon {
+  font-size: 18px;
+}
+
+.cancelIcon:hover {
+  color: #be0e0e;
+}
+
+/* File Upload Button Styles */
+.fileInput {
+  display: none;
+}
+
+.attachFileIcon {
+  cursor: pointer; 
   color: white;
+  margin-top: 4px;
 }
