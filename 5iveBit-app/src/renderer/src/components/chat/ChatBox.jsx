@@ -8,6 +8,21 @@ import styles from './ChatBox.module.css';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import AttachFileOutlinedIcon from '@mui/icons-material/AttachFileOutlined';
 import CancelIcon from '@mui/icons-material/Cancel';
+import Prism from 'prismjs';
+import 'prismjs/themes/prism-funky.css'; //maybe change syntax theme
+import 'prismjs/components/prism-javascript';
+import 'prismjs/components/prism-jsx';
+import 'prismjs/components/prism-typescript';
+import 'prismjs/components/prism-python';
+import 'prismjs/components/prism-java';
+import 'prismjs/components/prism-c';
+import 'prismjs/components/prism-cpp';
+import 'prismjs/components/prism-csharp';
+import 'prismjs/components/prism-sql';
+import 'prismjs/components/prism-bash';
+import 'prismjs/components/prism-markup';
+import 'prismjs/components/prism-css';
+import { isLikelyCode } from './ChatCodeDetect';
 import { useState, useRef } from 'react';
 
 // ChatBox component handles the chat interface including message display and input
@@ -20,8 +35,85 @@ function ChatBox() {
   const fileUploadRef = useRef(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  //codeblock formatting
+  const formatMessage = (content) => {
+    const parts = content.split(/(```[\s\S]*?```)/g);
+    
+    return parts.map((part, index) => {
+      if (part.startsWith('```') && part.endsWith('```')) {
+        const code = part.slice(3, -3);
+        
+        // Detect language 
+        const firstLine = code.split('\n')[0].trim().toLowerCase();
+        let language = 'javascript'; 
+        let codeContent = code;
+  
+        // Common file extensions for different languages
+        const languageMap = {
+          'javascript': 'javascript',
+          'js': 'javascript',
+          'jsx': 'jsx',
+          'typescript': 'typescript',
+          'ts': 'typescript',
+          'python': 'python',
+          'py': 'python',
+          'java': 'java',
+          'cpp': 'cpp',
+          'c++': 'cpp',
+          'csharp': 'csharp',
+          'c#': 'csharp',
+          'sql': 'sql',
+          'html': 'markup',
+          'css': 'css',
+          'bash': 'bash',
+          'shell': 'bash'
+        };
+  
+        // Check if first line indicates language
+        if (languageMap[firstLine]) {
+          language = languageMap[firstLine];
+          // Remove the language line from the code
+          codeContent = code.slice(firstLine.length).trim();
+        }
+  
+        // Syntax highlighting
+        let highlightedCode;
+        try {
+          const grammar = Prism.languages[language] || Prism.languages.javascript;
+          highlightedCode = Prism.highlight(codeContent, grammar, language);
+        } catch (error) {
+          console.error('Syntax highlighting failed:', error);
+          highlightedCode = codeContent; // Fallback to plain text
+        }
+  
+        return (
+          <div key={index} className={styles.codeBlock}>
+            <IconButton
+              onClick={() => copyToClipboard(codeContent)}
+              className={styles.copyButton}
+              title="Copy code"
+            >
+              <ContentCopyIcon className={styles.copyIcon} />
+            </IconButton>
+            
+            <div className={styles.codeHeader}>
+              <span className={styles.languageLabel}>{language}</span>
+            </div>
+            
+            <pre className={styles.codeContent}>
+              <code 
+                dangerouslySetInnerHTML={{ __html: highlightedCode }}
+                className={`language-${language}`}
+              />
+            </pre>
+          </div>
+        );
+      }
+      return <span key={index}>{part}</span>;
+    });
+  };
 
-  //Current accepted file types
+  //Current accepted file types for upload
   const acceptedFileTypes = [
     '.js', '.py', '.java', '.txt', '.html', '.css', '.pdf', '.doc', '.docx', '.c', '.cs', '.jsx' //update different file types
   ];
@@ -54,7 +146,9 @@ function ChatBox() {
         setFiles(prev => [...prev, ...validFiles]);
       
       if (validFiles.length === uploadedFiles.length) {
-        setSnackbarMessage('File(s) uploaded'); }
+        setSnackbarMessage('File(s) uploaded'); 
+        setSnackbarOpen(true);
+         }
         }
       }  catch (error) {
         console.error('An error occurred when uploading file(s);', error); //add file validation later
@@ -69,7 +163,7 @@ function ChatBox() {
       const reader = new FileReader();
       reader.onload = (event) => resolve({
         name: file.name,
-        content: event.target.result
+        content: `File: ${file.name}\n\`\`\`\n${event.target.result}\n\`\`\``
       });
       reader.onerror = (error) => reject(error);
       reader.readAsText(file);
@@ -98,12 +192,10 @@ function ChatBox() {
 
       if (files.length > 0) {
         try {
-          const fileContentsPromises = files.map(readFileContent);
-          const fileResults = await Promise.all(fileContentsPromises);
-
-          // C
-          const fileMessage = fileResults
-            .map(({ name, content }) => `File: ${name}\n${content}`)
+          //const fileContentsPromises = files.map(readFileContent);
+          const fileContents = await Promise.all(files.map(readFileContent));
+          const fileMessage = fileContents
+            .map(({ content }) => content )
             .join('\n\n==========\n\n');
 
           await generateAnswer(fileMessage);
@@ -114,16 +206,21 @@ function ChatBox() {
           }
         } catch (error) {
           console.error('Error submitting file(s):', error);
-          setSnackbarMessage('Error submitting file(s)'); //maybe update error message
+          setSnackbarMessage('Error submitting file(s)'); 
           setSnackbarOpen(true);
           return;
         }
       }
-
+      
       if (question.trim()) {
-        const currentQuestion = question;
+        let processedQuestion = question;
+
+      if (!question.includes('```') && isLikelyCode(question)) {
+        processedQuestion = `\`\`\`${language}\n${question}\n\`\`\``;
+      }
+
         setQuestion('');
-        await generateAnswer(currentQuestion);
+        await generateAnswer(processedQuestion);
       }
     } finally {
       setIsSubmitting(false);
@@ -144,10 +241,12 @@ function ChatBox() {
       .writeText(text)
       .then(() => {
         console.log('Copied to clipboard:', text);
+        setSnackbarMessage('Copied to clipboard');
         setSnackbarOpen(true);
       })
       .catch((err) => {
         console.error('Failed to copy:', err);
+        setSnackbarMessage('Failed to copy'); 
         setSnackbarOpen(true);
       });
   };
@@ -166,7 +265,9 @@ function ChatBox() {
           {currentChat.messages?.map((message, index) => (
             <div key={index} className={styles.messageContainer}>
               <p className={message.role === 'user' ? styles.userMessage : styles.botMessage}>
-                <span className={message.isThinking ? styles.thinking : ''}>{message.content}</span>
+                <span className={message.isThinking ? styles.thinking : ''}>
+                {formatMessage(message.content)}
+                </span>
                 {message.role === 'assistant' && !message.isThinking && (
                   <IconButton
                     onClick={() => copyToClipboard(message.content)}
@@ -225,7 +326,6 @@ function ChatBox() {
               <Button
                 onClick={handleDownloadChatFile}
                 className={styles.iconButton}
-                // disabled={currentChat.questions.length === 0}
               >
                 <DownloadIcon />
               </Button>
