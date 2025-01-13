@@ -55,11 +55,6 @@ function ChatBox() {
       
       if (validFiles.length === uploadedFiles.length) {
         setSnackbarMessage('File(s) uploaded'); }
-          else {
-          const rejectedCount = uploadedFiles.length - validFiles.length;
-          setSnackbarMessage('File type not supported. Please upload a valid file type.');
-          }
-        setSnackbarOpen(true);
         }
       }  catch (error) {
         console.error('An error occurred when uploading file(s);', error); //add file validation later
