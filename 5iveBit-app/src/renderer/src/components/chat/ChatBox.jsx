@@ -8,21 +8,7 @@ import styles from './ChatBox.module.css';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import AttachFileOutlinedIcon from '@mui/icons-material/AttachFileOutlined';
 import CancelIcon from '@mui/icons-material/Cancel';
-import Prism from 'prismjs';
-import 'prismjs/themes/prism-funky.css'; //maybe change syntax theme
-import 'prismjs/components/prism-javascript';
-import 'prismjs/components/prism-jsx';
-import 'prismjs/components/prism-typescript';
-import 'prismjs/components/prism-python';
-import 'prismjs/components/prism-java';
-import 'prismjs/components/prism-c';
-import 'prismjs/components/prism-cpp';
-import 'prismjs/components/prism-csharp';
-import 'prismjs/components/prism-sql';
-import 'prismjs/components/prism-bash';
-import 'prismjs/components/prism-markup';
-import 'prismjs/components/prism-css';
-import { isLikelyCode } from './ChatCodeDetect';
+import { formatMessage, isLikelyCode } from './ChatFormatCode';
 import { useState, useRef } from 'react';
 
 // ChatBox component handles the chat interface including message display and input
@@ -35,89 +21,6 @@ function ChatBox() {
   const fileUploadRef = useRef(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  //codeblock formatting
-  const formatMessage = (content) => {
-    const parts = content.split(/(```[\s\S]*?```)/g);
-    
-    return parts.map((part, index) => {
-      if (part.startsWith('```') && part.endsWith('```')) {
-        const code = part.slice(3, -3);
-        
-        // Detect language 
-        const firstLine = code.split('\n')[0].trim().toLowerCase();
-        let language = 'javascript'; 
-        let codeContent = code;
-  
-        // Common file extensions for different languages
-        const languageMap = {
-          'javascript': 'javascript',
-          'js': 'javascript',
-          'jsx': 'jsx',
-          'typescript': 'typescript',
-          'ts': 'typescript',
-          'python': 'python',
-          'py': 'python',
-          'java': 'java',
-          'cpp': 'cpp',
-          'c++': 'cpp',
-          'csharp': 'csharp',
-          'c#': 'csharp',
-          'sql': 'sql',
-          'html': 'markup',
-          'css': 'css',
-          'bash': 'bash',
-          'shell': 'bash'
-        };
-  
-        // Check if first line indicates language
-        if (languageMap[firstLine]) {
-          language = languageMap[firstLine];
-          // Remove the language line from the code
-          codeContent = code.slice(firstLine.length).trim();
-        }
-  
-        // Syntax highlighting
-        let highlightedCode;
-        try {
-          const grammar = Prism.languages[language] || Prism.languages.javascript;
-          highlightedCode = Prism.highlight(codeContent, grammar, language);
-        } catch (error) {
-          console.error('Syntax highlighting failed:', error);
-          highlightedCode = codeContent; // Fallback to plain text
-        }
-  
-        return (
-          <div key={index} className={styles.codeBlock}>
-            <IconButton
-              onClick={() => copyToClipboard(codeContent)}
-              className={styles.copyButton}
-              title="Copy code"
-            >
-              <ContentCopyIcon className={styles.copyIcon} />
-            </IconButton>
-            
-            <div className={styles.codeHeader}>
-              <span className={styles.languageLabel}>{language}</span>
-            </div>
-            
-            <pre className={styles.codeContent}>
-              <code 
-                dangerouslySetInnerHTML={{ __html: highlightedCode }}
-                className={`language-${language}`}
-              />
-            </pre>
-          </div>
-        );
-      }
-      return <span key={index}>{part}</span>;
-    });
-  };
-
-  //Current accepted file types for upload
-  const acceptedFileTypes = [
-    '.js', '.py', '.java', '.txt', '.html', '.css', '.pdf', '.doc', '.docx', '.c', '.cs', '.jsx' //update different file types
-  ];
-
   // download chat as .txt or as .log
   async function handleDownloadChatFile() {
     const content = contentRef.current?.innerText || '';
@@ -129,6 +32,12 @@ function ChatBox() {
       console.error('An error occurred while saving the file:', error);
     }
   }
+
+    //Current accepted file types for upload
+    const acceptedFileTypes = [
+      '.js', '.py', '.java', '.txt', '.html', '.css', '.pdf', '.doc', '.docx', '.c', '.cs', '.jsx',   //update to more file types if needed
+      '.php', '.aspx', '.jsp', '.dart', '.ejs', '.sql', '.md', '.yaml', '.yml', '.htm', '.mjs', '.sass', '.vue', '.tsx', '.bson'
+    ];
 
   //Handles uploading users file(s)
   const handleFileUpload = (e) => {
@@ -216,7 +125,7 @@ function ChatBox() {
         let processedQuestion = question;
 
       if (!question.includes('```') && isLikelyCode(question)) {
-        processedQuestion = `\`\`\`${language}\n${question}\n\`\`\``;
+        processedQuestion = `\`\`\`\n${question}\n\`\`\``;
       }
 
         setQuestion('');
@@ -266,7 +175,7 @@ function ChatBox() {
             <div key={index} className={styles.messageContainer}>
               <p className={message.role === 'user' ? styles.userMessage : styles.botMessage}>
                 <span className={message.isThinking ? styles.thinking : ''}>
-                {formatMessage(message.content)}
+                {formatMessage(message.content, copyToClipboard )}
                 </span>
                 {message.role === 'assistant' && !message.isThinking && (
                   <IconButton
