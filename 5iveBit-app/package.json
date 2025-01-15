@@ -26,6 +26,7 @@
     "@mui/joy": "^5.0.0-beta.48",
     "@mui/material": "^6.1.10",
     "axios": "^1.7.9",
+    "prismjs": "^1.29.0",
     "react-router-dom": "^7.0.2"
   },
   "devDependencies": {
