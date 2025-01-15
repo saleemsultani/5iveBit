@@ -35,8 +35,9 @@ function ChatBox() {
 
     //Current accepted file types for upload
     const acceptedFileTypes = [
-      '.js', '.py', '.java', '.txt', '.html', '.css', '.pdf', '.doc', '.docx', '.c', '.cs', '.jsx',   //update to more file types if needed
-      '.php', '.aspx', '.jsp', '.dart', '.ejs', '.sql', '.md', '.yaml', '.yml', '.htm', '.mjs', '.sass', '.vue', '.tsx', '.bson'
+      '.js', '.py', '.java', '.txt', '.html', '.htm', '.css', '.pdf', '.doc', '.docx', '.c', '.cs', '.cpp', '.jsx',   //update to more file types if needed
+      '.php', '.aspx', '.jsp', '.dart', '.ejs', '.sql', '.md', '.yaml', '.yml', '.htm', '.mjs', '.sass', '.vue', '.tsx', '.bson', 
+      '.csv', '.log', '.syslog', '.xml', '.xlsx', 'xls', '.ts', '.sh', '.rb'
     ];
 
   //Handles uploading users file(s)

@@ -67,7 +67,7 @@
 /* fixes the code block so messages are not so large*/
 .userMessage,
 .botMessage {
-  max-width: 50% !important; 
+  max-width: 40% !important; 
   width: fit-content !important;
   padding: 8px 12px !important;
 }
