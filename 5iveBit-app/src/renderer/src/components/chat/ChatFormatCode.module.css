@@ -1,0 +1,84 @@
+/* Code block container styling */
+.codeBlock {
+  background-color: #1e1e1e;
+  overflow: hidden;
+  border: 1px solid #333;
+  font-size: 14px;      
+  line-height: 1.2;            
+}
+
+/* Header section with language label and copy button */
+.codeHeader {
+  background-color: #2d2d2d;
+  padding: 8px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #3d3d3d;
+}
+
+.languageLabel {
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Code content area */
+.codeContent {
+  margin: 0;
+  padding: 16px;
+  overflow-x: auto;
+  background: transparent;
+}
+
+.codeContent code {
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  display: block;
+}
+
+/* Scrollbar customization for code blocks */
+.codeContent::-webkit-scrollbar {
+  height: 8px;
+  background-color: #1e1e1e;
+}
+
+.codeContent::-webkit-scrollbar-thumb {
+  background-color: #3d3d3d;
+  border-radius: 4px;
+}
+
+.codeContent::-webkit-scrollbar-thumb:hover {
+  background-color: #4d4d4d;
+}
+
+/* Syntax highlighting colors (complementing Prism themes) */   
+.codeBlock .token.comment { color: #dd11dd; }
+.codeBlock .token.keyword { color: #230fdd; }
+.codeBlock .token.string { color: #3cf3db; }
+.codeBlock .token.function { color: #d48ad1; }
+.codeBlock .token.number { color: #46ac0f; }
+.codeBlock .token.operator { color: #fdfafa; }
+.codeBlock .token.class-name { color: #6d099b; }
+
+/* fixes the code block so messages are not so large*/
+.userMessage,
+.botMessage {
+  max-width: 40% !important; 
+  width: fit-content !important;
+  padding: 8px 12px !important;
+}
+
+/* Copy button styling for coping code*/
+.copyIcon {
+  font-size: 1rem !important;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Copy icon hover effect */
+.copyIcon:hover {
+  color: white;
+}

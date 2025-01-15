@@ -8,6 +8,7 @@ import styles from './ChatBox.module.css';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import AttachFileOutlinedIcon from '@mui/icons-material/AttachFileOutlined';
 import CancelIcon from '@mui/icons-material/Cancel';
+import { formatMessage, isLikelyCode } from './ChatFormatCode';
 import { useState, useRef } from 'react';
 
 // ChatBox component handles the chat interface including message display and input
@@ -20,12 +21,6 @@ function ChatBox() {
   const fileUploadRef = useRef(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-
-  //Current accepted file types
-  const acceptedFileTypes = [
-    '.js', '.py', '.java', '.txt', '.html', '.css', '.pdf', '.doc', '.docx', '.c', '.cs', '.jsx' //update different file types
-  ];
-
   // download chat as .txt or as .log
   async function handleDownloadChatFile() {
     const content = contentRef.current?.innerText || '';
@@ -37,6 +32,13 @@ function ChatBox() {
       console.error('An error occurred while saving the file:', error);
     }
   }
+
+    //Current accepted file types for upload
+    const acceptedFileTypes = [
+      '.js', '.py', '.java', '.txt', '.html', '.htm', '.css', '.pdf', '.doc', '.docx', '.c', '.cs', '.cpp', '.jsx',   //update to more file types if needed
+      '.php', '.aspx', '.jsp', '.dart', '.ejs', '.sql', '.md', '.yaml', '.yml', '.htm', '.mjs', '.sass', '.vue', '.tsx', '.bson', 
+      '.csv', '.log', '.syslog', '.xml', '.xlsx', 'xls', '.ts', '.sh', '.rb'
+    ];
 
   //Handles uploading users file(s)
   const handleFileUpload = (e) => {
@@ -54,7 +56,9 @@ function ChatBox() {
         setFiles(prev => [...prev, ...validFiles]);
       
       if (validFiles.length === uploadedFiles.length) {
-        setSnackbarMessage('File(s) uploaded'); }
+        setSnackbarMessage('File(s) uploaded'); 
+        setSnackbarOpen(true);
+         }
         }
       }  catch (error) {
         console.error('An error occurred when uploading file(s);', error); //add file validation later
@@ -69,7 +73,7 @@ function ChatBox() {
       const reader = new FileReader();
       reader.onload = (event) => resolve({
         name: file.name,
-        content: event.target.result
+        content: `File: ${file.name}\n\`\`\`\n${event.target.result}\n\`\`\``
       });
       reader.onerror = (error) => reject(error);
       reader.readAsText(file);
@@ -98,12 +102,10 @@ function ChatBox() {
 
       if (files.length > 0) {
         try {
-          const fileContentsPromises = files.map(readFileContent);
-          const fileResults = await Promise.all(fileContentsPromises);
-
-          // C
-          const fileMessage = fileResults
-            .map(({ name, content }) => `File: ${name}\n${content}`)
+          //const fileContentsPromises = files.map(readFileContent);
+          const fileContents = await Promise.all(files.map(readFileContent));
+          const fileMessage = fileContents
+            .map(({ content }) => content )
             .join('\n\n==========\n\n');
 
           await generateAnswer(fileMessage);
@@ -114,16 +116,21 @@ function ChatBox() {
           }
         } catch (error) {
           console.error('Error submitting file(s):', error);
-          setSnackbarMessage('Error submitting file(s)'); //maybe update error message
+          setSnackbarMessage('Error submitting file(s)'); 
           setSnackbarOpen(true);
           return;
         }
       }
-
+      
       if (question.trim()) {
-        const currentQuestion = question;
+        let processedQuestion = question;
+
+      if (!question.includes('```') && isLikelyCode(question)) {
+        processedQuestion = `\`\`\`\n${question}\n\`\`\``;
+      }
+
         setQuestion('');
-        await generateAnswer(currentQuestion);
+        await generateAnswer(processedQuestion);
       }
     } finally {
       setIsSubmitting(false);
@@ -144,10 +151,12 @@ function ChatBox() {
       .writeText(text)
       .then(() => {
         console.log('Copied to clipboard:', text);
+        setSnackbarMessage('Copied to clipboard');
         setSnackbarOpen(true);
       })
       .catch((err) => {
         console.error('Failed to copy:', err);
+        setSnackbarMessage('Failed to copy'); 
         setSnackbarOpen(true);
       });
   };
@@ -166,7 +175,9 @@ function ChatBox() {
           {currentChat.messages?.map((message, index) => (
             <div key={index} className={styles.messageContainer}>
               <p className={message.role === 'user' ? styles.userMessage : styles.botMessage}>
-                <span className={message.isThinking ? styles.thinking : ''}>{message.content}</span>
+                <span className={message.isThinking ? styles.thinking : ''}>
+                {formatMessage(message.content, copyToClipboard )}
+                </span>
                 {message.role === 'assistant' && !message.isThinking && (
                   <IconButton
                     onClick={() => copyToClipboard(message.content)}
@@ -225,7 +236,6 @@ function ChatBox() {
               <Button
                 onClick={handleDownloadChatFile}
                 className={styles.iconButton}
-                // disabled={currentChat.questions.length === 0}
               >
                 <DownloadIcon />
               </Button>
