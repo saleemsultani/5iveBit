@@ -35,9 +35,9 @@ function ChatBox() {
 
     //Current accepted file types for upload
     const acceptedFileTypes = [
-      '.js', '.py', '.java', '.txt', '.html', '.htm', '.css', '.pdf', '.doc', '.docx', '.c', '.cs', '.cpp', '.jsx',   //update to more file types if needed
+      '.js', '.py', '.java', '.txt', '.html', '.htm', '.css', '.c', '.cs', '.cpp', '.jsx', 
       '.php', '.aspx', '.jsp', '.dart', '.ejs', '.sql', '.md', '.yaml', '.yml', '.htm', '.mjs', '.sass', '.vue', '.tsx', '.bson', 
-      '.csv', '.log', '.syslog', '.xml', '.xlsx', 'xls', '.ts', '.sh', '.rb'
+      '.csv', '.log', '.syslog', '.xml', '.xlsx', 'xls', '.ts', '.sh', '.rb', '.json'
     ];
 
   //Handles uploading users file(s)
@@ -93,44 +93,55 @@ function ChatBox() {
     }
   };
 
-  // Handle sending messages when the user submits a question or uploading file(s)
-   const handleSubmitQuestion = async () => {
-    if ((!question.trim() && files.length === 0) || isSubmitting) return; // Prevents empty submissions
-
+  // Handle sending messages when the user submits a question or uploads file(s)
+  const handleSubmitQuestion = async () => {
+    if ((!question.trim() && files.length === 0) || isSubmitting) return;  // Prevents empty submissions
+  
     try {
       setIsSubmitting(true); // Prevents multiple submissions
-
+      let messageParts = [];
+  
+      const currentQuestion = question.trim();
+  
+      // Process question if it exists
+      if (currentQuestion) {
+        let processedQuestion = currentQuestion;
+        if (!currentQuestion.includes('```') && isLikelyCode(currentQuestion)) {
+          processedQuestion = `\`\`\`\n${currentQuestion}\n\`\`\``;
+        }
+        messageParts.push(processedQuestion);
+      }
+  
+      // Process file(s) if they exist
       if (files.length > 0) {
         try {
-          //const fileContentsPromises = files.map(readFileContent);
           const fileContents = await Promise.all(files.map(readFileContent));
-          const fileMessage = fileContents
-            .map(({ content }) => content )
-            .join('\n\n==========\n\n');
-
-          await generateAnswer(fileMessage);
-
+          fileContents.forEach(({ content }) => {
+            messageParts.push(content);
+          });
+  
+          // Clear file states after processing - no longer appear in message input box
           setFiles([]);
           if (fileUploadRef.current) {
             fileUploadRef.current.value = '';
           }
         } catch (error) {
-          console.error('Error submitting file(s):', error);
-          setSnackbarMessage('Error submitting file(s)'); 
+          console.error('Error sending message', error); 
+          setSnackbarMessage('Failed to send message');
           setSnackbarOpen(true);
           return;
         }
       }
-      
-      if (question.trim()) {
-        let processedQuestion = question;
-
-      if (!question.includes('```') && isLikelyCode(question)) {
-        processedQuestion = `\`\`\`\n${question}\n\`\`\``;
-      }
-
+  
+      // If there is a question to send
+      if (messageParts.length > 0) {
+        const combinedMessage = messageParts.join('\n\n-\n\n');
+        
+        // Clear the question input before sending - no longer appears in message input box
         setQuestion('');
-        await generateAnswer(processedQuestion);
+
+        //Sends message 
+        await generateAnswer(combinedMessage); 
       }
     } finally {
       setIsSubmitting(false);
