@@ -40,6 +40,14 @@
   display: block;
 }
 
+/*fixes code blocks not fitting into the message box*/
+.codeBlock pre,
+.codeBlock code {
+  white-space: pre-wrap !important; 
+  word-break: break-word !important;
+  width: 100% !important;
+}
+
 /* Scrollbar customization for code blocks */
 .codeContent::-webkit-scrollbar {
   height: 8px;
