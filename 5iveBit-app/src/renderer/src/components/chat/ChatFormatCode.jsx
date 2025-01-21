@@ -15,7 +15,7 @@ export const formatMessage = (content, copyToClipboard) => {
       
       // Detect language 
       const firstLine = code.split('\n')[0].trim().toLowerCase();
-      let language = 'javascript'; 
+      let language = 'uploaded file'; 
       let codeContent = code;
 
       // file extensions for different languages  - add more if needed
