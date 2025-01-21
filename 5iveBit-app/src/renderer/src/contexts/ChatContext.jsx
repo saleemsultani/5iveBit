@@ -1,6 +1,7 @@
 import { useState, createContext, useContext, useEffect } from 'react';
 import { fetchCVEByID } from '../CVE/cveSearchAPI';
 import { WrapperPrompt } from './prompts';
+import { generateSecuritySuggestions } from './SecuritySuggestion';
 import { handleCVEQuery } from '../CVE/cveHandler';
 const ChatsContext = createContext();
 
@@ -64,6 +65,9 @@ function ChatsProvider({ children }) {
       if (cveResponse !== null) {
         return cveResponse;
       }
+
+      // Generate security suggestions
+      await generateSecuritySuggestions(promptInput, updatedMessages, setcurrentChat);
 
       // If no relevant terms, send the promptInput with WrapperPrompt
       const combinedMessage = `${WrapperPrompt}\n\n${promptInput}`.trim();
