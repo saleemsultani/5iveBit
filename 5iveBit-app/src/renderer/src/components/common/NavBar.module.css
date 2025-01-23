@@ -40,9 +40,10 @@
   width: 11%;
   padding: 10px;
   color: white !important;
-  background: linear-gradient(to right, #862e9c, #c10281);
+  background-color: #1c0d2c;
   font-size: 0.9rem;
   text-transform: none;
+  border: none;
 }
 
 /* Back arrow styles */

@@ -10,7 +10,7 @@
 .chatBoxContainer .chatHistory {
   height: 90%;
   border-radius: 20px;
-  background-color: #212121;
+  background-color: #1c0d2c;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -38,9 +38,9 @@
   width: 50%;
   padding: 10px;
   word-wrap: break-word;
-  background-color: #57575b;
+  background-color: #4b3069;
   border-radius: 10px;
-  color: white;
+  color: #e0e0e0;
 }
 
 /* Bot messages styling with copy button */
@@ -50,9 +50,9 @@
   width: 50%;
   padding: 10px;
   word-wrap: break-word;
-  background-color: #57575b;
+  background-color: #3a1f4f;
   border-radius: 10px;
-  color: white;
+  color: #e0e0e0;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -78,12 +78,11 @@
 
 /* Chat input textarea styling */
 .chatBoxContainer .textarea {
-  background-color: #212121;
-  border: solid 1px black;
+  background-color: #1c0d2c;
+  border: solid 1px #1c0d2c;
   border-radius: 10px;
   color: white;
   width: 100%;
-
 }
 
 /* Action buttons styling */
@@ -100,7 +99,7 @@
 /* Custom snackbar notification styling */
 .snackbar {
   & :global(.MuiSnackbarContent-root) {
-    background-color: #424242;
+    background-color: #1c0d2c;
     color: white;
   }
 }
@@ -139,13 +138,13 @@
   padding: 4px 8px;
   gap: 4px;
   max-width: fit-content;
-  border-radius: 6px solid transparent; 
+  border-radius: 6px solid transparent;
 }
 
 .filePreview:hover {
   box-shadow: 0 0 0 2px rgba(92, 6, 6, 0.3);
   border-color: #be0e0e;
-  background-color: #f8f9fa; 
+  background-color: #f8f9fa;
   transform: translateY(-1px);
 }
 
@@ -182,10 +181,7 @@
 }
 
 .attachFileIcon {
-  cursor: pointer; 
-  color: white;
+  cursor: pointer;
+  color: #ffffff;
   margin-top: 4px;
 }
-
-
-
