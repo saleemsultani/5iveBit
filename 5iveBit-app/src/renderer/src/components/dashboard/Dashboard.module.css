@@ -61,6 +61,18 @@
   padding: 10px;
   background-color: purple;
   transition: background-color 0.3s ease;
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Keyframe animation for floating effect */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 /* Feature Cards section */
