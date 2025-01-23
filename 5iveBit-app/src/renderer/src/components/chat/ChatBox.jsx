@@ -9,7 +9,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import AttachFileOutlinedIcon from '@mui/icons-material/AttachFileOutlined';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { formatMessage, isLikelyCode } from './ChatFormatCode';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 // ChatBox component handles the chat interface including message display and input
 function ChatBox() {
@@ -17,9 +17,16 @@ function ChatBox() {
   const [snackbarOpen, setSnackbarOpen] = useState(false); // State for managing clipboard copy notification
   const contentRef = useRef(null); // state for targeting the element which contains current chat
   const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [files, setFiles] = useState([]); 
+  const [files, setFiles] = useState([]);
   const fileUploadRef = useRef(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Auto-scroll to the bottom of the chat history when new messages are added
+  useEffect(() => {
+    if (contentRef.current) {
+      contentRef.current.scrollTop = contentRef.current.scrollHeight;
+    }
+  }, [currentChat.messages]);
 
   // download chat as .txt or as .log
   async function handleDownloadChatFile() {
@@ -33,48 +40,83 @@ function ChatBox() {
     }
   }
 
-    //Current accepted file types for upload
-    const acceptedFileTypes = [
-      '.js', '.py', '.java', '.txt', '.html', '.htm', '.css', '.c', '.cs', '.cpp', '.jsx', 
-      '.php', '.aspx', '.jsp', '.dart', '.ejs', '.sql', '.md', '.yaml', '.yml', '.htm', '.mjs', '.sass', '.vue', '.tsx', '.bson', 
-      '.csv', '.log', '.syslog', '.xml', '.xlsx', 'xls', '.ts', '.sh', '.rb', '.json'
-    ];
+  //Current accepted file types for upload
+  const acceptedFileTypes = [
+    '.js',
+    '.py',
+    '.java',
+    '.txt',
+    '.html',
+    '.htm',
+    '.css',
+    '.c',
+    '.cs',
+    '.cpp',
+    '.jsx',
+    '.php',
+    '.aspx',
+    '.jsp',
+    '.dart',
+    '.ejs',
+    '.sql',
+    '.md',
+    '.yaml',
+    '.yml',
+    '.htm',
+    '.mjs',
+    '.sass',
+    '.vue',
+    '.tsx',
+    '.bson',
+    '.csv',
+    '.log',
+    '.syslog',
+    '.xml',
+    '.xlsx',
+    'xls',
+    '.ts',
+    '.sh',
+    '.rb',
+    '.json'
+  ];
 
   //Handles uploading users file(s)
   const handleFileUpload = (e) => {
     try {
       const uploadedFiles = Array.from(e.target.files || []);
-      if (uploadedFiles.length === 0) 
-      {return;}
+      if (uploadedFiles.length === 0) {
+        return;
+      }
 
-      const validFiles = uploadedFiles.filter(file => {
-      const fileName = file.name.toLowerCase();
-        return acceptedFileTypes.some(ext => fileName.endsWith(ext));
+      const validFiles = uploadedFiles.filter((file) => {
+        const fileName = file.name.toLowerCase();
+        return acceptedFileTypes.some((ext) => fileName.endsWith(ext));
       });
 
       if (validFiles.length > 0) {
-        setFiles(prev => [...prev, ...validFiles]);
-      
-      if (validFiles.length === uploadedFiles.length) {
-        setSnackbarMessage('File(s) uploaded'); 
-        setSnackbarOpen(true);
-         }
+        setFiles((prev) => [...prev, ...validFiles]);
+
+        if (validFiles.length === uploadedFiles.length) {
+          setSnackbarMessage('File(s) uploaded');
+          setSnackbarOpen(true);
         }
-      }  catch (error) {
-        console.error('An error occurred when uploading file(s);', error); //add file validation later
-        setSnackbarMessage('Failed to upload file(s)');
-        setSnackbarOpen(true);
-      } 
-    };
+      }
+    } catch (error) {
+      console.error('An error occurred when uploading file(s);', error); //add file validation later
+      setSnackbarMessage('Failed to upload file(s)');
+      setSnackbarOpen(true);
+    }
+  };
 
   //Read file(s) as text - file(s) is pasted into chat as text for chatbot to read - multiple files will appear as one user message
   const readFileContent = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.onload = (event) => resolve({
-        name: file.name,
-        content: `File: ${file.name}\n\`\`\`\n${event.target.result}\n\`\`\``
-      });
+      reader.onload = (event) =>
+        resolve({
+          name: file.name,
+          content: `File: ${file.name}\n\`\`\`\n${event.target.result}\n\`\`\``
+        });
       reader.onerror = (error) => reject(error);
       reader.readAsText(file);
     });
@@ -83,9 +125,9 @@ function ChatBox() {
   //Users can remove one uploaded file from the message input area at a time
   const removeFileUpload = (removeFile) => {
     try {
-    setFiles(prevFiles => prevFiles.filter(file => file !== removeFile)); 
-    setSnackbarMessage('File removed'); 
-    setSnackbarOpen(true); //notifies user that file has been removed 
+      setFiles((prevFiles) => prevFiles.filter((file) => file !== removeFile));
+      setSnackbarMessage('File removed');
+      setSnackbarOpen(true); //notifies user that file has been removed
     } catch (error) {
       console.error('An error occurred when removing the file(s)');
       setSnackbarMessage('Failed to remove file(s)');
@@ -95,14 +137,14 @@ function ChatBox() {
 
   // Handle sending messages when the user submits a question or uploads file(s)
   const handleSubmitQuestion = async () => {
-    if ((!question.trim() && files.length === 0) || isSubmitting) return;  // Prevents empty submissions
-  
+    if ((!question.trim() && files.length === 0) || isSubmitting) return; // Prevents empty submissions
+
     try {
       setIsSubmitting(true); // Prevents multiple submissions
       let messageParts = [];
-  
+
       const currentQuestion = question.trim();
-  
+
       // Process question if it exists
       if (currentQuestion) {
         let processedQuestion = currentQuestion;
@@ -111,7 +153,7 @@ function ChatBox() {
         }
         messageParts.push(processedQuestion);
       }
-  
+
       // Process file(s) if they exist
       if (files.length > 0) {
         try {
@@ -119,29 +161,29 @@ function ChatBox() {
           fileContents.forEach(({ content }) => {
             messageParts.push(content);
           });
-  
+
           // Clear file states after processing - no longer appear in message input box
           setFiles([]);
           if (fileUploadRef.current) {
             fileUploadRef.current.value = '';
           }
         } catch (error) {
-          console.error('Error sending message', error); 
+          console.error('Error sending message', error);
           setSnackbarMessage('Failed to send message');
           setSnackbarOpen(true);
           return;
         }
       }
-  
+
       // If there is a question to send
       if (messageParts.length > 0) {
         const combinedMessage = messageParts.join('\n\n-\n\n');
-        
+
         // Clear the question input before sending - no longer appears in message input box
         setQuestion('');
 
-        //Sends message 
-        await generateAnswer(combinedMessage); 
+        //Sends message
+        await generateAnswer(combinedMessage);
       }
     } finally {
       setIsSubmitting(false);
@@ -167,7 +209,7 @@ function ChatBox() {
       })
       .catch((err) => {
         console.error('Failed to copy:', err);
-        setSnackbarMessage('Failed to copy'); 
+        setSnackbarMessage('Failed to copy');
         setSnackbarOpen(true);
       });
   };
@@ -187,7 +229,7 @@ function ChatBox() {
             <div key={index} className={styles.messageContainer}>
               <p className={message.role === 'user' ? styles.userMessage : styles.botMessage}>
                 <span className={message.isThinking ? styles.thinking : ''}>
-                {formatMessage(message.content, copyToClipboard )}
+                  {formatMessage(message.content, copyToClipboard)}
                 </span>
                 {message.role === 'assistant' && !message.isThinking && (
                   <IconButton
@@ -217,47 +259,35 @@ function ChatBox() {
             files.length > 0 && (
               <Box className={styles.filesPreviewContainer}>
                 {files.map((file, index) => (
-                  <Box 
-                    key={index} 
-                    className={styles.filePreview}
-                  >
-                    <span className={styles.fileName}>
-                      {file.name}
-                    </span>
-                    <IconButton 
+                  <Box key={index} className={styles.filePreview}>
+                    <span className={styles.fileName}>{file.name}</span>
+                    <IconButton
                       onClick={() => removeFileUpload(file)}
                       size="small"
                       className={styles.removeFileButton}
                       aria-label={`Remove ${file.name}`}
                     >
-                      <CancelIcon 
-                        fontSize="small" 
-                        className={styles.cancelIcon}
-                      />
+                      <CancelIcon fontSize="small" className={styles.cancelIcon} />
                     </IconButton>
                   </Box>
                 ))}
               </Box>
             )
           }
-
           endDecorator={
             <Stack direction="row" width="100%" justifyContent="flex-end">
               {/* download button for downloading chat */}
-              <Button
-                onClick={handleDownloadChatFile}
-                className={styles.iconButton}
-              >
+              <Button onClick={handleDownloadChatFile} className={styles.iconButton}>
                 <DownloadIcon />
               </Button>
-              
+
               {/* Attach file(s) button */}
               <label htmlFor="file-upload" className={styles.attachFileIcon}>
                 <input
                   ref={fileUploadRef}
                   id="file-upload"
                   type="file"
-                  accept={acceptedFileTypes.join(',')} 
+                  accept={acceptedFileTypes.join(',')}
                   onChange={handleFileUpload}
                   className={styles.fileInput}
                   multiple
@@ -290,7 +320,6 @@ function ChatBox() {
         />
       </Box>
 
-    
       {/* Notification popup for successful clipboard copy */}
       <Snackbar
         open={snackbarOpen}
