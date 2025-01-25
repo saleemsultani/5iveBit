@@ -54,7 +54,7 @@ export const handleCVEQuery = async (promptInput, updatedMessages, setcurrentCha
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: '5iveBit-ca-1',
+        model: '5iveBit-ca-4',
         messages: [...updatedMessages, { role: 'user', content: combinedMessage }],
         stream: false
       })
