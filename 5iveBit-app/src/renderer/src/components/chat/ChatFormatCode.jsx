@@ -7,7 +7,9 @@ import styles from './ChatFormatCode.module.css';
 
 export const formatMessage = (content, copyToClipboard) => {
   const CodeBlock = ({ node, inline, className, children, ...props }) => {
-    if (inline) {
+    // Check if parent is pre tag to decide if it's inline code or code block
+    const isInline = node.position?.start.line === node.position?.end.line;
+    if (isInline) {
       return (
         <code className={className} {...props}>
           {children}
