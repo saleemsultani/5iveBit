@@ -3,8 +3,8 @@
   background-color: #1e1e1e;
   overflow: hidden;
   border: 1px solid #333;
-  font-size: 14px;      
-  line-height: 1.2;            
+  font-size: 14px;
+  line-height: 1.2;
 }
 
 /* Header section with language label and copy button */
@@ -43,7 +43,7 @@
 /*fixes code blocks not fitting into the message box*/
 .codeBlock pre,
 .codeBlock code {
-  white-space: pre-wrap !important; 
+  white-space: pre-wrap !important;
   word-break: break-word !important;
   width: 100% !important;
 }
@@ -63,19 +63,33 @@
   background-color: #4d4d4d;
 }
 
-/* Syntax highlighting colors (complementing Prism themes) */   
-.codeBlock .token.comment { color: #dd11dd; }
-.codeBlock .token.keyword { color: #230fdd; }
-.codeBlock .token.string { color: #3cf3db; }
-.codeBlock .token.function { color: #d48ad1; }
-.codeBlock .token.number { color: #46ac0f; }
-.codeBlock .token.operator { color: #fdfafa; }
-.codeBlock .token.class-name { color: #6d099b; }
+/* Syntax highlighting colors (complementing Prism themes) */
+.codeBlock .token.comment {
+  color: #dd11dd;
+}
+.codeBlock .token.keyword {
+  color: #230fdd;
+}
+.codeBlock .token.string {
+  color: #3cf3db;
+}
+.codeBlock .token.function {
+  color: #d48ad1;
+}
+.codeBlock .token.number {
+  color: #46ac0f;
+}
+.codeBlock .token.operator {
+  color: #fdfafa;
+}
+.codeBlock .token.class-name {
+  color: #6d099b;
+}
 
 /* fixes the code block so messages are not so large*/
 .userMessage,
 .botMessage {
-  max-width: 40% !important; 
+  max-width: 40% !important;
   width: fit-content !important;
   padding: 8px 12px !important;
 }

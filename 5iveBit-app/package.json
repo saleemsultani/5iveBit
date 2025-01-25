@@ -27,7 +27,9 @@
     "@mui/material": "^6.1.10",
     "axios": "^1.7.9",
     "prismjs": "^1.29.0",
-    "react-router-dom": "^7.0.2"
+    "react-markdown": "^9.0.3",
+    "react-router-dom": "^7.0.2",
+    "react-syntax-highlighter": "^15.6.1"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config": "^1.0.2",
