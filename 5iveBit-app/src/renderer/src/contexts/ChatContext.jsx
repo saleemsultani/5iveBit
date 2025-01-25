@@ -1,7 +1,5 @@
 import { useState, createContext, useContext, useEffect } from 'react';
-import { fetchCVEByID } from '../CVE/cveSearchAPI';
 import { WrapperPrompt } from './prompts';
-import { generateSecuritySuggestions } from './SecuritySuggestion';
 import { handleCVEQuery } from '../CVE/cveHandler';
 const ChatsContext = createContext();
 
@@ -66,8 +64,9 @@ function ChatsProvider({ children }) {
         return cveResponse;
       }
 
+      // This feautre introduces unintentional behaviour. So it is disabled for now.
       // Generate security suggestions
-      await generateSecuritySuggestions(promptInput, updatedMessages, setcurrentChat);
+      // await generateSecuritySuggestions(promptInput, updatedMessages, setcurrentChat);
 
       // If no relevant terms, send the promptInput with WrapperPrompt
       const combinedMessage = `${WrapperPrompt}\n\n${promptInput}`.trim();
@@ -78,7 +77,7 @@ function ChatsProvider({ children }) {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          model: '5iveBit-ca-1',
+          model: '5iveBit-ca-4',
           messages: [...updatedMessages, { role: 'user', content: combinedMessage }],
           stream: false
         })
