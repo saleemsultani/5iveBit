@@ -6,9 +6,7 @@ const api = {
   // custom API for saving file
   saveFile: (content) => ipcRenderer.invoke('save-file', content),
   // pop for human in the loop
-  askUserPopup: (options) => ipcRenderer.invoke('popup-for-user-in-loop', options),
-  // update file
-  updateFile: (fileDetails, content) => ipcRenderer.invoke('update-file', fileDetails, content)
+  askUserPopup: (options) => ipcRenderer.invoke('popup-for-user-in-loop', options)
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to
