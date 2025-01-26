@@ -166,6 +166,33 @@ ipcMain.handle('save-file', async (_, content) => {
   }
 });
 
+// /////////////////////////////////////////////
+
+// Listen for the file update request from the renderer process
+ipcMain.handle('update-file', async (event, fileDetails, content) => {
+  console.log(fileDetails);
+  const filePath = fileDetails[0].filePath;
+  console.log(filePath);
+  try {
+    // Append or modify the file content
+    fs.writeFileSync(filePath, content, { encoding: 'utf8' });
+
+    // Respond with success
+    return {
+      success: true,
+      message: `File updated successfully: ${filePath}`
+    };
+  } catch (error) {
+    console.error('Error updating file:', error);
+    return {
+      success: false,
+      message: `Failed to update file: ${error.message}`
+    };
+  }
+});
+
+// ///////////////////////////////////////////////
+
 // pop-for-user-in-loop
 ipcMain.handle('popup-for-user-in-loop', async (event, options) => {
   const { type, title, message, buttons } = options;
