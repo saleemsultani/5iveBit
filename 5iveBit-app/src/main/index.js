@@ -5,12 +5,21 @@ import os from 'os';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
 
+// Function to get the default download folder based on the operating system
 const getDownloadsFolder = () => {
   const homeDir = os.homedir(); // Get the user's home directory
-  
-  return join(homeDir, 'Downloads');
+  // Check for OS platform and return appropriate path
+  if (os.platform() === 'win32') {
+    // On Windows, the Downloads folder is under the user's home directory
+    return join(homeDir, 'Downloads');
+  } else if (os.platform() === 'darwin') {
+    // On macOS, the Downloads folder is also in the user's home directory
+    return join(homeDir, 'Downloads');
+  } else {
+    // On Linux and other Unix-like systems, it's usually the Downloads folder under home
+    return join(homeDir, 'Downloads');
+  }
 };
-
 
 // Creating Main Window
 function createWindow() {
