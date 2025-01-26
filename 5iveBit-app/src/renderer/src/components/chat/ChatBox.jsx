@@ -30,11 +30,14 @@ function ChatBox() {
 
   // download chat as .txt or as .log
   async function handleDownloadChatFile() {
+    console.log(currentChat)
     const content = contentRef.current?.innerText || '';
 
     try {
-      await window.api.saveFile(content);
+      const res = await window.api.saveFile(content);
+      if(res.success)
       console.log('File saved successfully!');
+    
     } catch (error) {
       console.error('An error occurred while saving the file:', error);
     }
@@ -277,7 +280,9 @@ function ChatBox() {
           endDecorator={
             <Stack direction="row" width="100%" justifyContent="flex-end">
               {/* download button for downloading chat */}
-              <Button onClick={handleDownloadChatFile} className={styles.iconButton}>
+              <Button onClick={handleDownloadChatFile} className={styles.iconButton}
+              disabled={currentChat.messages.length === 0}
+              >
                 <DownloadIcon />
               </Button>
 
