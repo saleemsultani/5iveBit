@@ -20,6 +20,9 @@ function ChatBox() {
   const [files, setFiles] = useState([]);
   const fileUploadRef = useRef(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+    // /////////////////////////
+    const [currentUploadedFiles, setCurrentUploadedFiles] = useState([]);
+    // /////////////////////////
 
   // Auto-scroll to the bottom of the chat history when new messages are added
   useEffect(() => {
@@ -29,8 +32,13 @@ function ChatBox() {
   }, [currentChat.messages]);
 
   // download chat as .txt or as .log
-  async function handleDownloadChatFile() {
-    const content = contentRef.current?.innerText || '';
+  async function handleDownloadChatFile(codeContent) {
+    let content;
+    if (codeContent) {
+      content = codeContent;
+    } else {
+      content = contentRef.current?.innerText || '';
+    }
 
     try {
       await window.api.saveFile(content);
@@ -39,6 +47,31 @@ function ChatBox() {
       console.error('An error occurred while saving the file:', error);
     }
   }
+
+
+  // /////////////////////////////////////////////////
+  const handleUpdateFile = async (content) => {
+    try {
+      const options = {
+        type: 'warning',
+        title: 'Update file Confirmation',
+        message: `Are you sure you want update the file ${currentUploadedFiles[0].fileName} ?`,
+        buttons: ['Update', 'Cancel']
+      };
+      const result = await window.api.askUserPopup(options);
+      if (result === 'Update') {
+        await window.api.updateFile(currentUploadedFiles, content);
+        console.log('File updated successfully!');
+      } else {
+        throw new Error('File update cancelled');
+      }
+    } catch (error) {
+      console.error('An error occurred while saving the file:', error);
+    }
+  };
+  // /////////////////////////////////////////////////
+
+
 
   //Current accepted file types for upload
   const acceptedFileTypes = [
@@ -95,6 +128,22 @@ function ChatBox() {
 
       if (validFiles.length > 0) {
         setFiles((prev) => [...prev, ...validFiles]);
+
+        // //////////////////////////////////////////
+        // take a note of each uploaded file
+        validFiles.forEach((file) => {
+          console.log('file Path: ', file.path);
+          const filePath = file.path;
+          const fileName = file.name;
+          const fileExtension = fileName.slice(fileName.lastIndexOf('.'));
+
+          setCurrentUploadedFiles((curr) => {
+            return [...curr, { filePath, fileName, fileExtension }];
+          });
+        });
+
+        // //////////////////////////////////////////
+
 
         if (validFiles.length === uploadedFiles.length) {
           setSnackbarMessage('File(s) uploaded');
@@ -229,7 +278,11 @@ function ChatBox() {
             <div key={index} className={styles.messageContainer}>
               <p className={message.role === 'user' ? styles.userMessage : styles.botMessage}>
                 <span className={message.isThinking ? styles.thinking : ''}>
-                  {formatMessage(message.content, copyToClipboard)}
+                  {formatMessage(message.content, copyToClipboard,
+                   message.role,
+                    handleUpdateFile,
+                    currentUploadedFiles,
+                    handleDownloadChatFile)}
                 </span>
                 {message.role === 'assistant' && !message.isThinking && (
                   <IconButton
