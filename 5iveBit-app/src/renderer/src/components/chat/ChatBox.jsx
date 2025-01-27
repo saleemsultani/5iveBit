@@ -330,9 +330,7 @@ function ChatBox() {
           endDecorator={
             <Stack direction="row" width="100%" justifyContent="flex-end">
               {/* download button for downloading chat */}
-              <Button onClick={handleDownloadChatFile} className={styles.iconButton}
-              disabled={currentChat.messages.length === 0}   // disable download if ther is no chat
-              >
+              <Button onClick={handleDownloadChatFile} className={styles.iconButton}>
                 <DownloadIcon />
               </Button>
 
