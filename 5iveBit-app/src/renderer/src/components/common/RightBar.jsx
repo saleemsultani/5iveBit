@@ -26,6 +26,13 @@ function RightbarButton({ children, buttonText, onClick }) {
 function RightBar() {
   const [openHistory, setOpenHistory] = useState(false);
   const { chats, setcurrentChat, setQuestion } = useChats();
+  const [openLevelSelect, setOpenLevelSelect] = useState(false);
+  
+  const userExperienceLevels = [
+    { id: 'beginner', label: 'Beginner' },
+    { id: 'intermediate', label: 'Intermediate' },
+    { id: 'expert', label: 'Expert' }
+];
 
   const handleNewChat = () => {
     setcurrentChat({
@@ -39,6 +46,10 @@ function RightBar() {
   const handleSetcurrentChat = (id) => {
     setcurrentChat(chats.find((chat) => chat.id === id));
   };
+
+  const handleLevelChange = (levelId) => {
+    setOpenLevelSelect(false); 
+};
 
   const handleSupport = () => {
     window.location.href = 'mailto:contact.5iveBit@gmail.com';
@@ -67,8 +78,29 @@ function RightBar() {
               </Button>
             ))}
           </Box>
-        </Box>
 
+        {/* User Experience Level Button */}
+          <RightbarButton 
+            onClick={() => setOpenLevelSelect(!openLevelSelect)} 
+            buttonText="Experience Level"
+          >
+            {openLevelSelect ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </RightbarButton>
+
+          {/* User Experience Level Dropdown */}
+          <Box className={`${styles.userLevel} ${openLevelSelect ? styles.open : ''}`}>
+            {userExperienceLevels.map((level) => (
+              <Button
+                key={level.id}
+                className={styles.experienceLevelButton}
+                onClick={() => handleLevelChange(level.id)}
+              >
+                {level.label}
+              </Button>
+            ))}
+          </Box>
+        </Box>
+      
         {/* Bottom Button */}
         <RightbarButton buttonText="Support" onClick={handleSupport} />
       </Box>

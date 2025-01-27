@@ -64,3 +64,39 @@
   background-color: #862e9c;
   color: white;
 }
+
+
+/* user level container */
+.rightBarContainer .userLevel {
+  display: none;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: white;
+  align-items: center;
+  height: 100px;
+}
+
+/* Open state for user levels  */
+.rightBarContainer .userLevel.open {
+  display: flex;
+}
+
+/* Individual user levels buttons */
+.rightBarContainer .experienceLevelButton {
+  width: 70%;
+  padding: 5px;
+  color: white;
+  text-align: center;
+  border: none;
+  border-radius: 5px;
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.rightBarContainer .experienceLevelButton:hover {
+  background-color: #862e9c;
+  color: white;
+}
+
+
