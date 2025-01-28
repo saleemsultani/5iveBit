@@ -22,7 +22,12 @@ function NavBar() {
             />
           </a>
           <p className={styles.navbarLink}>NewsLetter</p>
-          <p className={styles.navbarLink}>Best Practices</p>
+          <p
+            className={styles.navbarLink}
+            onClick={() => (window.location.href = '/best-practices?from=navbar')}
+          >
+            Best Practices
+          </p>
         </Box>
 
         {/* Right Side Button */}
