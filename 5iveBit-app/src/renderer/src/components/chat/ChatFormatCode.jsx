@@ -6,29 +6,34 @@ import { funky } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import styles from './ChatFormatCode.module.css';
 import AskUserButtons from '../shared/AskUserButtons';
 
-export const formatMessage = (content, copyToClipboard, role,
+export const formatMessage = (
+  content,
+  copyToClipboard,
+  role,
   handleUpdateFile,
   currentUploadedFiles,
   handleDownloadChatFile
 ) => {
   const CodeBlock = ({ node, inline, className, children, ...props }) => {
-    // Check if parent is pre tag to decide if it's inline code or code block
-    const isInline = node.position?.start.line === node.position?.end.line;
+    // Determine if the code block is inline
+    const isInline = inline || node.position?.start.line === node.position?.end.line;
+
     if (isInline) {
       return (
-        <code className={className} {...props}>
+        <code className={styles.inlineCode} {...props}>
           {children}
         </code>
       );
     }
 
- 
+    // Handle block code (triple backticks)
     const match = /language-(\w+)/.exec(className || '');
-    const language = match ? match[1] : 'text';
-    const code = String(children).replace(/\n$/, '');
+    const language = match ? match[1] : 'file'; // Default to 'file' if no language is specified
+    const code = String(children).replace(/\n$/, ''); // Remove trailing newline
 
     return (
       <div className={styles.codeBlock}>
+        {/* Copy Button */}
         <IconButton
           onClick={() => copyToClipboard(code)}
           className={styles.copyButton}
@@ -37,10 +42,12 @@ export const formatMessage = (content, copyToClipboard, role,
           <ContentCopyIcon className={styles.copyIcon} />
         </IconButton>
 
+        {/* Language Label */}
         <div className={styles.codeHeader}>
           <span className={styles.languageLabel}>{language}</span>
         </div>
 
+        {/* Syntax Highlighter for Block Code */}
         <SyntaxHighlighter
           language={language}
           style={funky}
@@ -49,44 +56,38 @@ export const formatMessage = (content, copyToClipboard, role,
         >
           {code}
         </SyntaxHighlighter>
-         {/* ///////////////////////////////// */}
-          {/* User permission related code */}
-          {role !== 'user' &&
-            (currentUploadedFiles.length !== 0 ? (
-              <>
-                <p>Do you want to update the uploaded file with this code?</p>
-                <AskUserButtons
-                  options={[
-                    {
-                      label: 'update',
-                      onclick: () => {
-                        handleUpdateFile(code);
-                      },
-                      color: 'white',
-                      bgcolor: '#015050'
-                    }
-                  ]}
-                />
-              </>
-            ) : (
-              <>
-                <p>Do you want to download this file?</p>
-                <AskUserButtons
-                  options={[
-                    {
-                      label: 'download',
-                      onclick: () => {
-                        handleDownloadChatFile(code);
-                      },
-                      color: 'white',
-                      bgcolor: '#015050'
-                    }
-                  ]}
-                />
-              </>
-            ))}
 
-          {/* ///////////////////////////////// */}
+        {/* Optional User Action Buttons */}
+        {role !== 'user' &&
+          (currentUploadedFiles.length !== 0 ? (
+            <>
+              <p>Do you want to update the uploaded file with this code?</p>
+              <AskUserButtons
+                options={[
+                  {
+                    label: 'update',
+                    onclick: () => handleUpdateFile(code),
+                    color: 'white',
+                    bgcolor: '#015050'
+                  }
+                ]}
+              />
+            </>
+          ) : (
+            <>
+              <p>Do you want to download this file?</p>
+              <AskUserButtons
+                options={[
+                  {
+                    label: 'download',
+                    onclick: () => handleDownloadChatFile(code),
+                    color: 'white',
+                    bgcolor: '#015050'
+                  }
+                ]}
+              />
+            </>
+          ))}
       </div>
     );
   };
@@ -94,7 +95,37 @@ export const formatMessage = (content, copyToClipboard, role,
   return (
     <ReactMarkdown
       components={{
-        code: CodeBlock
+        // Handlers for various Markdown elements
+        h1: ({ children }) => <h1 className={styles.heading1}>{children}</h1>,
+        h2: ({ children }) => <h2 className={styles.heading2}>{children}</h2>,
+        h3: ({ children }) => <h3 className={styles.heading3}>{children}</h3>,
+        p: ({ children }) => <p className={styles.paragraph}>{children}</p>,
+        a: ({ href, children }) => (
+          <a href={href} target="_blank" rel="noopener noreferrer" className={styles.link}>
+            {children}
+          </a>
+        ),
+        blockquote: ({ children }) => (
+          <blockquote className={styles.blockquote}>{children}</blockquote>
+        ),
+        ul: ({ children }) => <ul className={styles.unorderedList}>{children}</ul>,
+        ol: ({ children }) => <ol className={styles.orderedList}>{children}</ol>,
+        li: ({ children }) => <li className={styles.listItem}>{children}</li>,
+        strong: ({ children }) => <strong className={styles.boldText}>{children}</strong>,
+        code: ({ node, inline, className, children, ...props }) => (
+          <CodeBlock
+            node={node}
+            inline={inline}
+            className={className}
+            children={children}
+            {...props}
+            copyToClipboard={copyToClipboard}
+            role={role}
+            handleUpdateFile={handleUpdateFile}
+            currentUploadedFiles={currentUploadedFiles}
+            handleDownloadChatFile={handleDownloadChatFile}
+          />
+        )
       }}
     >
       {content}
@@ -102,9 +133,9 @@ export const formatMessage = (content, copyToClipboard, role,
   );
 };
 
+// Helper function to detect likely code
 export const isLikelyCode = (text) => {
   const codePatterns = [
-    //update if needed
     '{',
     '}',
     ';',
