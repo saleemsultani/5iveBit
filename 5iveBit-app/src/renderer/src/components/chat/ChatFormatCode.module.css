@@ -167,44 +167,37 @@
   text-decoration: none;
 }
 
-.heading1 {
-  font-size: 1.5em;
+.heading1,
+.heading2,
+.heading3,
+.heading4,
+.heading5,
+.heading6 {
   font-weight: bold;
   margin: 4px 4px;
   margin-bottom: 0.5em;
+}
+
+.heading1 {
+  font-size: 1.5em;
 }
 
 .heading2 {
   font-size: 1.25em;
-  font-weight: bold;
-  margin: 4px 4px;
-  margin-bottom: 0.5em;
 }
 
 .heading3 {
   font-size: 1em;
-  font-weight: bold;
-  margin: 4px 4px;
-  margin-bottom: 0.5em;
 }
 
 .heading4 {
   font-size: 0.75em;
-  font-weight: bold;
-  margin: 4px 4px;
-  margin-bottom: 0.5em;
 }
 
 .heading5 {
   font-size: 0.5em;
-  font-weight: bold;
-  margin: 4px 4px;
-  margin-bottom: 0.5em;
 }
 
 .heading6 {
   font-size: 0.25em;
-  font-weight: bold;
-  margin: 4px 4px;
-  margin-bottom: 0.5em;
 }
