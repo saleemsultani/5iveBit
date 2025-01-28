@@ -1,3 +1,6 @@
+
+//user experience level prompts 
+
 export const beginnerPrompt = 
 'STRICTLY explain cybersecurity concepts in simple, approachable terms, assuming the audience has a solid understanding of computer science but limited knowledge of cybersecurity. Use basic technical terminology when necessary but prioritize clarity. Break down topics step by step, connecting them to familiar computer science concepts like networks, databases, and programming. Provide real-world examples to make cybersecurity ideas and concepts relatable.';
 

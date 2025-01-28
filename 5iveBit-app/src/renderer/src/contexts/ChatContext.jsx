@@ -1,5 +1,6 @@
 import { useState, createContext, useContext, useEffect } from 'react';
 import { WrapperPrompt } from './prompts';
+import { beginnerPrompt, intermediatePrompt, expertPrompt } from './UserLevelPrompts';
 import { handleCVEQuery } from '../CVE/cveHandler';
 const ChatsContext = createContext();
 
@@ -17,6 +18,7 @@ function generateRandomId(length = 32) {
 function ChatsProvider({ children }) {
   const [question, setQuestion] = useState('');
   const [chats, setChats] = useState([]);
+  const [currentLevel, setCurrentLevel] = useState(null);
   const [currentChat, setcurrentChat] = useState({
     id: generateRandomId(15),
     messages: []
@@ -64,12 +66,26 @@ function ChatsProvider({ children }) {
         return cveResponse;
       }
 
+      //Prompt Levels
+      let levelPrompt = '';
+      if (currentLevel === 'beginner') {
+        levelPrompt = beginnerPrompt;
+      } else if (currentLevel === 'intermediate') {
+        levelPrompt = intermediatePrompt;
+      } else if (currentLevel === 'expert') {
+        levelPrompt = expertPrompt;
+      }
+      
       // This feautre introduces unintentional behaviour. So it is disabled for now.
       // Generate security suggestions
       // await generateSecuritySuggestions(promptInput, updatedMessages, setcurrentChat);
 
-      // If no relevant terms, send the promptInput with WrapperPrompt
-      const combinedMessage = `${WrapperPrompt}\n\n${promptInput}`.trim();
+      // If no relevant terms, send the promptInput with WrapperPrompt if user selects experience level send that with the wrapper prompt
+      const combinedMessage = currentLevel 
+        ? `${WrapperPrompt}\n\n${levelPrompt}\n\n${promptInput}`.trim()
+        : `${WrapperPrompt}\n\n${promptInput}`.trim();
+
+        console.log('Current level:', currentLevel);   
 
       const response = await fetch('http://localhost:11434/api/chat', {
         method: 'POST',
@@ -150,7 +166,9 @@ function ChatsProvider({ children }) {
         generateRandomId,
         question,
         setQuestion,
-        generateAnswer
+        generateAnswer,
+        currentLevel,
+        setCurrentLevel
       }}
     >
       {children}
