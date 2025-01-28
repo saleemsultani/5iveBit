@@ -55,7 +55,7 @@ function DashboardMain() {
 
           <Box className={styles.dashboardCard} onClick={() => navigate('/best-practices')}>
             <img
-              src="https://via.placeholder.com/300x140"
+              src="/src/assets/dashboard-bestpractice.png"
               alt="Best Practices"
               className={styles.cardImage}
             />

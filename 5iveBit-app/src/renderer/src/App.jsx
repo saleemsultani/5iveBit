@@ -4,6 +4,7 @@ import { ChatsProvider } from './contexts/ChatContext';
 import styles from './App.module.css';
 import Dashboard from './components/dashboard/Dashboard';
 import ChatWindow from './components/chat/ChatWindow';
+import BestPractices from './components/dashboard/BestPractices';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
             <Route path="/chat" element={<ChatWindow />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/" element={<Dashboard />} />
+            <Route path="/best-practices" element={<BestPractices />} />
           </Routes>
         </Box>
       </Router>
