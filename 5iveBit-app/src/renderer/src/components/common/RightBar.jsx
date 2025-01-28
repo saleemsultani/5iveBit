@@ -68,11 +68,34 @@ function RightBar() {
         <Box className={styles.topSection}>
           <RightbarButton buttonText="New Chat" onClick={handleNewChat} />
           <RightbarButton buttonText="Reports" />
-          <RightbarButton onClick={() => setOpenHistory(!openHistory)} buttonText="Chat History">
-            {openHistory ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </RightbarButton>
 
-          {/* Chat History */}
+          {/* Chat History Button */}
+        <RightbarButton onClick={() => setOpenHistory(!openHistory)} sx={{ position: 'relative' }} >
+          <span>Chat History</span>
+          {openHistory ? (
+            <KeyboardArrowUpIcon
+              sx={{
+                position: 'absolute',
+                right: '8px', 
+                top: '50%', 
+                transform: 'translateY(-50%)', 
+                fontSize: '1.5rem', 
+              }}
+            />
+          ) : (
+            <KeyboardArrowDownIcon
+              sx={{
+                position: 'absolute',
+                right: '8px', 
+                top: '50%', 
+                transform: 'translateY(-50%)', 
+                fontSize: '1.5rem', 
+              }}
+            />
+          )}
+        </RightbarButton>
+
+          {/* Chat History Dropdown */}
           <Box className={`${styles.chatHistory} ${openHistory ? styles.open : ''}`}>
             {chats.map((c, i) => (
               <Button
@@ -86,12 +109,30 @@ function RightBar() {
           </Box>
 
         {/* User Experience Level Button */}
-          <RightbarButton 
-            onClick={() => setOpenLevelSelect(!openLevelSelect)} 
-            buttonText="Experience Level"
-          >
-            {openLevelSelect ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </RightbarButton>
+        <RightbarButton onClick={() => setOpenLevelSelect(!openLevelSelect)} sx={{ position: 'relative' }}>
+          <span>Experience Level</span>
+          {openLevelSelect ? (
+            <KeyboardArrowUpIcon
+              sx={{
+                position: 'absolute',
+                right: '8px', 
+                top: '50%', 
+                transform: 'translateY(-50%)', 
+                fontSize: '1.5rem', 
+              }}
+            />
+          ) : (
+            <KeyboardArrowDownIcon
+              sx={{
+                position: 'absolute',
+                right: '8px', 
+                top: '50%', 
+                transform: 'translateY(-50%)', 
+                fontSize: '1.5rem', 
+              }}
+            />
+          )}
+        </RightbarButton>
 
           {/* User Experience Level Dropdown */}
           <Box className={`${styles.userLevel} ${openLevelSelect ? styles.open : ''}`}>
