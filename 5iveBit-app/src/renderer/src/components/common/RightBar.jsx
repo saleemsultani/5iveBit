@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { Box, Button } from '@mui/material';
+import { Box, Button, Snackbar } from '@mui/material';
 import { useChats } from '../../contexts/ChatContext';
 import styles from './RightBar.module.css';
 
@@ -25,7 +25,12 @@ function RightbarButton({ children, buttonText, onClick }) {
 
 function RightBar() {
   const [openHistory, setOpenHistory] = useState(false);
-  const { chats, setcurrentChat, setQuestion } = useChats();
+  const { chats, setcurrentChat, setQuestion, currentLevel, setCurrentLevel } = useChats();
+  const [openLevelSelect, setOpenLevelSelect] = useState(false);
+  //const [currentLevel, setCurrentLevel] = useState(null);
+  const [snackbarMessage, setSnackbarMessage] = useState(false);
+
+  const userExperienceLevels = ['beginner', 'intermediate', 'expert'];
 
   const handleNewChat = () => {
     setcurrentChat({
@@ -38,6 +43,18 @@ function RightBar() {
 
   const handleSetcurrentChat = (id) => {
     setcurrentChat(chats.find((chat) => chat.id === id));
+  };
+
+  const handleLevelChange = (level) => {
+    setCurrentLevel(level);
+    setOpenLevelSelect(false);
+    
+    setSnackbarMessage(true);
+    console.log('Experience level changed to:', level);
+    
+    setTimeout(() => {
+      setSnackbarMessage(false);
+    }, 3000);
   };
 
   const handleSupport = () => {
@@ -67,8 +84,37 @@ function RightBar() {
               </Button>
             ))}
           </Box>
+
+        {/* User Experience Level Button */}
+          <RightbarButton 
+            onClick={() => setOpenLevelSelect(!openLevelSelect)} 
+            buttonText="Experience Level"
+          >
+            {openLevelSelect ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </RightbarButton>
+
+          {/* User Experience Level Dropdown */}
+          <Box className={`${styles.userLevel} ${openLevelSelect ? styles.open : ''}`}>
+            {userExperienceLevels.map((level) => (
+              <Button
+                key={level}
+                className={styles.experienceLevelButton}
+                onClick={() => handleLevelChange(level)}
+              >
+                {level.charAt(0).toUpperCase() + level.slice(1)}
+              </Button>
+            ))}
+          </Box>
         </Box>
 
+        <Snackbar
+        open={snackbarMessage}
+        autoHideDuration={3000}
+        onClose={() => setSnackbarMessage(false)}
+        message={`Experience level set to ${currentLevel ? currentLevel.charAt(0).toUpperCase() + currentLevel.slice(1) : 'Default'}`}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      />
+      
         {/* Bottom Button */}
         <RightbarButton buttonText="Support" onClick={handleSupport} />
       </Box>
