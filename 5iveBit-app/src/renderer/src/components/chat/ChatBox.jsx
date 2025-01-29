@@ -1,7 +1,6 @@
 import { Box, Button, Stack, IconButton, Snackbar } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import SendIcon from '@mui/icons-material/Send';
-import GraphicEqIcon from '@mui/icons-material/GraphicEq';
 import Textarea from '@mui/joy/Textarea';
 import { useChats } from '../../contexts/ChatContext';
 import styles from './ChatBox.module.css';
@@ -338,6 +337,7 @@ function ChatBox() {
               <Button onClick={handleDownloadChatFile} className={styles.iconButton}>
                 <DownloadIcon />
               </Button>
+
               {/* Attach file(s) button */}
               <label htmlFor="file-upload" className={styles.attachFileIcon}>
                 <input
@@ -351,18 +351,8 @@ function ChatBox() {
                 />
                 <AttachFileOutlinedIcon className={styles.attachFileIcon} />
               </label>
-              {/* Voice input button (functionality to be implemented) */}
-              {/* <Button
-                className={styles.iconButton}
-                onClick={async () => {
-                  const options = { buttons: ['saleem', 'khan'] };
-                  const res = await window.api.askUserPopup(options);
-                  console.log(res);
-                }}
-              >
-                <GraphicEqIcon />
-              </Button> */}
-              }
+
+              {/* Send button */}
               <Button
                 onClick={handleSubmitQuestion}
                 disabled={!question.trim() && files.length === 0} // Disable if no text or file is present
