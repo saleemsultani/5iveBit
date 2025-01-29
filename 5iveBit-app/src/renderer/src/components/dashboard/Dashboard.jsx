@@ -61,10 +61,10 @@ function DashboardMain() {
             />
           </Box>
 
-          <Box className={styles.dashboardCard} onClick={() => navigate('/best-practices')}>
+          <Box className={styles.dashboardCard} onClick={() => navigate('/cybercrime-response')}>
             <img
-              src="https://via.placeholder.com/300x140"
-              alt="Best Practices"
+              src="src/assets/dashboard-reportcybercrime.png"
+              alt="Understanding Cybercrime"
               className={styles.cardImage}
             />
           </Box>
