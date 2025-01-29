@@ -42,13 +42,15 @@ export const handleCVEQuery = async (promptInput, updatedMessages, setcurrentCha
       }
     }
 
-    const vendorProductPattern = /latest vulnerabilities for (\w+) (\w+)/i;
+    const vendorProductPattern = /(latest|newest) (vulnerabilities|CVEs) (for|in) (\w+) (\w+)/i;
     const vendorProductMatch = promptInput.match(vendorProductPattern);
     let cveProductInfo = null;
 
     if (vendorProductMatch) {
-      const vendor = vendorProductMatch[1];
-      const product = vendorProductMatch[2];
+      // Indices 1, 2, and 3 are used for groups (latest|newest) (vulnerabilities|CVEs) (for|in)
+      // Indices 4 and 5 are used for groups (\w+) (\w+) which are the vendor and product respectively
+      const vendor = vendorProductMatch[4];
+      const product = vendorProductMatch[5];
       console.log(`Fetching latest vulnerabilities for vendor: ${vendor}, product: ${product}`);
 
       try {
