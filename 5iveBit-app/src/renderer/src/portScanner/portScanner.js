@@ -105,13 +105,13 @@ export const handlePortScanQuery = async (promptInput, updatedMessages, setcurre
 
     // Add a prompt if there's any port information
     const hasPortInfo = finalPortResponse || finalPortAvailableResponse || finalPortInUseResponse;
-    const introText = hasPortInfo ? 'Please tell the user the following information:\n\n' : '';
+    const introText = hasPortInfo ? 'Tell this port information to the user:\n\n' : '';
 
     // Combine all port responses with the new format
-    const combinedPortResponse =
-      `${WrapperPrompt}\n\n${promptInput}\n\n${introText}${finalPortResponse}\n\n${finalPortAvailableResponse}\n\n${finalPortInUseResponse}`.trim();
+    const combinedMessage =
+      `${introText}${finalPortResponse}\n\n${finalPortAvailableResponse}\n\n${finalPortInUseResponse}`.trim();
 
-    console.log('Combined port scan message:', combinedPortResponse);
+    console.log('Combined port scan message:', combinedMessage);
 
     // Send request to the local LLM server
     const response = await fetch('http://localhost:11434/api/chat', {
@@ -121,7 +121,7 @@ export const handlePortScanQuery = async (promptInput, updatedMessages, setcurre
       },
       body: JSON.stringify({
         model: '5iveBit-ca-4',
-        messages: [...updatedMessages, { role: 'user', content: combinedPortResponse }],
+        messages: [...updatedMessages, { role: 'user', content: combinedMessage }],
         stream: false
       })
     });
