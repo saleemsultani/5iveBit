@@ -5,6 +5,8 @@ import styles from './App.module.css';
 import Dashboard from './components/dashboard/Dashboard';
 import ChatWindow from './components/chat/ChatWindow';
 import BestPractices from './components/dashboard/BestPractices';
+import NistStandards from './components/dashboard/NistStandards';
+import IsoStandards from './components/dashboard/IsoStandards';
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/" element={<Dashboard />} />
             <Route path="/best-practices" element={<BestPractices />} />
+            <Route path="/nist-standards" element={<NistStandards />} />
+            <Route path="/iso-standards" element={<IsoStandards />} />
           </Routes>
         </Box>
       </Router>
