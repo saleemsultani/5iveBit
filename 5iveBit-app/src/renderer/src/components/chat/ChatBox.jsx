@@ -33,14 +33,20 @@ function ChatBox() {
 
   // download chat as .txt or as .log
   async function handleDownloadChatFile(codeContent) {
-    let content;
-    if (codeContent) {
-      content = codeContent;
-    } else {
-      content = contentRef.current?.innerText || '';
-    }
-
     try {
+      let content;
+      // Check if codeContent is provided and is a string
+      if (codeContent && typeof codeContent === 'string') {
+        content = codeContent;
+      } else {
+        // Fallback to getting content from the ref
+        content = contentRef.current?.innerText|| '';
+      }
+  
+      // For debugging
+      console.log('Content to save:', content);
+      
+      // Send to Electron API
       await window.api.saveFile(content);
       console.log('File saved successfully!');
     } catch (error) {
