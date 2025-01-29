@@ -37,18 +37,18 @@ function DashboardMain() {
 
         {/* Feature Cards */}
         <Box className={styles.dashboardCards}>
-          <Box className={styles.dashboardCard} onClick={() => navigate('/latest-cves')}>
+          <Box className={styles.dashboardCard} onClick={() => navigate('/nist-standards')}>
             <img
-              src="https://via.placeholder.com/300x140"
-              alt="Latest CVEs"
+              src="src/assets/dashboard-nistframework.png"
+              alt="NIST Cyber Security Framework"
               className={styles.cardImage}
             />
           </Box>
 
-          <Box className={styles.dashboardCard} onClick={() => navigate('/best-practices')}>
+          <Box className={styles.dashboardCard} onClick={() => navigate('/iso-standards')}>
             <img
-              src="https://via.placeholder.com/300x140"
-              alt="Best Practices"
+              src="/src/assets/dashboard-isostandard.png"
+              alt="ISO Standard"
               className={styles.cardImage}
             />
           </Box>
