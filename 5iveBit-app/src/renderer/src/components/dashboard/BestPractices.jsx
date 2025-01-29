@@ -9,7 +9,7 @@ function BestPractices() {
       title: 'Essential Security Basics',
       content: [
         'Regular Software Updates: Keep all software, operating systems, and applications up to date.',
-        'Strong Password Policy: Implement complex passwords and use password managers.',
+        'Strong Password Policy: Implement complex passwords and use password managers. Do not keep identical passwords for every application you use.',
         'Multi-Factor Authentication: Enable MFA wherever possible, especially for critical systems.',
         'Data Encryption: Use strong encryption algorithms for sensitive data both in transit and at rest.',
         'Regular Backups: Maintain regular backups of critical data and periodically test recovery procedures.'
