@@ -35,7 +35,7 @@ function createWindow() {
       sandbox: false,
       contextIsolation: true,
       nodeIntegration: false,
-      webSecurity: true //Enabled web security
+      webSecurity: false
     }
   });
 
@@ -45,12 +45,15 @@ function createWindow() {
       ...details.responseHeaders,
       'Content-Security-Policy': [
         `default-src 'self';
-         connect-src 'self' http://localhost:11434 https://cve.circl.lu;
+         connect-src 'self' http://localhost:11434 https://cve.circl.lu https://app.opencve.io;
          script-src 'self' 'unsafe-inline';
          style-src 'self' 'unsafe-inline';
          img-src 'self' data: https:;
          font-src 'self' data:;`
-      ]
+      ],
+      'Access-Control-Allow-Origin': ['*'],
+      'Access-Control-Allow-Methods': ['GET, POST, PUT, DELETE, OPTIONS'],
+      'Access-Control-Allow-Headers': ['Content-Type, Authorization']
     };
 
     // Ensure only one value for 'Access-Control-Allow-Origin'
