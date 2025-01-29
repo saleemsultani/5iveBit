@@ -8,7 +8,15 @@ const api = {
   // pop for human in the loop
   askUserPopup: (options) => ipcRenderer.invoke('popup-for-user-in-loop', options),
   // update file
-  updateFile: (fileDetails, content) => ipcRenderer.invoke('update-file', fileDetails, content)
+  updateFile: (fileDetails, content) => ipcRenderer.invoke('update-file', fileDetails, content),
+  // check port status
+  checkPortStatus: (port, host) => ipcRenderer.invoke('check-port-status', port, host),
+  // find available port
+  findAvailablePort: (startPort, endPort, host) =>
+    ipcRenderer.invoke('find-available-port', startPort, endPort, host),
+  // find in-use port
+  findInUsePort: (startPort, endPort, host) =>
+    ipcRenderer.invoke('find-in-use-port', startPort, endPort, host)
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to

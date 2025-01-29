@@ -2,6 +2,7 @@ import { useState, createContext, useContext, useEffect } from 'react';
 import { WrapperPrompt } from './prompts';
 import { beginnerPrompt, intermediatePrompt, expertPrompt } from './UserLevelPrompts';
 import { handleCVEQuery } from '../CVE/cveHandler';
+import { handlePortScanQuery } from '../portScanner/portScanner';
 const ChatsContext = createContext();
 
 // Utility function to generate unique IDs for chats and messages
@@ -66,6 +67,16 @@ function ChatsProvider({ children }) {
         return cveResponse;
       }
 
+      // Use the new handlePortScanQuery function
+      const portScanResponse = await handlePortScanQuery(
+        promptInput,
+        updatedMessages,
+        setcurrentChat
+      );
+      if (portScanResponse !== null) {
+        return portScanResponse;
+      }
+
       //Prompt Levels
       let levelPrompt = '';
       if (currentLevel === 'beginner') {
@@ -75,17 +86,17 @@ function ChatsProvider({ children }) {
       } else if (currentLevel === 'expert') {
         levelPrompt = expertPrompt;
       }
-      
+
       // This feautre introduces unintentional behaviour. So it is disabled for now.
       // Generate security suggestions
       // await generateSecuritySuggestions(promptInput, updatedMessages, setcurrentChat);
 
       // If no relevant terms, send the promptInput with WrapperPrompt if user selects experience level send that with the wrapper prompt
-      const combinedMessage = currentLevel 
+      const combinedMessage = currentLevel
         ? `${WrapperPrompt}\n\n${levelPrompt}\n\n${promptInput}`.trim()
         : `${WrapperPrompt}\n\n${promptInput}`.trim();
 
-        console.log('Current level:', currentLevel);   
+      console.log('Current level:', currentLevel);
 
       const response = await fetch('http://localhost:11434/api/chat', {
         method: 'POST',

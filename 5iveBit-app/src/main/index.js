@@ -4,6 +4,7 @@ import fs from 'fs';
 import os from 'os';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
+import net from 'net';
 
 // Function to get the default download folder based on the operating system
 const getDownloadsFolder = () => {
@@ -217,4 +218,62 @@ ipcMain.handle('popup-for-user-in-loop', async (event, options) => {
   // Return the selected button's value
   const returnValue = buttons ? buttons[result.response] : null;
   return returnValue;
+});
+
+// Port scanning functions
+const checkPortStatus = (port, host = '127.0.0.1') => {
+  return new Promise((resolve) => {
+    const socket = new net.Socket();
+
+    const onError = () => {
+      socket.destroy();
+      resolve('closed');
+    };
+
+    socket.setTimeout(1000);
+    socket.once('error', onError);
+    socket.once('timeout', onError);
+
+    socket.connect(port, host, () => {
+      socket.destroy();
+      resolve('open');
+    });
+  });
+};
+
+// IPC handlers for port scanning
+ipcMain.handle('check-port-status', async (_, port, host) => {
+  return await checkPortStatus(port, host);
+});
+
+ipcMain.handle('find-available-port', async (_, startPort, endPort, host = '127.0.0.1') => {
+  for (let port = startPort; port <= endPort; port++) {
+    const status = await checkPortStatus(port, host);
+    if (status === 'closed') {
+      return port;
+    }
+  }
+  throw new Error('No available ports found in range');
+});
+
+ipcMain.handle('find-in-use-port', async (_, startPort, endPort, host = '127.0.0.1') => {
+  try {
+    let scannedPorts = 0;
+    for (let port = startPort; port <= endPort; port++) {
+      scannedPorts++;
+      const status = await checkPortStatus(port, host);
+      if (status === 'open') {
+        return port;
+      }
+      // Optional: Add progress logging
+      if (scannedPorts % 100 === 0) {
+        console.log(`Scanned ${scannedPorts} ports...`);
+      }
+    }
+    return {
+      error: `No in-use ports found between ${startPort} and ${endPort}. All ports appear to be closed.`
+    };
+  } catch (error) {
+    return { error: `Error scanning ports: ${error.message}` };
+  }
 });

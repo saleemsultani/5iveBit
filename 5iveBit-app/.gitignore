@@ -167,3 +167,6 @@ yarn.lock
 
 # Cache loader (for React or PWA features)
 /.cache-loader
+
+# Documentation examples
+docs/portScanner-examples.md
