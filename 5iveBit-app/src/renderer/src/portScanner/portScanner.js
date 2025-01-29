@@ -105,11 +105,14 @@ export const handlePortScanQuery = async (promptInput, updatedMessages, setcurre
 
     // Add a prompt if there's any port information
     const hasPortInfo = finalPortResponse || finalPortAvailableResponse || finalPortInUseResponse;
-    const introText = hasPortInfo ? 'Tell this port information to the user:\n\n' : '';
+    const introText = hasPortInfo ? 'Port Scanning finished. Here are the results:\n\n' : '';
 
-    // Combine all port responses with the new format
-    const combinedMessage =
-      `${introText}${finalPortResponse}\n\n${finalPortAvailableResponse}\n\n${finalPortInUseResponse}`.trim();
+    // Combine only non-empty responses
+    const responses = [finalPortResponse, finalPortAvailableResponse, finalPortInUseResponse]
+      .filter((response) => response) // Filter out empty responses
+      .join('\n\n'); // Join only non-empty responses with double newlines
+
+    const combinedMessage = `${WrapperPrompt}\n\n${introText}${responses}`.trim();
 
     console.log('Combined port scan message:', combinedMessage);
 
