@@ -11716,3 +11716,26 @@ body.dark-mode .card a {
 body.dark-mode .text-dark i {
   color: #ffffff !important; 
 }
+
+/* Personas */
+.persona-container {
+  display: flex;
+  flex-direction: column; /* Stack image, title, and text */
+  align-items: center; /* Center everything horizontally */
+  text-align: center; /* Ensure text is centered */
+}
+
+.persona-image {
+  width: 250px; /* Adjust size as needed */
+  height: auto;
+  margin-bottom: 10px; /* Space between image and text */
+}
+
+.begin-persona,
+.int-persona,
+.expert-persona {
+  display: flex;
+  flex-direction: column; /* Ensure stacked layout */
+  align-items: center; /* Center content */
+  text-align: center; /* Center text */
+}
