@@ -1,7 +1,6 @@
 import { Box, Button, Stack, IconButton, Snackbar } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import SendIcon from '@mui/icons-material/Send';
-import GraphicEqIcon from '@mui/icons-material/GraphicEq';
 import Textarea from '@mui/joy/Textarea';
 import { useChats } from '../../contexts/ChatContext';
 import styles from './ChatBox.module.css';
@@ -20,9 +19,9 @@ function ChatBox() {
   const [files, setFiles] = useState([]);
   const fileUploadRef = useRef(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-    // /////////////////////////
-    const [currentUploadedFiles, setCurrentUploadedFiles] = useState([]);
-    // /////////////////////////
+  // /////////////////////////
+  const [currentUploadedFiles, setCurrentUploadedFiles] = useState([]);
+  // /////////////////////////
 
   // Auto-scroll to the bottom of the chat history when new messages are added
   useEffect(() => {
@@ -40,12 +39,12 @@ function ChatBox() {
         content = codeContent;
       } else {
         // Fallback to getting content from the ref
-        content = contentRef.current?.innerText|| '';
+        content = contentRef.current?.innerText || '';
       }
-  
+
       // For debugging
       console.log('Content to save:', content);
-      
+
       // Send to Electron API
       await window.api.saveFile(content);
       console.log('File saved successfully!');
@@ -53,7 +52,6 @@ function ChatBox() {
       console.error('An error occurred while saving the file:', error);
     }
   }
-
 
   // /////////////////////////////////////////////////
   const handleUpdateFile = async (content) => {
@@ -76,8 +74,6 @@ function ChatBox() {
     }
   };
   // /////////////////////////////////////////////////
-
-
 
   //Current accepted file types for upload
   const acceptedFileTypes = [
@@ -149,7 +145,6 @@ function ChatBox() {
         });
 
         // //////////////////////////////////////////
-
 
         if (validFiles.length === uploadedFiles.length) {
           setSnackbarMessage('File(s) uploaded');
@@ -284,11 +279,14 @@ function ChatBox() {
             <div key={index} className={styles.messageContainer}>
               <p className={message.role === 'user' ? styles.userMessage : styles.botMessage}>
                 <span className={message.isThinking ? styles.thinking : ''}>
-                  {formatMessage(message.content, copyToClipboard,
-                   message.role,
+                  {formatMessage(
+                    message.content,
+                    copyToClipboard,
+                    message.role,
                     handleUpdateFile,
                     currentUploadedFiles,
-                    handleDownloadChatFile)}
+                    handleDownloadChatFile
+                  )}
                 </span>
                 {message.role === 'assistant' && !message.isThinking && (
                   <IconButton
@@ -353,18 +351,6 @@ function ChatBox() {
                 />
                 <AttachFileOutlinedIcon className={styles.attachFileIcon} />
               </label>
-
-              {/* Voice input button (functionality to be implemented) */}
-              <Button
-                className={styles.iconButton}
-                onClick={async () => {
-                  const options = { buttons: ['saleem', 'khan'] };
-                  const res = await window.api.askUserPopup(options);
-                  console.log(res);
-                }}
-              >
-                <GraphicEqIcon />
-              </Button>
 
               {/* Send button */}
               <Button
