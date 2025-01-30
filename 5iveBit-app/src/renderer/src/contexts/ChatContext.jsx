@@ -3,6 +3,7 @@ import { WrapperPrompt } from './prompts';
 import { beginnerPrompt, intermediatePrompt, expertPrompt } from './UserLevelPrompts';
 import { handleCVEQuery } from '../CVE/cveHandler';
 import { handlePortScanQuery } from '../portScanner/portScanner';
+import { handleSecuritySuggestion } from './SecuritySuggestion';
 const ChatsContext = createContext();
 
 // Utility function to generate unique IDs for chats and messages
@@ -76,7 +77,17 @@ function ChatsProvider({ children }) {
       if (portScanResponse !== null) {
         return portScanResponse;
       }
-
+      let finalPrompt = promptInput;
+      try {
+        // Get security-enhanced prompt if applicable
+        const enhancedPrompt = await handleSecuritySuggestion(promptInput);
+        if (enhancedPrompt) {
+          console.log('Using security-enhanced prompt');
+          finalPrompt = enhancedPrompt;
+        }
+      } catch (error) {
+        console.error('Error in security suggestion handler:', error);
+      }
       //Prompt Levels
       let levelPrompt = '';
       if (currentLevel === 'beginner') {
@@ -87,14 +98,10 @@ function ChatsProvider({ children }) {
         levelPrompt = expertPrompt;
       }
 
-      // This feautre introduces unintentional behaviour. So it is disabled for now.
-      // Generate security suggestions
-      // await generateSecuritySuggestions(promptInput, updatedMessages, setcurrentChat);
-
       // If no relevant terms, send the promptInput with WrapperPrompt if user selects experience level send that with the wrapper prompt
       const combinedMessage = currentLevel
-        ? `${WrapperPrompt}\n\n${levelPrompt}\n\n${promptInput}`.trim()
-        : `${WrapperPrompt}\n\n${promptInput}`.trim();
+        ? `${WrapperPrompt}\n\n${levelPrompt}\n\n${finalPrompt}`.trim()
+        : `${WrapperPrompt}\n\n${finalPrompt}`.trim();
 
       console.log('Current level:', currentLevel);
 
