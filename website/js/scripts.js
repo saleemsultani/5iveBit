@@ -30,3 +30,34 @@ window.addEventListener("DOMContentLoaded", (event) => {
     });
   });
 });
+
+//dark mode
+document.addEventListener("DOMContentLoaded", function () {
+  const themeToggle = document.getElementById("flexSwitchCheckChecked");
+
+  // Function to enable dark mode
+  function enableDarkMode() {
+      document.body.classList.add("dark-mode");
+      localStorage.setItem("darkMode", "enabled");
+  }
+
+  // Function to disable dark mode
+  function disableDarkMode() {
+      document.body.classList.remove("dark-mode");
+      localStorage.setItem("darkMode", "disabled");
+  }
+
+  // Check saved preference and apply
+  if (localStorage.getItem("darkMode") === "enabled") {
+      enableDarkMode();
+      themeToggle.checked = true;
+  }
+
+  themeToggle.addEventListener("change", function () {
+      if (themeToggle.checked) {
+          enableDarkMode();
+      } else {
+          disableDarkMode();
+      }
+  });
+});
