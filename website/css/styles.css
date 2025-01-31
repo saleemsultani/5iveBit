@@ -11745,3 +11745,14 @@ body.dark-mode .text-dark i {
   display: inline-flex; /* Makes sure all icons are aligned */
   align-items: center; /* Aligns icons vertically */
 }  
+
+.bi-bluesky::before {
+  content: "";
+  background-color: currentColor;
+  -webkit-mask: url("/assets/images/bluesky-black-logo-24456.svg") no-repeat 50% 50%;
+  mask: url("") no-repeat 50% 50%;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+  height: 16px;
+  width: 16px;
+}
