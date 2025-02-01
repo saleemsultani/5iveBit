@@ -37,6 +37,13 @@ function DashboardMain() {
 
         {/* Feature Cards */}
         <Box className={styles.dashboardCards}>
+          <Box className={styles.dashboardCard} onClick={() => navigate('/cyber-news')}>
+            <img
+              src="src/assets/dashboard-cybersecuritynews.png"
+              alt="Cyber Security News"
+              className={styles.cardImage}
+            />
+          </Box>
           <Box className={styles.dashboardCard} onClick={() => navigate('/nist-standards')}>
             <img
               src="src/assets/dashboard-nistframework.png"
