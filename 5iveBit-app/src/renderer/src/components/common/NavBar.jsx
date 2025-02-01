@@ -21,7 +21,12 @@ function NavBar() {
               className={`${styles.navbarLogo} ${styles.tinyLogo}`}
             />
           </a>
-          <p className={styles.navbarLink}>NewsLetter</p>
+          <p
+            className={styles.navbarLink}
+            onClick={() => (window.location.href = '/cyber-news?from=navbar')}
+          >
+            Cyber Security News
+          </p>
           <p
             className={styles.navbarLink}
             onClick={() => (window.location.href = '/best-practices?from=navbar')}

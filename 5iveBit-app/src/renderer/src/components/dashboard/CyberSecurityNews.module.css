@@ -1,0 +1,144 @@
+/* Main container styling */
+.cyberSecurityNewsWrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #0d0117;
+}
+
+/* Introduction alert box styling - matches other pages */
+.alertBox {
+    background-color: #1c0d2c;
+    border: 1px solid #4b3069;
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 40px;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.alertTitle {
+    color: white;
+    text-align: center;
+    margin-bottom: 16px !important;
+    font-weight: 500 !important;
+}
+
+.alertText {
+    color: #e0e0e0;
+    text-align: center;
+    font-size: 1.1rem !important;
+    line-height: 1.6 !important;
+}
+
+/* Header section styling */
+.headerSection {
+    padding: 20px 40px;
+}
+
+.navigation {
+    margin-bottom: 40px;
+}
+
+/* Navigation button styling */
+.backButton {
+    color: white !important;
+}
+
+.backButton:hover {
+    background-color: #1c0d2c !important;
+}
+
+/* Main header text */
+.header {
+    color: white;
+    text-align: center;
+    font-size: 2.5rem !important;
+    margin-bottom: 60px !important;
+}
+
+/* Main content area styling */
+.mainContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #0d0117;
+}
+
+/* News content container */
+.contentContainer {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Individual news card styling */
+.newsCard {
+    background-color: #1c0d2c;
+    border: 1px solid #4b3069;
+    border-radius: 10px;
+    padding: 24px;
+}
+
+/* News title in cards */
+.newsTitle {
+    color: white;
+    font-size: 1.25rem !important;
+    font-weight: 500 !important;
+    margin-bottom: 16px !important;
+}
+
+/* News content text */
+.newsText {
+    color: #e0e0e0;
+    font-size: 1rem !important;
+    line-height: 1.5 !important;
+    margin-bottom: 16px !important;
+}
+
+/* News card footer section */
+.newsFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+}
+
+/* Source text styling */
+.newsSource {
+    color: #a855f7;
+    font-size: 0.9rem !important;
+}
+
+/* Read more link styling */
+.newsLink {
+    color: #a855f7;
+    font-size: 0.9rem !important;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.newsLink:hover {
+    color: #d8b4fe;
+    text-decoration: underline;
+}
+
+/* Loading spinner container */
+.loadingSpinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+}
+
+/* Error message styling */
+.errorText {
+    color: #ff6b6b;
+    text-align: center;
+}

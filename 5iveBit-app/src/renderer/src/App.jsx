@@ -8,6 +8,7 @@ import BestPractices from './components/dashboard/BestPractices';
 import NistStandards from './components/dashboard/NistStandards';
 import IsoStandards from './components/dashboard/IsoStandards';
 import CybercrimeResponse from './components/dashboard/CybercrimeResponse';
+import CyberSecurityNews from './components/dashboard/CyberSecurityNews';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path="/nist-standards" element={<NistStandards />} />
             <Route path="/iso-standards" element={<IsoStandards />} />
             <Route path="/cybercrime-response" element={<CybercrimeResponse />} />
+            <Route path="/cyber-news" element={<CyberSecurityNews />} />
           </Routes>
         </Box>
       </Router>
