@@ -46,7 +46,7 @@ function createWindow() {
       ...details.responseHeaders,
       'Content-Security-Policy': [
         `default-src 'self';
-         connect-src 'self' http://localhost:11434 https://cve.circl.lu https://app.opencve.io https://newsapi.org;
+         connect-src 'self' http://localhost:11434 https://cve.circl.lu https://app.opencve.io https://newsapi.org https://www.virustotal.com;
          script-src 'self' 'unsafe-inline';
          style-src 'self' 'unsafe-inline';
          img-src 'self' data: https:;
