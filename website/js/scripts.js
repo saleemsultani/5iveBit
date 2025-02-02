@@ -33,28 +33,36 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
 //enables dark mode -NO local storage -NO user tracking
 document.addEventListener("DOMContentLoaded", function () {
-  const themeToggle = document.getElementById("flexSwitchCheckChecked");
+  const themeToggle = document.getElementById("flexSwitchCheckChecked"); 
 
   // Function to enable dark mode
-  function enableDarkMode() {
-    document.body.classList.add("dark-mode");
+function enableDarkMode() {
+  document.body.classList.add("dark-mode");
+  localStorage.setItem("darkMode", "enabled");
+}
+
+// Function to disable dark mode
+function disableDarkMode() {
+  document.body.classList.remove("dark-mode");
+  localStorage.setItem("darkMode", "disabled");
+}
+
+// Check saved preference and apply
+const savedMode = localStorage.getItem("darkMode");
+if (savedMode === "enabled") {
+  enableDarkMode();
+  themeToggle.checked = true; 
+} else {
+  disableDarkMode(); 
+  themeToggle.checked = false; 
+}
+
+// Toggle dark mode on switch change
+themeToggle.addEventListener("change", function () {
+  if (themeToggle.checked) {
+    enableDarkMode();
+  } else {
+    disableDarkMode();
   }
-
-  // Function to disable dark mode
-  function disableDarkMode() {
-    document.body.classList.remove("dark-mode");
-  }
-
-  // Default to light mode
-  disableDarkMode();
-  themeToggle.checked = false;
-
-  // Toggle dark mode on switch change
-  themeToggle.addEventListener("change", function () {
-    if (themeToggle.checked) {
-      enableDarkMode();
-    } else {
-      disableDarkMode();
-    }
   });
 });
