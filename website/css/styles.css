@@ -11531,40 +11531,27 @@ header.masthead {
   padding-top: 9rem; /* Ensure the top part of the team page is visible */
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Personas */
+/* Personas Section */
 .persona-container {
   display: flex;
-  flex-direction: column; /* Stack image, title, and text */
-  align-items: center; /* Center everything horizontally */
-  text-align: center; /* Ensure text is centered */
+  flex-direction: column; 
+  align-items: center; 
+  text-align: center; 
 }
 
 .persona-image {
-  width: 250px; /* Adjust size as needed */
+  width: 250px; 
   height: auto;
-  margin-bottom: 10px; /* Space between image and text */
+  margin-bottom: 10px; 
 }
 
 .begin-persona,
 .int-persona,
 .expert-persona {
   display: flex;
-  flex-direction: column; /* Ensure stacked layout */
-  align-items: center; /* Center content */
-  text-align: center; /* Center text */
+  flex-direction: column; 
+  align-items: center; 
+  text-align: center; 
 }
 
 .expert-persona {
@@ -11576,7 +11563,7 @@ header.masthead {
 }
 
 
-
+/*Social media icons footer*/
 .footer-icon {
   text-decoration: none !important; /* Removes white underline */
   display: inline-flex; /* Makes sure all icons are aligned */
@@ -11602,7 +11589,7 @@ header.masthead {
   top: 10%;
   display: flex;
   align-items: center;
-  gap: 8px; /* Space between the toggle and the icon */
+  gap: 8px; 
 }
 
 /* Adjust spacing for mobile */
@@ -11614,7 +11601,7 @@ header.masthead {
 
 /* Hide the default toggle switch */
 #themeToggle .form-check-input {
-  display: none; /* Hide the default toggle */
+  display: none; 
 }
 
 /* Icons Container */
@@ -11623,39 +11610,38 @@ header.masthead {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px; /* Adjust size as needed */
+  width: 40px; 
   height: 40px;
-  border-radius: 50%; /* Circular shape */
-  background-color: #f0f0f0; /* Light gray background for light mode */
+  border-radius: 50%; 
+  background-color: #f0f0f0; 
   transition: background-color 0.3s ease;
 }
 
 /* Icons */
 .theme-icon {
-  font-size: 1.2rem; /* Adjust icon size */
-  color: #4b3069; /* Purple icons for light mode */
+  font-size: 1.2rem; 
+  color: #4b3069; 
   transition: opacity 0.3s ease;
 }
 
 /* Light Mode Icon */
 .theme-icon.light {
-  opacity: 1; /* Visible in light mode */
+  opacity: 1; 
 }
 
 /* Dark Mode Icon */
 .theme-icon.dark {
-  opacity: 0; /* Hidden in light mode */
+  opacity: 0; 
   position: absolute;
 }
 
 /* Dark Mode Styles for Toggle */
 body.dark-mode #themeToggleLabel {
-  background-color: #4b3069; /* Dark purple background in dark mode */
+  background-color: #4b3069; 
 }
 
 body.dark-mode #themeToggleLabel .theme-icon {
-  color: #ffffff; /* White icons in dark mode */
-}
+  color: #ffffff; }
 
 body.dark-mode #themeToggleLabel .theme-icon.light {
   opacity: 0; /* Hide sun in dark mode */
@@ -11855,12 +11841,10 @@ body.dark-mode footer .mb-2 {
 }
 
 /* ===== Gradient Section in Dark Mode ===== */
-/* Dark Mode */
 body.dark-mode .bg-gradient-primary-to-secondary {
-  background: #3a1f4f !important; 
+  background: #3a1f4f !important; /*is solid color in dark mode*/
   color: #ffffff !important; 
 }
-
 
 /* ===== Light Mode Footer ===== */
 .light-footer {
