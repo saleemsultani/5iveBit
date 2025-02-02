@@ -31,33 +31,30 @@ window.addEventListener("DOMContentLoaded", (event) => {
   });
 });
 
-//dark mode
+//enables dark mode -NO local storage -NO user tracking
 document.addEventListener("DOMContentLoaded", function () {
   const themeToggle = document.getElementById("flexSwitchCheckChecked");
 
   // Function to enable dark mode
   function enableDarkMode() {
-      document.body.classList.add("dark-mode");
-      localStorage.setItem("darkMode", "enabled");
+    document.body.classList.add("dark-mode");
   }
 
   // Function to disable dark mode
   function disableDarkMode() {
-      document.body.classList.remove("dark-mode");
-      localStorage.setItem("darkMode", "disabled");
+    document.body.classList.remove("dark-mode");
   }
 
-  // Check saved preference and apply
-  if (localStorage.getItem("darkMode") === "enabled") {
-      enableDarkMode();
-      themeToggle.checked = true;
-  }
+  // Default to light mode
+  disableDarkMode();
+  themeToggle.checked = false;
 
+  // Toggle dark mode on switch change
   themeToggle.addEventListener("change", function () {
-      if (themeToggle.checked) {
-          enableDarkMode();
-      } else {
-          disableDarkMode();
-      }
+    if (themeToggle.checked) {
+      enableDarkMode();
+    } else {
+      disableDarkMode();
+    }
   });
 });

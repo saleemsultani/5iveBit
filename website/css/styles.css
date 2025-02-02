@@ -11531,215 +11531,39 @@ header.masthead {
   padding-top: 9rem; /* Ensure the top part of the team page is visible */
 }
 
-
-/* Theme Toggle Button */
-#themeToggle {
-  position: absolute;
-  right: 10px;
-  top: 10%;
-}
-
-/* Optional: Adjust spacing for mobile */
-@media (max-width: 768px) {
-  #themeToggle {
-      margin-right: 5px; 
-  }
-}
-
-/*  Dark Mode Styles */
-body.dark-mode {
-  background-color: #000000 !important; 
-  color: #ffffff !important; 
-}
-
-/* Paragraphs */
-body.dark-mode p {
-  color: #ffffff !important; 
-}
-
-/* Sections */
-body.dark-mode section {
-  background-color: #000000 !important; 
-  color: #ffffff !important; 
-}
-
-/* Text inside sections dark mode*/
-body.dark-mode section h1,
-body.dark-mode section h2,
-body.dark-mode section h3,
-body.dark-mode section p {
-  color: #ffffff !important; 
-}
-
-/* muted text dark mode*/
-body.dark-mode .text-muted {
-  color: #e9e6e6 !important; 
-}
-
-
-/* Masthead */
-body.dark-mode .masthead {
-  background-color: #000000 !important; 
-  color: #ffffff !important; 
-}
-
-/* Text in masthead */
-body.dark-mode .masthead h1,
-body.dark-mode .masthead h2,
-body.dark-mode .masthead p {
-  color: #ffffff !important; 
-}
-
-/* Dark mode for navbar */
-body.dark-mode .navbar {
-  background-color: #000000 !important; 
-  border-color: #333333 !important; 
-}
-
-body.dark-mode .navbar a.nav-link {
-  color: #ffffff !important; 
-}
-
-body.dark-mode .navbar a.nav-link:hover {
-  color: #e6e6e6 !important; 
-}
-
-/* Dark mode for buttons */
-body.dark-mode .btn {
-  background-color: #ffffff !important; 
-  color: #000000 !important; 
-  border: 1px solid #000000 !important; 
-}
-
-body.dark-mode .btn:hover {
-  background-color: #f2f2f2 !important; 
-  color: #000000 !important; 
-  border-color: #000000 !important; 
-}
-
-/* Dark mode for buttons inside sections */
-body.dark-mode section .btn {
-  background-color: #ffffff !important;
-  color: #000000 !important; 
-  border: 1px solid #000000 !important;
-}
-
-body.dark-mode section .btn:hover {
-  background-color: #f2f2f2 !important;
-  color: #000000 !important;
-  border-color: #000000 !important;
-}
-
-/*dark mode toggle button*/
-body.dark-mode .form-check-input {
-  background-color: #500597 !important; 
-  border-color: #ffffff !important; 
-}
-
-body.dark-mode .form-check-input:checked {
-  background-color: #500597 !important; /* Completely white when checked */
-  border-color: #ffffff !important;
-}
-
-body.dark-mode .form-check-input:focus {
-  box-shadow: 0 0 5px #ffffff !important; /* White glow when focused */
-}
-
-/* Footer */
-body.dark-mode footer {
-  background-color: #000000 !important; 
-  color: #ffffff !important; 
-}
-
-body.dark-mode footer a {
-  color: #ffffff !important; 
-}
-
-body.dark-mode footer a:hover {
-  color: #e6e6e6 !important; 
-}
-
-body.dark-mode .text-white-50 {
-  color: #ffffff !important; 
-}
-
-/* blue buttons */
-body.dark-mode .btn-primary {
-  background-color: #ffffff !important; 
-  color: #000000 !important; 
-  border-color: #000000 !important;
-}
-
-body.dark-mode .btn-primary:hover {
-  background-color: #f2f2f2 !important;
-  color: #000000 !important;
-  border-color: #000000 !important;
-}
-
-/* Tables */
-body.dark-mode .table {
-  background-color: #000000 !important; 
-  color: #ffffff !important; 
-}
-
-body.dark-mode .table thead {
-  background-color: #333333 !important; 
-  color: #ffffff !important;
-}
-
-body.dark-mode .bg-gradient-primary-to-secondary {
-  background: #000000 !important;
-  color: #ffffff !important; 
-}
-
-/*cards*/
-body.dark-mode .card {
-  background-color: #ffffff !important; 
-  color: #000000 !important; 
-  border-color: #dddddd !important; 
-}
-
-/* text inside the card */
-body.dark-mode .card h1,
-body.dark-mode .card h2,
-body.dark-mode .card h3,
-body.dark-mode .card h4,
-body.dark-mode .card h5,
-body.dark-mode .card h6,
-body.dark-mode .card p,
-body.dark-mode .card span,
-body.dark-mode .card a {
-  color: #000000 !important; 
-}
-
-/*team page links*/
-body.dark-mode .text-dark i {
-  color: #ffffff !important; 
-}
-
-/* Personas */
+/* Personas Section */
 .persona-container {
   display: flex;
-  flex-direction: column; /* Stack image, title, and text */
-  align-items: center; /* Center everything horizontally */
-  text-align: center; /* Ensure text is centered */
+  flex-direction: column; 
+  align-items: center; 
+  text-align: center; 
 }
 
 .persona-image {
-  width: 250px; /* Adjust size as needed */
+  width: 250px; 
   height: auto;
-  margin-bottom: 10px; /* Space between image and text */
+  margin-bottom: 10px; 
 }
 
 .begin-persona,
 .int-persona,
 .expert-persona {
   display: flex;
-  flex-direction: column; /* Ensure stacked layout */
-  align-items: center; /* Center content */
-  text-align: center; /* Center text */
+  flex-direction: column; 
+  align-items: center; 
+  text-align: center; 
 }
 
+.expert-persona {
+  display: flex;
+  flex-direction: column; 
+  align-items: center; 
+  text-align: center; 
+  margin-bottom: 29px;
+}
+
+
+/*Social media icons footer*/
 .footer-icon {
   text-decoration: none !important; /* Removes white underline */
   display: inline-flex; /* Makes sure all icons are aligned */
@@ -11755,4 +11579,288 @@ body.dark-mode .text-dark i {
   mask-size: cover;
   height: 16px;
   width: 16px;
+}
+
+
+/* Theme Toggle Container */
+#themeToggle {
+  position: absolute;
+  right: 10px;
+  top: 10%;
+  display: flex;
+  align-items: center;
+  gap: 8px; 
+}
+
+/* Adjust spacing for mobile */
+@media (max-width: 768px) {
+  #themeToggle {
+      margin-right: 5px; 
+  }
+}
+
+/* Hide the default toggle switch */
+#themeToggle .form-check-input {
+  display: none; 
+}
+
+/* Icons Container */
+#themeToggleLabel {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px; 
+  height: 40px;
+  border-radius: 50%; 
+  background-color: #f0f0f0; 
+  transition: background-color 0.3s ease;
+}
+
+/* Icons */
+.theme-icon {
+  font-size: 1.2rem; 
+  color: #4b3069; 
+  transition: opacity 0.3s ease;
+}
+
+/* Light Mode Icon */
+.theme-icon.light {
+  opacity: 1; 
+}
+
+/* Dark Mode Icon */
+.theme-icon.dark {
+  opacity: 0; 
+  position: absolute;
+}
+
+/* Dark Mode Styles for Toggle */
+body.dark-mode #themeToggleLabel {
+  background-color: #4b3069; 
+}
+
+body.dark-mode #themeToggleLabel .theme-icon {
+  color: #ffffff; }
+
+body.dark-mode #themeToggleLabel .theme-icon.light {
+  opacity: 0; /* Hide sun in dark mode */
+}
+
+body.dark-mode #themeToggleLabel .theme-icon.dark {
+  opacity: 1; /* Show moon in dark mode */
+}
+
+
+/* ===== General Dark Mode Styles ===== */
+body.dark-mode {
+  background-color: #1c0d2c !important; 
+  color: #ffffff !important; 
+}
+
+/* Paragraphs */
+body.dark-mode p {
+  color: #ffffff !important;
+}
+
+/* Headings */
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6 {
+  color: #ffffff !important;
+}
+
+/* Muted Text */
+body.dark-mode .text-muted {
+  color: #ffffff !important; 
+}
+
+/* Links */
+body.dark-mode a {
+  color: #ffffff !important;
+}
+
+body.dark-mode a:hover {
+  color: #d3a4ff !important; 
+}
+
+/* Sections */
+body.dark-mode section {
+  background-color: #1c0d2c !important;
+  color: #ffffff !important;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Text inside sections */
+body.dark-mode section h1,
+body.dark-mode section h2,
+body.dark-mode section h3,
+body.dark-mode section p {
+  color: #ffffff !important;
+}
+
+/* Masthead */
+body.dark-mode .masthead {
+  background-color: #1c0d2c !important;
+  color: #ffffff !important;
+}
+
+/* Text in masthead */
+body.dark-mode .masthead h1,
+body.dark-mode .masthead h2,
+body.dark-mode .masthead p {
+  color: #ffffff !important;
+}
+
+/* Navbar */
+body.dark-mode .navbar {
+  background-color: #0f011b !important;
+  border-color: #3a1f4f !important; 
+}
+
+body.dark-mode .navbar a.nav-link {
+  color: #ffffff !important;
+}
+
+body.dark-mode .navbar a.nav-link:hover {
+  color: #d3a4ff !important; 
+}
+
+/* ===== Buttons ===== */
+body.dark-mode .btn {
+  background-color: #ffffff !important; 
+  color: #4b3069 !important; 
+  border: 1px solid #4b3069 !important;
+}
+
+body.dark-mode .btn:hover {
+  background-color: #d3a4ff !important; 
+  color: #ffffff !important; 
+  border-color: #d3a4ff !important;
+}
+
+/* Primary Buttons */
+body.dark-mode .btn-primary {
+  background-color: #ffffff !important; 
+  color: #4b3069 !important; 
+  border-color: #4b3069 !important;
+}
+
+body.dark-mode .btn-primary:hover {
+  background-color: #d3a4ff !important; 
+  color: #ffffff !important; 
+  border-color: #d3a4ff !important;
+}
+
+/* Buttons Inside Sections */
+body.dark-mode section .btn {
+  background-color: #ffffff !important; 
+  color: #4b3069 !important; 
+  border: 1px solid #4b3069 !important;
+}
+
+body.dark-mode section .btn:hover {
+  background-color: #d3a4ff !important; 
+  color: #ffffff !important; 
+  border-color: #d3a4ff !important;
+}
+
+/* ===== Cards ===== */
+body.dark-mode .card {
+  background-color: #ffffff !important; 
+  color: #000000 !important; 
+  border-color: #dddddd !important;
+}
+
+/* Text inside the card */
+body.dark-mode .card h1,
+body.dark-mode .card h2,
+body.dark-mode .card h3,
+body.dark-mode .card h5,
+body.dark-mode .card h6,
+body.dark-mode .card p,
+body.dark-mode .card span,
+body.dark-mode .card a {
+  color: #000000 !important; 
+}
+
+/* Purple text inside cards */
+body.dark-mode .card .text-primary {
+  color: #7708F5 !important; 
+}
+
+body.dark-mode .card .text-success {
+  color: #0bd717 !important; 
+}
+
+/* ===== Tables ===== */
+body.dark-mode .table {
+  background-color: #1c0d2c !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .table thead {
+  background-color: #3a1f4f !important; 
+  color: #ffffff !important;
+}
+
+/* ===== Footer Dark Mode ===== */
+body.dark-mode footer {
+  background-color: #0f011b !important; 
+  color: #ffffff !important; 
+}
+
+body.dark-mode footer a {
+  color: #ffffff !important;
+}
+
+body.dark-mode footer a:hover {
+  color: #d3a4ff !important; 
+}
+
+/* Text inside <div class="mb-3"> in light mode */
+body.dark-mode footer a {
+  color: #ffffff !important; 
+}
+
+body.dark-mode footer a:hover {
+  color: #d3a4ff !important; 
+}
+
+/* footer text*/
+body.dark-mode footer .mb-3 {
+  color: #ffffff !important; 
+}
+
+body.dark-mode footer .mb-2 {
+  color: #ffffff !important; 
+}
+
+/* ===== Gradient Section in Dark Mode ===== */
+body.dark-mode .bg-gradient-primary-to-secondary {
+  background: #3a1f4f !important; /*is solid color in dark mode*/
+  color: #ffffff !important; 
+}
+
+/* ===== Light Mode Footer ===== */
+.light-footer {
+  background-color: #f8f9fa !important; 
+  color: #000000 !important; 
+}
+
+.light-footer a {
+  color: #000 !important; 
+}
+
+/* footer text */
+.light-footer .mb-3 {
+  color: #000000 !important; 
+}
+
+.light-footer .mb-2 {
+  color: #000000 !important;
 }
