@@ -11756,3 +11756,69 @@ body.dark-mode .text-dark i {
   height: 16px;
   width: 16px;
 }
+
+
+/* Theme Toggle Container */
+#themeToggle {
+  position: absolute;
+  right: 10px;
+  top: 10%;
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Space between the toggle and the icon */
+}
+
+/* Hide the default toggle switch */
+#themeToggle .form-check-input {
+  display: none; /* Hide the default toggle */
+}
+
+/* Icons Container */
+#themeToggleLabel {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px; /* Adjust size as needed */
+  height: 40px;
+  border-radius: 50%; /* Circular shape */
+  background-color: #f0f0f0; /* Light gray background for light mode */
+  transition: background-color 0.3s ease;
+}
+
+/* Icons */
+.theme-icon {
+  font-size: 1.2rem; /* Adjust icon size */
+  color: #4b3069; /* Purple icons for light mode */
+  transition: opacity 0.3s ease;
+}
+
+/* Light Mode Icon */
+.theme-icon.light {
+  opacity: 1; /* Visible in light mode */
+}
+
+/* Dark Mode Icon */
+.theme-icon.dark {
+  opacity: 0; /* Hidden in light mode */
+  position: absolute;
+}
+
+/* Dark Mode Styles for Toggle */
+body.dark-mode #themeToggleLabel {
+  background-color: #4b3069; /* Dark purple background in dark mode */
+}
+
+body.dark-mode #themeToggleLabel .theme-icon {
+  color: #ffffff; /* White icons in dark mode */
+}
+
+body.dark-mode #themeToggleLabel .theme-icon.light {
+  opacity: 0; /* Hide sun in dark mode */
+}
+
+body.dark-mode #themeToggleLabel .theme-icon.dark {
+  opacity: 1; /* Show moon in dark mode */
+}
+
+
