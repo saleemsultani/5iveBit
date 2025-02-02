@@ -8,6 +8,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import ColorLensIcon from '@mui/icons-material/ColorLens';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import InfoIcon from '@mui/icons-material/Info';
+import { AboutModal, HelpModal } from '../shared/Modal';
 
 function generateRandomId(length = 32) {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -30,6 +31,8 @@ function DashSideBarButton({ children, buttonText, onClick }) {
 function DashSideBar() {
   const [openHistory, setOpenHistory] = useState(false);
   const { chats, setcurrentChat, setQuestion } = useChats();
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
 
   const handleNewChat = () => {
     setcurrentChat({
@@ -67,12 +70,30 @@ function DashSideBar() {
 
       {/* Lower Links */}
       <Box className={styles.lowerLinks}>
-        <a href="#" className={styles.lowerLink}>
+        <a
+          href="#"
+          className={styles.lowerLink}
+          onClick={(e) => {
+            e.preventDefault();
+            setIsHelpOpen(true);
+          }}
+        >
           <HelpOutlineIcon /> Help
         </a>
-        <a href="#" className={styles.lowerLink}>
+        <a
+          href="#"
+          className={styles.lowerLink}
+          onClick={(e) => {
+            e.preventDefault();
+            setIsAboutOpen(true);
+          }}
+        >
           <InfoIcon /> About
         </a>
+
+        {/* Modal Components */}
+        <AboutModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
+        <HelpModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
       </Box>
     </Box>
   );
