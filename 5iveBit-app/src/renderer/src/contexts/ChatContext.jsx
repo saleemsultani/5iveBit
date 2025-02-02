@@ -4,6 +4,7 @@ import { beginnerPrompt, intermediatePrompt, expertPrompt } from './UserLevelPro
 import { handleCVEQuery } from '../CVE/cveHandler';
 import { handlePortScanQuery } from '../portScanner/portScanner';
 import { handleSecuritySuggestion } from './SecuritySuggestion';
+import { handleURLScanQuery } from '../URL-Scan/urlScanHandler';
 const ChatsContext = createContext();
 
 // Utility function to generate unique IDs for chats and messages
@@ -66,6 +67,15 @@ function ChatsProvider({ children }) {
       const cveResponse = await handleCVEQuery(promptInput, updatedMessages, setcurrentChat);
       if (cveResponse !== null) {
         return cveResponse;
+      }
+
+      const URLScanResponse = await handleURLScanQuery(
+        promptInput,
+        updatedMessages,
+        setcurrentChat
+      );
+      if (URLScanResponse !== null) {
+        return URLScanResponse;
       }
 
       // Use the new handlePortScanQuery function
