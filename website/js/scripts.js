@@ -66,3 +66,16 @@ themeToggle.addEventListener("change", function () {
   }
   });
 });
+
+/*disclaimer popup*/
+document.addEventListener("DOMContentLoaded", function () {
+  if (localStorage.getItem("disclaimerDismissed") !== "true") {
+      document.getElementById("disclaimer-popup").style.display = "block";
+  }
+});
+
+/*dismiss disclaimer popup*/
+function dismissPopup() {
+  document.getElementById("disclaimer-popup").style.display = "none";
+  localStorage.setItem("disclaimerDismissed", "true");
+}
