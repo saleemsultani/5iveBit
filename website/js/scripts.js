@@ -69,13 +69,31 @@ themeToggle.addEventListener("change", function () {
 
 /*disclaimer popup*/
 document.addEventListener("DOMContentLoaded", function () {
-  if (localStorage.getItem("disclaimerDismissed") !== "true") {
+  const hasSeenDisclaimer = localStorage.getItem("hasSeenDisclaimer");
+  const sessionActive = sessionStorage.getItem("sessionActive");
+
+  // Checks if it's a new session
+  if (!sessionActive) {
+      sessionStorage.setItem("sessionActive", "true"); // Marks session as active
+      localStorage.removeItem("hasSeenDisclaimer"); // Resets disclaimer for new session
+  }
+
+  // If disclaimer was dismissed in the past session, don't show it
+  if (hasSeenDisclaimer) return;
+
+  // If the disclaimer has not been dismissed in this session, show it
+  if (!sessionStorage.getItem("disclaimerDismissed")) {
       document.getElementById("disclaimer-popup").style.display = "block";
   }
 });
 
-/*dismiss disclaimer popup*/
+/* dismiss disclaimer popup */
 function dismissPopup() {
   document.getElementById("disclaimer-popup").style.display = "none";
-  localStorage.setItem("disclaimerDismissed", "true");
+
+  // Store in localStorage so it does not appear again until a new session starts
+  localStorage.setItem("hasSeenDisclaimer", "true");
+  
+  // Store in sessionStorage so it does not appear again during the session
+  sessionStorage.setItem("disclaimerDismissed", "true");
 }
