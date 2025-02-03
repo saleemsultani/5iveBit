@@ -1,0 +1,59 @@
+.container {
+  max-width: 80%;
+  margin: 5%;
+  padding: 10%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  background-color: #110420 !important;
+
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 90%;
+}
+
+.container:hover {
+  background: white;
+}
+
+.title,
+.passwordTitle {
+  color: white;
+}
+
+/* --- Fix Text & Border Color --- */
+.textField .MuiInputBase-input {
+  color: white !important;
+}
+
+.textField .MuiOutlinedInput-root {
+  border: 2px solid white !important;
+}
+
+.textField label {
+  color: white !important;
+}
+
+.buttonGroup {
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.button {
+  border-radius: 5px !important;
+  padding: 15px;
+  /* background-color: #1c0d2c !important; */
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  color: white;
+}
+
+.button:hover {
+  transition: background-color 0.3s ease !important;
+  background-color: #0c0118 !important;
+}
