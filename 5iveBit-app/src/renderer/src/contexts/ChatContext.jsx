@@ -27,24 +27,72 @@ function ChatsProvider({ children }) {
     messages: []
   });
 
-  // Creates a new chat session with a unique ID
-  const addChat = function (newChat) {
-    setChats((current) => {
-      return [
-        ...current,
-        {
-          id: generateRandomId(15),
-          messages: [],
-          ...newChat
+  // for initial loading of chats and current chat
+  useEffect(() => {
+    console.log('this is inside useEffect');
+    async function fetchChats() {
+      try {
+        const allChats = await window.api.getAllChats();
+        console.log(allChats);
+        const parsedChats = JSON.parse(allChats.chats);
+        console.log(parsedChats);
+        // check if there is no chat
+        if (parsedChats.length === 0) {
+          console.log('there is no chat: creating chat...');
+          // create a new chat
+          const newChat = await window.api.createChat({ messages: [] });
+
+          if (newChat.success) {
+            setcurrentChat({
+              _id: newChat.chatId,
+              messages: JSON.parse(newChat.messages)
+            });
+          }
+        } else {
+          console.log('this is parsedChat[0] inside useEffect: ', parsedChats[0]);
+          setcurrentChat(parsedChats[0]);
+          setChats(parsedChats);
         }
-      ];
-    });
+      } catch (error) {
+        console.log('error', error);
+      }
+    }
+
+    fetchChats();
+  }, []);
+
+  // update chats state with all the chats from database
+  const updateChats = async function () {
+    try {
+      const res = await window.api.getAllChats();
+      const parsedChats = JSON.parse(res.chats);
+      if (res.success) {
+        setChats(parsedChats);
+      } else {
+        console.log('error updating chats');
+      }
+    } catch (error) {
+      console.log('error', error);
+    }
   };
 
-  // Updates the chats array when the current chat changes
-  const updateChats = function () {
-    const obj = chats.find((chat) => currentChat.id === chat.id);
-    console.log(obj);
+  // updates current chat from the dataBase
+  // chat data is object which has id and messages array
+  const updateCurrentChat = async function (chatData) {
+    console.log(chatData);
+    const res = await window.api.updateChat(chatData);
+    console.log(res);
+    const parsedMessages = JSON.parse(res.messages);
+    try {
+      if (res.success) {
+        setcurrentChat({
+          _id: res.chatId,
+          messages: parsedMessages
+        });
+      }
+    } catch (error) {
+      console.log('error', error);
+    }
   };
 
   // Handles the API communication with the local LLM server
@@ -151,10 +199,16 @@ function ChatsProvider({ children }) {
       }
 
       // Update chat with the AI's response
-      setcurrentChat((current) => ({
-        ...current,
-        messages: [...updatedMessages, { role: 'assistant', content: data.message.content }]
-      }));
+      setcurrentChat((current) => {
+        const newChat = {
+          ...current,
+          messages: [...updatedMessages, { role: 'assistant', content: data.message.content }]
+        };
+
+        // save the changes done in currentChat in the DB
+        updateCurrentChat({ chatId: newChat._id, messages: newChat.messages }); // Using the new state
+        return newChat;
+      });
 
       return data.message.content;
     } catch (error) {
@@ -189,7 +243,6 @@ function ChatsProvider({ children }) {
         setChats,
         currentChat,
         setcurrentChat,
-        addChat,
         updateChats,
         generateRandomId,
         question,
