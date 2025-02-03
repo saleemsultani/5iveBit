@@ -5,15 +5,6 @@ import { Box, Button, Snackbar } from '@mui/material';
 import { useChats } from '../../contexts/ChatContext';
 import styles from './RightBar.module.css';
 
-function generateRandomId(length = 32) {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
-  return result;
-}
-
 function RightbarButton({ children, buttonText, onClick }) {
   return (
     <Button className={styles.rightbarButton} variant="outlined" onClick={onClick}>
@@ -25,33 +16,74 @@ function RightbarButton({ children, buttonText, onClick }) {
 
 function RightBar() {
   const [openHistory, setOpenHistory] = useState(false);
-  const { chats, setcurrentChat, setQuestion, currentLevel, setCurrentLevel } = useChats();
+  const {
+    chats,
+    updateChats,
+    currentChat,
+    setcurrentChat,
+    setQuestion,
+    currentLevel,
+    setCurrentLevel
+  } = useChats();
   const [openLevelSelect, setOpenLevelSelect] = useState(false);
   //const [currentLevel, setCurrentLevel] = useState(null);
   const [snackbarMessage, setSnackbarMessage] = useState(false);
 
   const userExperienceLevels = ['beginner', 'intermediate', 'expert'];
 
-  const handleNewChat = () => {
-    setcurrentChat({
-      id: generateRandomId(),
-      questions: [],
-      answers: []
-    });
-    setQuestion('');
+  const handleNewChat = async () => {
+    // If the current chat is empty, do nothing
+    if (!currentChat || currentChat.messages.length === 0) {
+      return;
+    }
+
+    try {
+      const newChat = await window.api.createChat({ messages: [] });
+
+      if (!newChat || !newChat.success) {
+        console.error('Failed to create a new chat.');
+        return;
+      }
+
+      // If an empty chat already exists, ask the user whether to move to it
+      if (newChat.emptyChatExist) {
+        const popUpResponse = await window.api.askUserPopup({
+          type: 'question',
+          message: 'An empty chat already exists. Do you want to go to that chat?',
+          buttons: ['Yes', 'No']
+        });
+
+        if (popUpResponse === 'Yes') {
+          setcurrentChat({ _id: newChat.chatId, messages: [] });
+          console.log('Switched to existing empty chat:', newChat.chatId);
+          return;
+        } else {
+          return;
+        }
+      }
+
+      // Set the current chat to the newly created chat
+      setcurrentChat({ _id: newChat.chatId, messages: [] });
+      updateChats();
+      setQuestion('');
+    } catch (error) {
+      console.error('Error handling new chat:', error);
+    }
   };
 
+  // handle set current chat
   const handleSetcurrentChat = (id) => {
-    setcurrentChat(chats.find((chat) => chat.id === id));
+    const foundChat = chats.find((chat) => chat._id === id);
+    setcurrentChat(foundChat);
   };
 
   const handleLevelChange = (level) => {
     setCurrentLevel(level);
     setOpenLevelSelect(false);
-    
+
     setSnackbarMessage(true);
     console.log('Experience level changed to:', level);
-    
+
     setTimeout(() => {
       setSnackbarMessage(false);
     }, 3000);
@@ -70,30 +102,33 @@ function RightBar() {
           <RightbarButton buttonText="Reports" />
 
           {/* Chat History Button */}
-        <RightbarButton onClick={() => setOpenHistory(!openHistory)} sx={{ position: 'relative' }} >
-          <span>Chat History</span>
-          {openHistory ? (
-            <KeyboardArrowUpIcon
-              sx={{
-                position: 'absolute',
-                right: '8px', 
-                top: '50%', 
-                transform: 'translateY(-50%)', 
-                fontSize: '1.5rem', 
-              }}
-            />
-          ) : (
-            <KeyboardArrowDownIcon
-              sx={{
-                position: 'absolute',
-                right: '8px', 
-                top: '50%', 
-                transform: 'translateY(-50%)', 
-                fontSize: '1.5rem', 
-              }}
-            />
-          )}
-        </RightbarButton>
+          <RightbarButton
+            onClick={() => setOpenHistory(!openHistory)}
+            sx={{ position: 'relative' }}
+          >
+            <span>Chat History</span>
+            {openHistory ? (
+              <KeyboardArrowUpIcon
+                sx={{
+                  position: 'absolute',
+                  right: '8px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  fontSize: '1.5rem'
+                }}
+              />
+            ) : (
+              <KeyboardArrowDownIcon
+                sx={{
+                  position: 'absolute',
+                  right: '8px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  fontSize: '1.5rem'
+                }}
+              />
+            )}
+          </RightbarButton>
 
           {/* Chat History Dropdown */}
           <Box className={`${styles.chatHistory} ${openHistory ? styles.open : ''}`}>
@@ -108,31 +143,34 @@ function RightBar() {
             ))}
           </Box>
 
-        {/* User Experience Level Button */}
-        <RightbarButton onClick={() => setOpenLevelSelect(!openLevelSelect)} sx={{ position: 'relative' }}>
-          <span>Experience Level</span>
-          {openLevelSelect ? (
-            <KeyboardArrowUpIcon
-              sx={{
-                position: 'absolute',
-                right: '8px', 
-                top: '50%', 
-                transform: 'translateY(-50%)', 
-                fontSize: '1.5rem', 
-              }}
-            />
-          ) : (
-            <KeyboardArrowDownIcon
-              sx={{
-                position: 'absolute',
-                right: '8px', 
-                top: '50%', 
-                transform: 'translateY(-50%)', 
-                fontSize: '1.5rem', 
-              }}
-            />
-          )}
-        </RightbarButton>
+          {/* User Experience Level Button */}
+          <RightbarButton
+            onClick={() => setOpenLevelSelect(!openLevelSelect)}
+            sx={{ position: 'relative' }}
+          >
+            <span>Experience Level</span>
+            {openLevelSelect ? (
+              <KeyboardArrowUpIcon
+                sx={{
+                  position: 'absolute',
+                  right: '8px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  fontSize: '1.5rem'
+                }}
+              />
+            ) : (
+              <KeyboardArrowDownIcon
+                sx={{
+                  position: 'absolute',
+                  right: '8px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  fontSize: '1.5rem'
+                }}
+              />
+            )}
+          </RightbarButton>
 
           {/* User Experience Level Dropdown */}
           <Box className={`${styles.userLevel} ${openLevelSelect ? styles.open : ''}`}>
@@ -149,13 +187,13 @@ function RightBar() {
         </Box>
 
         <Snackbar
-        open={snackbarMessage}
-        autoHideDuration={3000}
-        onClose={() => setSnackbarMessage(false)}
-        message={`Experience level set to ${currentLevel ? currentLevel.charAt(0).toUpperCase() + currentLevel.slice(1) : 'Default'}`}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      />
-      
+          open={snackbarMessage}
+          autoHideDuration={3000}
+          onClose={() => setSnackbarMessage(false)}
+          message={`Experience level set to ${currentLevel ? currentLevel.charAt(0).toUpperCase() + currentLevel.slice(1) : 'Default'}`}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        />
+
         {/* Bottom Button */}
         <RightbarButton buttonText="Support" onClick={handleSupport} />
       </Box>

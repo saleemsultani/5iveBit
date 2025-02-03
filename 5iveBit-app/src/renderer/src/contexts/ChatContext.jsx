@@ -5,6 +5,7 @@ import { handleCVEQuery } from '../CVE/cveHandler';
 import { handlePortScanQuery } from '../portScanner/portScanner';
 import { handleSecuritySuggestion } from './SecuritySuggestion';
 import { handleURLScanQuery } from '../URL-Scan/urlScanHandler';
+import { useAuth } from './authContext';
 const ChatsContext = createContext();
 
 // Utility function to generate unique IDs for chats and messages
@@ -22,6 +23,7 @@ function ChatsProvider({ children }) {
   const [question, setQuestion] = useState('');
   const [chats, setChats] = useState([]);
   const [currentLevel, setCurrentLevel] = useState(null);
+  const [auth, setAuth] = useAuth();
   const [currentChat, setcurrentChat] = useState({
     id: generateRandomId(15),
     messages: []
@@ -29,7 +31,11 @@ function ChatsProvider({ children }) {
 
   // for initial loading of chats and current chat
   useEffect(() => {
-    console.log('this is inside useEffect');
+    // if user is not logged in don't initiate chat
+    if (!auth?.user) {
+      console.log('user not logged in so chat not inieiated');
+      return;
+    }
     async function fetchChats() {
       try {
         const allChats = await window.api.getAllChats();
@@ -41,7 +47,7 @@ function ChatsProvider({ children }) {
           console.log('there is no chat: creating chat...');
           // create a new chat
           const newChat = await window.api.createChat({ messages: [] });
-
+          console.log('this is initial chat', newChat);
           if (newChat.success) {
             setcurrentChat({
               _id: newChat.chatId,
@@ -59,7 +65,7 @@ function ChatsProvider({ children }) {
     }
 
     fetchChats();
-  }, []);
+  }, [auth]);
 
   // update chats state with all the chats from database
   const updateChats = async function () {
