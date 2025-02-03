@@ -10,7 +10,9 @@ import IsoStandards from './components/dashboard/IsoStandards';
 import CybercrimeResponse from './components/dashboard/CybercrimeResponse';
 import CyberSecurityNews from './components/dashboard/CyberSecurityNews';
 import PrivateRoute from './components/User/PrivateRoute';
+import RegisterUser from './components/User/RegisterUser';
 import LoginUser from './components/User/LoginUser';
+import UserProfile from './components/User/UserProfile';
 import { AuthProvider } from './contexts/authContext';
 
 function App() {
@@ -30,7 +32,12 @@ function App() {
               <Route path="/iso-standards" element={<IsoStandards />} />
               <Route path="/cybercrime-response" element={<CybercrimeResponse />} />
               <Route path="/cyber-news" element={<CyberSecurityNews />} />
+              {/* user related */}
+              <Route path="/register-user" element={<RegisterUser />} />
               <Route path="/login-user" element={<LoginUser />} />
+              <Route path="/user-profile" element={<PrivateRoute />}>
+                <Route path="" element={<UserProfile />} />
+              </Route>
             </Routes>
           </Box>
         </Router>

@@ -87,6 +87,7 @@ const UserProfile = () => {
     // Make the API request to update the password
     try {
       const res = await window.api.updatePassword(userData);
+      console.log('this is res inside userProfile');
       console.log(res);
       if (res.success) {
         setSnackbarOpen(true);
@@ -218,6 +219,27 @@ const UserProfile = () => {
           Back
         </Button>
       </ButtonGroup>
+      <Button
+        variant="contained"
+        className={styles.logOutButton}
+        onClick={async () => {
+          try {
+            console.log('logging out...');
+            const res = await window.api.logoutUser();
+            if (res.success) {
+              setAuth({
+                user: null,
+                token: ''
+              });
+              navigate('/dashboard');
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        }}
+      >
+        Log out
+      </Button>
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={3000}

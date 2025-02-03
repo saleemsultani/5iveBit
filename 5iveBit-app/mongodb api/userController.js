@@ -183,7 +183,7 @@ export const updatePasswordController = async (event, userData) => {
     }
 
     // check if updated password is same as current password
-    if (comparePassword(newPassword, user.password)) {
+    if (await comparePassword(newPassword, user.password)) {
       return {
         success: false,
         message: 'Password is same'

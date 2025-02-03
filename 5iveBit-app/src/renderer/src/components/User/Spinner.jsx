@@ -4,7 +4,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { Box, Typography } from '@mui/material';
 
 const Spinner = () => {
-  const [count, setCount] = useState(3);
+  const [count, setCount] = useState(2);
   const navigate = useNavigate();
 
   useEffect(() => {

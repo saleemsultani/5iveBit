@@ -3,7 +3,6 @@ import { TextField, Button, Box, Typography, Paper, Snackbar, Alert } from '@mui
 import styles from './LoginUser.module.css';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/authContext';
-import { parse } from 'dotenv';
 
 const StyledInput = ({ label, name, value, onChange, type = 'text' }) => (
   <TextField
@@ -42,6 +41,7 @@ const LoginUser = () => {
         email,
         password
       });
+      console.log('res inside login: ', res);
       if (res.success) {
         const parsedUser = JSON.parse(res.user);
         setAuth({

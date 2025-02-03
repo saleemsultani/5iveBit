@@ -57,21 +57,29 @@ const RegisterUser = () => {
           subscribe
         })
       );
-      console.log('user inside register: ', JSON.parse(res.user));
+
       if (res.success) {
         setSnackbarOpen(true);
         setSnackbarMessage(res.message);
         setSoverity('success');
-        // navigate('/login');
+        navigate('/login-user');
       } else {
         setSnackbarOpen(true);
         setSnackbarMessage(res.message);
         setSoverity('error');
+        setFirstName('');
+        setLastName('');
+        setEmail('');
+        setPassword('');
       }
     } catch (error) {
       setSnackbarOpen(true);
       setSnackbarMessage('something went wrong');
       setSoverity('error');
+      setFirstName('');
+      setLastName('');
+      setEmail('');
+      setPassword('');
       console.log(error);
     }
   };
