@@ -132,7 +132,7 @@ function RightBar() {
 
           {/* Chat History Dropdown */}
           <Box className={`${styles.chatHistory} ${openHistory ? styles.open : ''}`}>
-            {chats.map((c, i) => (
+            {chats?.map((c, i) => (
               <Button
                 key={c.id}
                 className={styles.chatHistoryButton}
