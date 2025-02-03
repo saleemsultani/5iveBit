@@ -86,10 +86,10 @@ function ChatsProvider({ children }) {
   // chat data is object which has id and messages array
   const updateCurrentChat = async function (chatData) {
     console.log(chatData);
-    const res = await window.api.updateChat(chatData);
-    console.log(res);
-    const parsedMessages = JSON.parse(res.messages);
     try {
+      const res = await window.api.updateChat(chatData);
+      console.log(res);
+      const parsedMessages = JSON.parse(res.messages);
       if (res.success) {
         setcurrentChat({
           _id: res.chatId,
