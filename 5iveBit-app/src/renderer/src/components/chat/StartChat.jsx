@@ -21,19 +21,13 @@ function StartChat() {
     }
   }
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      height="100vh",
-      color='white',
-    >
+    <Box display="flex" flexDirection="column" alignItems="center" height="100vh" color="white">
       <h1>Welcoe to 5ivebit Bot</h1>
       <Button
         sx={{
           backgroundColor: 'blue',
           marginTop: '10%',
-          color:'white',
+          color: 'white'
         }}
         onClick={handleStartChat}
       >
