@@ -1,7 +1,6 @@
 import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
-import os from 'os';
 import AdmZip from 'adm-zip';
 import tar from 'tar';
 import { getOSInfo } from './getOSInfo';
@@ -31,7 +30,7 @@ export async function downloadMongoDB() {
   }
 
   // Skip download if MongoDB is already installed
-  if (fs.existsSync(path.join(MONGO_DIR, 'bin'))) {
+  if (fs.existsSync(MONGO_DIR)) {
     console.log('MongoDB is already installed at:', MONGO_DIR);
     return;
   }
@@ -84,8 +83,6 @@ export async function downloadMongoDB() {
 async function extractMongoDB(filePath, outputDir, platform) {
   console.log(`Extracting MongoDB...`);
 
-  const tempExtractPath = path.join(outputDir, 'temp_mongodb');
-
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
   }
@@ -93,24 +90,32 @@ async function extractMongoDB(filePath, outputDir, platform) {
   if (platform === 'win32') {
     // Windows: Extract ZIP
     const zip = new AdmZip(filePath);
-    zip.extractAllTo(tempExtractPath, true);
+    zip.extractAllTo(outputDir, true);
+
+    // Get extracted contents
+    const extractedFiles = fs.readdirSync(outputDir);
+
+    if (extractedFiles.length === 1) {
+      const topLevelFolder = path.join(outputDir, extractedFiles[0]);
+
+      // Check if it's a directory (meaning it's a wrapper folder we want to remove)
+      if (fs.statSync(topLevelFolder).isDirectory()) {
+        // Move all files inside topLevelFolder up one level
+        fs.readdirSync(topLevelFolder).forEach((file) => {
+          fs.renameSync(path.join(topLevelFolder, file), path.join(outputDir, file));
+        });
+
+        // Remove the empty top-level folder
+        fs.rmdirSync(topLevelFolder);
+      }
+    }
   } else {
     // macOS: Extract .tgz
     await tar.x({
       file: filePath,
-      cwd: tempExtractPath
+      cwd: outputDir,
+      strip: 1 // Remove the top-level folder during extraction
     });
-  }
-
-  // Move inner contents to final output directory
-  const extractedContents = fs.readdirSync(tempExtractPath);
-  const innerFolder = path.join(tempExtractPath, extractedContents[0]); // First extracted folder
-
-  if (fs.lstatSync(innerFolder).isDirectory()) {
-    fs.readdirSync(innerFolder).forEach((file) => {
-      fs.renameSync(path.join(innerFolder, file), path.join(outputDir, file));
-    });
-    fs.rmSync(tempExtractPath, { recursive: true, force: true }); // Cleanup
   }
 
   console.log(`Extracted MongoDB to: ${outputDir}`);
