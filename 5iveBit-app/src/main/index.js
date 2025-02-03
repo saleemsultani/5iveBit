@@ -8,6 +8,17 @@ import net from 'net';
 import { downloadMongoDB } from '../../automation/downloadMongoDB';
 import startMongoDB from '../../automation/startMongoDB';
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import {
+  isLogin,
+  loginController,
+  logoutController,
+  registerController,
+  updatePasswordController
+} from '../../mongodb api/userController';
+
+// Config .env
+dotenv.config();
 
 // Function to get the default download folder based on the operating system
 const getDownloadsFolder = () => {
@@ -304,3 +315,10 @@ ipcMain.handle('find-in-use-port', async (_, startPort, endPort, host = '127.0.0
     return { error: `Error scanning ports: ${error.message}` };
   }
 });
+
+// User
+ipcMain.handle('register-user', registerController);
+ipcMain.handle('login-user', loginController);
+ipcMain.handle('logout-user', logoutController);
+ipcMain.handle('check-auth', isLogin);
+ipcMain.handle('update-password', updatePasswordController);
