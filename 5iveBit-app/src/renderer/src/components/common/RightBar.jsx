@@ -23,7 +23,8 @@ function RightBar() {
     setcurrentChat,
     setQuestion,
     currentLevel,
-    setCurrentLevel
+    setCurrentLevel,
+    handleNewChat
   } = useChats();
   const [openLevelSelect, setOpenLevelSelect] = useState(false);
   //const [currentLevel, setCurrentLevel] = useState(null);
@@ -31,49 +32,11 @@ function RightBar() {
 
   const userExperienceLevels = ['beginner', 'intermediate', 'expert'];
 
-  const handleNewChat = async () => {
-    // If the current chat is empty, do nothing
-    if (!currentChat || currentChat.messages.length === 0) {
-      return;
-    }
-
-    try {
-      const newChat = await window.api.createChat({ messages: [] });
-
-      if (!newChat || !newChat.success) {
-        console.error('Failed to create a new chat.');
-        return;
-      }
-
-      // If an empty chat already exists, ask the user whether to move to it
-      if (newChat.emptyChatExist) {
-        const popUpResponse = await window.api.askUserPopup({
-          type: 'question',
-          message: 'An empty chat already exists. Do you want to go to that chat?',
-          buttons: ['Yes', 'No']
-        });
-
-        if (popUpResponse === 'Yes') {
-          setcurrentChat({ _id: newChat.chatId, messages: [] });
-          console.log('Switched to existing empty chat:', newChat.chatId);
-          return;
-        } else {
-          return;
-        }
-      }
-
-      // Set the current chat to the newly created chat
-      setcurrentChat({ _id: newChat.chatId, messages: [] });
-      updateChats();
-      setQuestion('');
-    } catch (error) {
-      console.error('Error handling new chat:', error);
-    }
-  };
-
   // handle set current chat
   const handleSetcurrentChat = (id) => {
     const foundChat = chats.find((chat) => chat._id === id);
+    console.log(id);
+    // console.log(foundChat);
     setcurrentChat(foundChat);
   };
 
@@ -136,7 +99,7 @@ function RightBar() {
               <Button
                 key={c.id}
                 className={styles.chatHistoryButton}
-                onClick={() => handleSetcurrentChat(c.id)}
+                onClick={() => handleSetcurrentChat(c._id)}
               >
                 {`Chat ${i + 1}`}
               </Button>

@@ -79,7 +79,7 @@ export const getAllChats = async () => {
 
 // update chat
 export const updateChat = async (event, chatData) => {
-  const { chatId, messages } = chatData;
+  const { chatId, messages } = JSON.parse(chatData);
 
   const token = tokenManager.getToken();
   if (!token) {

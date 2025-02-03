@@ -24,40 +24,22 @@ function ChatsProvider({ children }) {
   const [chats, setChats] = useState([]);
   const [currentLevel, setCurrentLevel] = useState(null);
   const [auth, setAuth] = useAuth();
-  const [currentChat, setcurrentChat] = useState({
-    id: generateRandomId(15),
-    messages: []
-  });
+  const [currentChat, setcurrentChat] = useState({});
 
   // for initial loading of chats and current chat
   useEffect(() => {
-    // if user is not logged in don't initiate chat
-    if (!auth?.user) {
-      console.log('user not logged in so chat not inieiated');
-      return;
-    }
     async function fetchChats() {
       try {
         const allChats = await window.api.getAllChats();
         console.log(allChats);
         const parsedChats = JSON.parse(allChats.chats);
         console.log(parsedChats);
-        // check if there is no chat
-        if (parsedChats.length === 0) {
-          console.log('there is no chat: creating chat...');
-          // create a new chat
-          const newChat = await window.api.createChat({ messages: [] });
-          console.log('this is initial chat', newChat);
-          if (newChat.success) {
-            setcurrentChat({
-              _id: newChat.chatId,
-              messages: JSON.parse(newChat.messages)
-            });
-          }
-        } else {
-          console.log('this is parsedChat[0] inside useEffect: ', parsedChats[0]);
+        if (parsedChats.length !== 0) {
           setcurrentChat(parsedChats[0]);
           setChats(parsedChats);
+        } else {
+          setChats([]);
+          setcurrentChat({});
         }
       } catch (error) {
         console.log('error', error);
@@ -87,7 +69,7 @@ function ChatsProvider({ children }) {
   const updateCurrentChat = async function (chatData) {
     console.log(chatData);
     try {
-      const res = await window.api.updateChat(chatData);
+      const res = await window.api.updateChat(JSON.stringify(chatData));
       console.log(res);
       const parsedMessages = JSON.parse(res.messages);
       if (res.success) {
@@ -98,6 +80,46 @@ function ChatsProvider({ children }) {
       }
     } catch (error) {
       console.log('error', error);
+    }
+  };
+
+  const handleNewChat = async () => {
+    // If the current chat is empty, do nothing
+    if (!currentChat || currentChat.messages.length === 0) {
+      return;
+    }
+
+    try {
+      const newChat = await window.api.createChat({ messages: [] });
+
+      if (!newChat || !newChat.success) {
+        console.error('Failed to create a new chat.');
+        return;
+      }
+
+      // If an empty chat already exists, ask the user whether to move to it
+      if (newChat.emptyChatExist) {
+        const popUpResponse = await window.api.askUserPopup({
+          type: 'question',
+          message: 'An empty chat already exists. Do you want to go to that chat?',
+          buttons: ['Yes', 'No']
+        });
+
+        if (popUpResponse === 'Yes') {
+          setcurrentChat({ _id: newChat.chatId, messages: [] });
+          console.log('Switched to existing empty chat:', newChat.chatId);
+          return;
+        } else {
+          return;
+        }
+      }
+
+      // Set the current chat to the newly created chat
+      setcurrentChat({ _id: newChat.chatId, messages: [] });
+      updateChats();
+      setQuestion('');
+    } catch (error) {
+      console.error('Error handling new chat:', error);
     }
   };
 
@@ -212,6 +234,7 @@ function ChatsProvider({ children }) {
         };
 
         // save the changes done in currentChat in the DB
+        // console.log(newChat);
         updateCurrentChat({ chatId: newChat._id, messages: newChat.messages }); // Using the new state
         return newChat;
       });
@@ -228,17 +251,9 @@ function ChatsProvider({ children }) {
     }
   };
 
-  // Effect hook to sync currentChat with the chats array
+  // Effect hook to update chats if there is change in current chat messages
   useEffect(() => {
-    setChats((prevChats) => {
-      const chatIndex = prevChats.findIndex((chat) => chat.id === currentChat.id);
-
-      if (chatIndex === -1) {
-        return [...prevChats, currentChat];
-      } else {
-        return prevChats.map((chat, index) => (index === chatIndex ? currentChat : chat));
-      }
-    });
+    updateChats();
   }, [currentChat]);
 
   // Provide chat-related state and functions to child components
@@ -255,7 +270,8 @@ function ChatsProvider({ children }) {
         setQuestion,
         generateAnswer,
         currentLevel,
-        setCurrentLevel
+        setCurrentLevel,
+        handleNewChat
       }}
     >
       {children}
