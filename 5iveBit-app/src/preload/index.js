@@ -28,7 +28,15 @@ const api = {
   // Check Authentication
   checkAuth: () => ipcRenderer.invoke('check-auth'),
   // Update Password
-  updatePassword: (userData) => ipcRenderer.invoke('update-password', userData)
+  updatePassword: (userData) => ipcRenderer.invoke('update-password', userData),
+
+  // chat
+  // Create Chat
+  createChat: (chatData) => ipcRenderer.invoke('create-chat', chatData),
+  // get All chats
+  getAllChats: () => ipcRenderer.invoke('get-all-chats'),
+  // update chat
+  updateChat: (chatData) => ipcRenderer.invoke('update-chat', chatData)
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to

@@ -16,6 +16,7 @@ import {
   registerController,
   updatePasswordController
 } from '../../mongodb api/userController';
+import { createChat, getAllChats, updateChat } from '../../mongodb api/chatController';
 
 // Config .env
 dotenv.config();
@@ -322,3 +323,8 @@ ipcMain.handle('login-user', loginController);
 ipcMain.handle('logout-user', logoutController);
 ipcMain.handle('check-auth', isLogin);
 ipcMain.handle('update-password', updatePasswordController);
+
+// chat
+ipcMain.handle('create-chat', createChat);
+ipcMain.handle('get-all-chats', getAllChats);
+ipcMain.handle('update-chat', updateChat);

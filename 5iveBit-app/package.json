@@ -29,6 +29,7 @@
     "axios": "^1.7.9",
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.7",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.9.6",
     "portscanner": "^2.2.0",
     "prismjs": "^1.29.0",
