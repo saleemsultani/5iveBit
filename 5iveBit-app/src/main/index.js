@@ -5,6 +5,9 @@ import os from 'os';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
 import net from 'net';
+import { downloadMongoDB } from '../../automation/downloadMongoDB';
+import startMongoDB from '../../automation/startMongoDB';
+import mongoose from 'mongoose';
 
 // Function to get the default download folder based on the operating system
 const getDownloadsFolder = () => {
@@ -104,7 +107,7 @@ function createWindow() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron');
 
@@ -117,6 +120,30 @@ app.whenReady().then(() => {
 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'));
+
+  //  monogdb related code
+  try {
+    // Check and download MongoDB binaries if necessary
+    console.log('Checking MongoDB binaries...');
+    await downloadMongoDB();
+    console.log('MongoDB binaries are ready.');
+    startMongoDB();
+  } catch (error) {
+    console.error('Failed to download MongoDB binaries:', error);
+    // Optionally show an error dialog and exit
+    dialog.showErrorBox(
+      'MongoDB Error',
+      'Failed to download or initialize MongoDB. Please check your internet connection or contact support.'
+    );
+    app.quit();
+    return;
+  }
+
+  // connect db
+  mongoose
+    .connect('mongodb://127.0.0.1:27017/5iveBit')
+    .then(() => console.log('Connected to MongoDB'))
+    .catch((err) => console.error('Failed to connect to MongoDB', err));
 
   createWindow();
 

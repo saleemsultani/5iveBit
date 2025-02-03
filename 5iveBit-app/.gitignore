@@ -170,3 +170,10 @@ yarn.lock
 
 # Documentation examples
 docs/portScanner-examples.md
+
+# mongodb binaries and logs
+resources/*
+!resources/icon.png
+
+# remove dotenv
+.env
