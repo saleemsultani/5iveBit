@@ -1,23 +1,12 @@
 import { useState } from 'react';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { Box, Button } from '@mui/material';
-import { useChats } from '../../contexts/ChatContext';
 import styles from './DashSideBar.module.css';
 import PersonIcon from '@mui/icons-material/Person';
-import ColorLensIcon from '@mui/icons-material/ColorLens';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import InfoIcon from '@mui/icons-material/Info';
 import { AboutModal, HelpModal } from '../shared/Modal';
-
-function generateRandomId(length = 32) {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
-  return result;
-}
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/authContext';
 
 function DashSideBarButton({ children, buttonText, onClick }) {
   return (
@@ -29,26 +18,10 @@ function DashSideBarButton({ children, buttonText, onClick }) {
 }
 
 function DashSideBar() {
-  const [openHistory, setOpenHistory] = useState(false);
-  const { chats, setcurrentChat, setQuestion } = useChats();
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
-
-  const handleNewChat = () => {
-    setcurrentChat({
-      id: generateRandomId(),
-      questions: [],
-      answers: []
-    });
-    setQuestion('');
-  };
-
-  const handleSetcurrentChat = (id) => {
-    {
-      /*FIX*/
-    }
-    setcurrentChat(chats.find((chat) => chat.id === id));
-  };
+  const [auth, setAuth] = useAuth();
+  const navigate = useNavigate();
 
   return (
     <Box className={styles.dashSideBarContainer} sx={{ overflowX: 'hidden' }}>
@@ -61,8 +34,11 @@ function DashSideBar() {
             variant="outlined"
             startIcon={<PersonIcon className={styles.profileIcon} />}
             sx={{ color: 'white' }}
+            onClick={() => {
+              navigate('/user-profile');
+            }}
           >
-            Profile
+            {auth?.user ? auth.user?.firstName : 'PROFILE'}
           </Button>
           <DashSideBarButton buttonText="Reports" />
         </Box>

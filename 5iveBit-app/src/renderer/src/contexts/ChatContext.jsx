@@ -5,6 +5,7 @@ import { handleCVEQuery } from '../CVE/cveHandler';
 import { handlePortScanQuery } from '../portScanner/portScanner';
 import { handleSecuritySuggestion } from './SecuritySuggestion';
 import { handleURLScanQuery } from '../URL-Scan/urlScanHandler';
+import { useAuth } from './authContext';
 const ChatsContext = createContext();
 
 // Utility function to generate unique IDs for chats and messages
@@ -22,29 +23,104 @@ function ChatsProvider({ children }) {
   const [question, setQuestion] = useState('');
   const [chats, setChats] = useState([]);
   const [currentLevel, setCurrentLevel] = useState(null);
-  const [currentChat, setcurrentChat] = useState({
-    id: generateRandomId(15),
-    messages: []
-  });
+  const [auth, setAuth] = useAuth();
+  const [currentChat, setcurrentChat] = useState({});
 
-  // Creates a new chat session with a unique ID
-  const addChat = function (newChat) {
-    setChats((current) => {
-      return [
-        ...current,
-        {
-          id: generateRandomId(15),
-          messages: [],
-          ...newChat
+  // for initial loading of chats and current chat
+  useEffect(() => {
+    async function fetchChats() {
+      try {
+        const allChats = await window.api.getAllChats();
+        console.log(allChats);
+        const parsedChats = JSON.parse(allChats.chats);
+        console.log(parsedChats);
+        if (parsedChats.length !== 0) {
+          setcurrentChat(parsedChats[0]);
+          setChats(parsedChats);
+        } else {
+          setChats([]);
+          setcurrentChat({});
         }
-      ];
-    });
+      } catch (error) {
+        console.log('error', error);
+      }
+    }
+
+    fetchChats();
+  }, [auth]);
+
+  // update chats state with all the chats from database
+  const updateChats = async function () {
+    try {
+      const res = await window.api.getAllChats();
+      const parsedChats = JSON.parse(res.chats);
+      if (res.success) {
+        setChats(parsedChats);
+      } else {
+        console.log('error updating chats');
+      }
+    } catch (error) {
+      console.log('error', error);
+    }
   };
 
-  // Updates the chats array when the current chat changes
-  const updateChats = function () {
-    const obj = chats.find((chat) => currentChat.id === chat.id);
-    console.log(obj);
+  // updates current chat from the dataBase
+  // chat data is object which has id and messages array
+  const updateCurrentChat = async function (chatData) {
+    console.log(chatData);
+    try {
+      const res = await window.api.updateChat(JSON.stringify(chatData));
+      console.log(res);
+      const parsedMessages = JSON.parse(res.messages);
+      if (res.success) {
+        setcurrentChat({
+          _id: res.chatId,
+          messages: parsedMessages
+        });
+      }
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
+  const handleNewChat = async () => {
+    // If the current chat is empty, do nothing
+    if (!currentChat || currentChat.messages.length === 0) {
+      return;
+    }
+
+    try {
+      const newChat = await window.api.createChat({ messages: [] });
+
+      if (!newChat || !newChat.success) {
+        console.error('Failed to create a new chat.');
+        return;
+      }
+
+      // If an empty chat already exists, ask the user whether to move to it
+      if (newChat.emptyChatExist) {
+        const popUpResponse = await window.api.askUserPopup({
+          type: 'question',
+          message: 'An empty chat already exists. Do you want to go to that chat?',
+          buttons: ['Yes', 'No']
+        });
+
+        if (popUpResponse === 'Yes') {
+          setcurrentChat({ _id: newChat.chatId, messages: [] });
+          console.log('Switched to existing empty chat:', newChat.chatId);
+          return;
+        } else {
+          return;
+        }
+      }
+
+      // Set the current chat to the newly created chat
+      setcurrentChat({ _id: newChat.chatId, messages: [] });
+      updateChats();
+      setQuestion('');
+    } catch (error) {
+      console.error('Error handling new chat:', error);
+    }
   };
 
   // Handles the API communication with the local LLM server
@@ -151,10 +227,17 @@ function ChatsProvider({ children }) {
       }
 
       // Update chat with the AI's response
-      setcurrentChat((current) => ({
-        ...current,
-        messages: [...updatedMessages, { role: 'assistant', content: data.message.content }]
-      }));
+      setcurrentChat((current) => {
+        const newChat = {
+          ...current,
+          messages: [...updatedMessages, { role: 'assistant', content: data.message.content }]
+        };
+
+        // save the changes done in currentChat in the DB
+        // console.log(newChat);
+        updateCurrentChat({ chatId: newChat._id, messages: newChat.messages }); // Using the new state
+        return newChat;
+      });
 
       return data.message.content;
     } catch (error) {
@@ -168,17 +251,9 @@ function ChatsProvider({ children }) {
     }
   };
 
-  // Effect hook to sync currentChat with the chats array
+  // Effect hook to update chats if there is change in current chat messages
   useEffect(() => {
-    setChats((prevChats) => {
-      const chatIndex = prevChats.findIndex((chat) => chat.id === currentChat.id);
-
-      if (chatIndex === -1) {
-        return [...prevChats, currentChat];
-      } else {
-        return prevChats.map((chat, index) => (index === chatIndex ? currentChat : chat));
-      }
-    });
+    updateChats();
   }, [currentChat]);
 
   // Provide chat-related state and functions to child components
@@ -189,14 +264,14 @@ function ChatsProvider({ children }) {
         setChats,
         currentChat,
         setcurrentChat,
-        addChat,
         updateChats,
         generateRandomId,
         question,
         setQuestion,
         generateAnswer,
         currentLevel,
-        setCurrentLevel
+        setCurrentLevel,
+        handleNewChat
       }}
     >
       {children}

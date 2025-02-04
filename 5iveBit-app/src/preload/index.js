@@ -16,7 +16,27 @@ const api = {
     ipcRenderer.invoke('find-available-port', startPort, endPort, host),
   // find in-use port
   findInUsePort: (startPort, endPort, host) =>
-    ipcRenderer.invoke('find-in-use-port', startPort, endPort, host)
+    ipcRenderer.invoke('find-in-use-port', startPort, endPort, host),
+
+  // User
+  // Register User
+  registerUser: (userData) => ipcRenderer.invoke('register-user', userData),
+  // Login User
+  loginUser: (userData) => ipcRenderer.invoke('login-user', userData),
+  // Log Out
+  logoutUser: () => ipcRenderer.invoke('logout-user'),
+  // Check Authentication
+  checkAuth: () => ipcRenderer.invoke('check-auth'),
+  // Update Password
+  updatePassword: (userData) => ipcRenderer.invoke('update-password', userData),
+
+  // chat
+  // Create Chat
+  createChat: (chatData) => ipcRenderer.invoke('create-chat', chatData),
+  // get All chats
+  getAllChats: () => ipcRenderer.invoke('get-all-chats'),
+  // update chat
+  updateChat: (chatData) => ipcRenderer.invoke('update-chat', chatData)
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to
