@@ -5,8 +5,6 @@ import { electronAPI } from '@electron-toolkit/preload';
 const api = {
   // custom API for saving file
   saveFile: (content) => ipcRenderer.invoke('save-file', content),
-  //export pdf
-  exportPDF: (content) => ipcRenderer.invoke('export-pdf', content),
   // pop for human in the loop
   askUserPopup: (options) => ipcRenderer.invoke('popup-for-user-in-loop', options),
   // update file

@@ -234,34 +234,6 @@ ipcMain.handle('update-file', async (event, fileDetails, content) => {
   }
 });
 
-////////////////////////////////////////
-
-//pop-up for handing the generated reports
-ipcMain.handle('export-pdf', async (_, content) => {
-  try {
-    const downloadsFolder = getDownloadsFolder();
-
-    const { filePath } = await dialog.showSaveDialog({
-      title: 'Save Report',
-      defaultPath: join(downloadsFolder, `report-${Date.now()}.pdf`), 
-      buttonLabel: 'Export PDF',
-      filters: [
-        { name: 'PDF Files', extensions: ['pdf'] }
-      ]
-    });
-
-    if (filePath) {
-      // error handling 
-      return { success: true, filePath };
-    } else {
-      return { success: false, message: 'Export cancelled by user.' };
-    }
-  } catch (error) {
-    console.error('Failed to export PDF:', error);
-    return { success: false, message: 'Failed to export PDF.' };
-  }
-});
-
 // ///////////////////////////////////////////////
 
 // pop-for-user-in-loop
