@@ -5,12 +5,13 @@ export const handleURLScanQuery = async (promptInput, updatedMessages, setcurren
   console.log('handleURLScanQuery called with promptInput:', promptInput);
 
   // Check if the promptInput contains URL scan related terms
-  const relevantTerms = /(https?:\/\/[^\s]+)/i;
+  const relevantTerms = /(https?:\/\/[^\s]+|www\.[^\s]+)/i;
+
   if (relevantTerms.test(promptInput)) {
     console.log('URL scan relevant terms found in promptInput.');
 
     // Extract URL from the prompt
-    const urlPattern = /(https?:\/\/[^\s]+)/g;
+    const urlPattern = /(https?:\/\/[^\s]+|www\.[^\s]+)/g;
     const urlMatch = promptInput.match(urlPattern);
     let urlInfo = null;
 
@@ -65,7 +66,7 @@ export const handleURLScanQuery = async (promptInput, updatedMessages, setcurren
 
     // Combine the scan results with WrapperPrompt
     const scanPrompt =
-      'Present the following information in a report format. Avoid printing the JSON. Do not say anything other than this information.';
+      'Present the following information in a report format. Avoid printing the JSON. Describe this information but do not say anything other than this information.';
     const combinedMessage =
       `${WrapperPrompt}\n\n${scanPrompt}\n\n${JSON.stringify(urlInfo, null, 2)}`.trim();
     console.log('Combined message:', combinedMessage);
