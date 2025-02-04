@@ -58,10 +58,18 @@
   background-color: #0c0118 !important;
 }
 
+.logoutDeleteButtonsContainer {
+  display: flex;
+  justify-content: space-between !important;
+  width: 80%;
+  margin-top: 5%;
+  margin-bottom: 5%;
+}
+
 .logOutButton {
-  width: 200px;
+  width: 30%;
   height: 50px;
-  border-radius: 10px;
+  border-radius: 5px !important;
   color: white;
   padding: 10px;
   background-color: purple;
@@ -69,7 +77,23 @@
   animation: float 3s ease-in-out infinite;
 }
 
-/* Keyframe animation for floating effect */
+.deleteAccountButton {
+  width: 30%;
+  height: 50px;
+  border-radius: 5px !important;
+  color: white;
+  padding: 10px;
+  background-color: rgb(194, 36, 36) !important;
+  transition: background-color 0.3s ease;
+  animation: float 3s ease-in-out infinite;
+}
+
+.deleteAccountButton:hover {
+  transition: background-color 0.3s ease !important;
+  background-color: #a31a1a !important;
+}
+
+/* Keyframe animation for floating effect
 @keyframes float {
   0%,
   100% {
@@ -78,4 +102,4 @@
   50% {
     transform: translateY(-10px);
   }
-}
+} */

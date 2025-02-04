@@ -31,15 +31,15 @@ function ChatsProvider({ children }) {
     async function fetchChats() {
       try {
         const allChats = await window.api.getAllChats();
-        console.log(allChats);
-        const parsedChats = JSON.parse(allChats.chats);
-        console.log(parsedChats);
-        if (parsedChats.length !== 0) {
-          setcurrentChat(parsedChats[0]);
-          setChats(parsedChats);
-        } else {
-          setChats([]);
-          setcurrentChat({});
+        if (allChats.success) {
+          const parsedChats = JSON.parse(allChats?.chats);
+          if (parsedChats.length !== 0) {
+            setcurrentChat(parsedChats[0]);
+            setChats(parsedChats);
+          } else {
+            setChats([]);
+            setcurrentChat({});
+          }
         }
       } catch (error) {
         console.log('error', error);
@@ -51,18 +51,11 @@ function ChatsProvider({ children }) {
 
   // update chats state with all the chats from database
   const updateChats = async function () {
-    // // // avoid updating chats if current messages content is set to Thinking...
-    // if (
-    //   currentChat?.mrssages?.role === 'assistant' &&
-    //   currentChat?.messages?.content === 'Thinking...'
-    // ) {
-    //   console.log('current chat.messages.content is set to Thinking... avoid updating chats');
-    //   return;
-    // }
     try {
       const res = await window.api.getAllChats();
-      const parsedChats = JSON.parse(res.chats);
+
       if (res.success) {
+        const parsedChats = JSON.parse(res?.chats);
         setChats(parsedChats);
       } else {
         console.log('error updating chats');
