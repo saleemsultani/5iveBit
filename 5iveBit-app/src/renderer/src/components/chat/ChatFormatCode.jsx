@@ -139,7 +139,6 @@ export const isLikelyCode = (text) => {
     '{',
     '}',
     ';',
-    '//',
     'function',
     'class',
     'const',
