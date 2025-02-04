@@ -3,11 +3,11 @@ export const handleSecuritySuggestion = async (promptInput) => {
 
   // Critical patterns check
   const criticalPatterns = [
-    /payment|gateway|transaction/i,
-    /auth|login|password/i,
-    /data|privacy|gdpr/i,
-    /api|endpoint/i,
-    /security|secure|protect/i
+    /auth|login|password|credential|session/i,
+    /data|privacy|encrypt|backup|store/i,
+    /server|cloud|network|infrastructure|config/i,
+    /website|webapp|frontend|backend|api|endpoint/i,
+    /security|secure|protect|risk|threat/i
   ];
 
   // Quick check if any pattern matches

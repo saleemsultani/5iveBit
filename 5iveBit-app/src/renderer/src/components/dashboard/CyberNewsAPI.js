@@ -20,7 +20,9 @@ export const fetchCyberNews = async () => {
       // Parameters for filtering cybersecurity news
       params: {
         // Search query targeting cybersecurity topics
-        q: '(cybersecurity OR "cyber attack" OR "data breach" OR "cyber security" OR "ransomware" OR "cyber threat")',
+        q: '("cyber attack" OR "data breach" OR "cyber threat" OR "CVE" OR "cybercrime" OR "security breach")',
+        domains:
+          '(bleepingcomputer.com,krebsonsecurity.com,therecord.media,securityweek.com,darkreading.com,infosecurity-magazine.com,thehackernews.com,portswigger.net,cyberscoop.com,enisa.europa.eu,cert.europa.eu,ecso.eu,cybersecuritynews.eu,securityeurope.info,nist.gov,cisa.gov,ncsc.gov.uk,europol.europa.eu)',
         sortBy: 'publishedAt', // Get newest articles first
         language: 'en',
         pageSize: 20,

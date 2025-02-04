@@ -83,7 +83,7 @@ function CyberSecurityNews() {
         </Box>
 
         <Typography variant="h3" className={styles.header}>
-          Cybersecurity News
+          Latest Cybersecurity News
         </Typography>
       </Box>
 
