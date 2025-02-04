@@ -1,0 +1,145 @@
+/* Main container styling */
+.enisaStandardsWrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #0d0117;
+}
+
+/* Header section styling */
+.headerSection {
+    padding: 20px 40px;
+}
+
+/* Navigation area for back button */
+.navigation {
+    margin-bottom: 40px;
+}
+
+/* Back button styling */
+.backButton {
+    color: white !important;
+}
+
+/* Hover effect for back button */
+.backButton:hover {
+    background-color: #1c0d2c !important;
+}
+
+/* Main header text styling */
+.header {
+    color: white;
+    text-align: center;
+    font-size: 2.5rem !important;
+    margin-bottom: 60px !important;
+}
+
+/* Main content area with scroll functionality */
+.mainContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #0d0117;
+}
+
+/* Alert box styling for framework introduction */
+.alertBox {
+    background-color: #1c0d2c;
+    border: 1px solid #4b3069;
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 40px;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Alert box title styling */
+.alertTitle {
+    color: white;
+    text-align: center;
+    margin-bottom: 16px !important;
+    font-weight: 500 !important;
+}
+
+/* Alert box text content styling */
+.alertText {
+    color: #e0e0e0;
+    text-align: center;
+    font-size: 1.1rem !important;
+    line-height: 1.6 !important;
+}
+
+/* Container for all section cards */
+.contentContainer {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Individual section card styling */
+.sectionCard {
+    background-color: #1c0d2c;
+    border: 1px solid #4b3069;
+    border-radius: 10px;
+    padding: 24px;
+}
+
+/* Section title styling */
+.sectionTitle {
+    color: white;
+    font-size: 1.25rem !important;
+    font-weight: 500 !important;
+    margin-bottom: 20px !important;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #4b3069;
+}
+
+/* Content list container styling */
+.contentList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Individual list item styling */
+.listItem {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+/* Bullet point styling for list items */
+.bullet {
+    min-width: 8px;
+    height: 8px;
+    background-color: #862e9c;
+    border-radius: 50%;
+    margin-top: 8px;
+}
+
+/* List item text styling */
+.itemText {
+    color: #e0e0e0;
+    font-size: 1rem !important;
+    line-height: 1.5 !important;
+}
+
+/* Link styling for any hyperlinks */
+.link {
+    color: #a855f7;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+/* Hover effect for links */
+.link:hover {
+    color: #d8b4fe;
+    text-decoration: underline;
+}

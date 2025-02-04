@@ -44,6 +44,13 @@ function DashboardMain() {
               className={styles.cardImage}
             />
           </Box>
+          <Box className={styles.dashboardCard} onClick={() => navigate('/enisa-standards')}>
+            <img
+              src="/src/assets/dashboard-enisastandard.png"
+              alt="ENISA Standards"
+              className={styles.cardImage}
+            />
+          </Box>
           <Box className={styles.dashboardCard} onClick={() => navigate('/nist-standards')}>
             <img
               src="src/assets/dashboard-nistframework.png"
