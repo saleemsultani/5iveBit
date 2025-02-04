@@ -2,7 +2,12 @@ import { fetchCVEByID } from './cveSearchAPI';
 import { fetchCVEsByVendorAndProduct } from './openCVEAPI';
 import { WrapperPrompt } from '../contexts/prompts';
 
-export const handleCVEQuery = async (promptInput, updatedMessages, setcurrentChat) => {
+export const handleCVEQuery = async (
+  promptInput,
+  updatedMessages,
+  setcurrentChat,
+  updateCurrentChat
+) => {
   console.log('handleCVEQuery called with promptInput:', promptInput);
 
   // Check if the promptInput contains relevant terms
@@ -150,10 +155,20 @@ export const handleCVEQuery = async (promptInput, updatedMessages, setcurrentCha
     }
 
     // Update chat with the AI's response
-    setcurrentChat((current) => ({
-      ...current,
-      messages: [...updatedMessages, { role: 'assistant', content: data.message.content }]
-    }));
+    // //////////////////
+    setcurrentChat((current) => {
+      const newChat = {
+        ...current,
+        messages: [...updatedMessages, { role: 'assistant', content: data.message.content }]
+      };
+
+      // save the changes done in currentChat in the DB
+      // console.log('type of data.messages.content ', data.messages.content);
+      updateCurrentChat({ chatId: newChat._id, messages: newChat.messages }); // Using the new state
+      return newChat;
+    });
+
+    // /////////////////
 
     return data.message.content;
   } else {

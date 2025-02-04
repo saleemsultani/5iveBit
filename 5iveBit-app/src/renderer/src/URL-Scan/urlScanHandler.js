@@ -1,7 +1,12 @@
 import { WrapperPrompt } from '../contexts/prompts';
 import { scanURL, getAnalysisResults } from './urlScanAPI';
 
-export const handleURLScanQuery = async (promptInput, updatedMessages, setcurrentChat) => {
+export const handleURLScanQuery = async (
+  promptInput,
+  updatedMessages,
+  setcurrentChat,
+  updateCurrentChat
+) => {
   console.log('handleURLScanQuery called with promptInput:', promptInput);
 
   // Check if the promptInput contains URL scan related terms
@@ -97,10 +102,17 @@ export const handleURLScanQuery = async (promptInput, updatedMessages, setcurren
     }
 
     // Update chat with the AI's response
-    setcurrentChat((current) => ({
-      ...current,
-      messages: [...updatedMessages, { role: 'assistant', content: data.message.content }]
-    }));
+    setcurrentChat((current) => {
+      const newChat = {
+        ...current,
+        messages: [...updatedMessages, { role: 'assistant', content: data.message.content }]
+      };
+
+      // save the changes done in currentChat in the DB
+      // console.log('type of data.messages.content ', data.messages.content);
+      updateCurrentChat({ chatId: newChat._id, messages: newChat.messages }); // Using the new state
+      return newChat;
+    });
 
     return data.message.content;
   } else {
