@@ -163,7 +163,9 @@ function ChatsProvider({ children }) {
       if (portScanResponse !== null) {
         return portScanResponse;
       }
+
       let finalPrompt = promptInput;
+      
       try {
         // Get security-enhanced prompt if applicable
         const enhancedPrompt = await handleSecuritySuggestion(promptInput);
@@ -230,7 +232,7 @@ function ChatsProvider({ children }) {
       setcurrentChat((current) => {
         const newChat = {
           ...current,
-          messages: [...updatedMessages, { role: 'assistant', content: data.message.content }]
+          messages: [...updatedMessages, { role: 'assistant', content: data.message.content, canExport: true  }]
         };
 
         // save the changes done in currentChat in the DB

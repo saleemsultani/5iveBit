@@ -1,4 +1,4 @@
-import { Box, Button, Stack, IconButton, Snackbar } from '@mui/material';
+import { Box, Button, Stack, IconButton, Snackbar, Typography } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import SendIcon from '@mui/icons-material/Send';
 import Textarea from '@mui/joy/Textarea';
@@ -10,6 +10,10 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import { formatMessage, isLikelyCode } from './ChatFormatCode';
 import { useState, useRef, useEffect } from 'react';
 import StartChat from './StartChat';
+import generateReport from '../shared/GenerateReport';
+import { handleCVEQuery } from '../../CVE/cveHandler';
+import { handleURLScanQuery } from '../../URL-Scan/urlScanHandler';
+import { handlePortScanQuery } from '../../portScanner/portScanner';
 
 // ChatBox component handles the chat interface including message display and input
 function ChatBox() {
@@ -268,6 +272,26 @@ function ChatBox() {
     setSnackbarOpen(false);
   };
 
+  //for report generation types 
+  const getResponseType = async (promptInput, updatedMessages, setcurrentChat) => {
+    const cveResponse = await handleCVEQuery(promptInput, updatedMessages, setcurrentChat);
+    if (cveResponse !== null) {
+      return 'cveResponse';
+    }
+  
+    const URLScanResponse = await handleURLScanQuery(promptInput, updatedMessages, setcurrentChat);
+    if (URLScanResponse !== null) {
+      return 'urlScan';
+    }
+  
+    const portScanResponse = await handlePortScanQuery(promptInput, updatedMessages, setcurrentChat);
+    if (portScanResponse !== null) {
+      return 'portScan';
+    }
+  
+    return null; // No relevant terms found
+  };
+
   return (
     <>
       <Box className={styles.chatBoxContainer}>
@@ -289,94 +313,145 @@ function ChatBox() {
                     )}
                   </span>
                   {message.role === 'assistant' && !message.isThinking && (
-                    <IconButton
-                      onClick={() => copyToClipboard(message.content)}
-                      className={styles.copyButton}
-                    >
-                      <ContentCopyIcon className={styles.copyIcon} />
-                    </IconButton>
+                    <>
+                      <IconButton
+                        onClick={() => copyToClipboard(message.content)}
+                        className={styles.copyButton}
+                      >
+                        <ContentCopyIcon className={styles.copyIcon} />
+                      </IconButton>
+                      
+                      {/*generate reports buttons*/}
+                      {(() => {
+                      const responseType = getResponseType(message.content);
+
+                      return responseType && (
+                        <Box
+                          sx={{
+                            width: "auto",
+                            display: "flex",
+                            marginTop: "auto",
+                            marginRight: 'auto',
+                          }}
+                        >
+                          <Button
+                            variant="contained"
+                            onClick={() => generateReport(message.content)}
+                            sx={{
+                              width: 'auto',
+                              color: 'white',
+                              bgcolor: '#015050'
+                            }}
+                          >
+                            {responseType === "cveResponse"
+                              ? "Generate CVE Report"
+                              : responseType === "urlScan"
+                              ? "Generate URL Scan Report"
+                              : "Generate Port Scan Report"}
+                          </Button>
+                        </Box>
+                      );
+                    })()}
+                    </>
                   )}
                 </p>
               </div>
             ))}
           </Box>
         </Box>
-
-        {/* Message input area with send and voice buttons & file upload*/}
-        <Box className={styles.inputContainer}>
-          <Textarea
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-            onKeyDown={handleKeyPress}
-            multiline
-            placeholder="Message 5iveBot (Enter to send, Shift+Enter for new line) or upload a file"
-            maxRows={3}
-            className={styles.textarea}
-            startDecorator={
-              files.length > 0 && (
-                <Box className={styles.filesPreviewContainer}>
-                  {files.map((file, index) => (
-                    <Box key={index} className={styles.filePreview}>
-                      <span className={styles.fileName}>{file.name}</span>
-                      <IconButton
-                        onClick={() => removeFileUpload(file)}
-                        size="small"
-                        className={styles.removeFileButton}
-                        aria-label={`Remove ${file.name}`}
-                      >
-                        <CancelIcon fontSize="small" className={styles.cancelIcon} />
-                      </IconButton>
+  
+      {/* Message input area with send and voice buttons & file upload*/}
+      <Box className={styles.inputContainer}>
+              <Textarea
+                value={question}
+                onChange={(e) => setQuestion(e.target.value)}
+                onKeyDown={handleKeyPress}
+                multiline
+                placeholder="Message 5iveBot (Enter to send, Shift+Enter for new line) or upload a file"
+                maxRows={3}
+                className={styles.textarea}
+                startDecorator={
+                  files.length > 0 && (
+                    <Box className={styles.filesPreviewContainer}>
+                      {files.map((file, index) => (
+                        <Box key={index} className={styles.filePreview}>
+                          <span className={styles.fileName}>{file.name}</span>
+                          <IconButton
+                            onClick={() => removeFileUpload(file)}
+                            size="small"
+                            className={styles.removeFileButton}
+                            aria-label={`Remove ${file.name}`}
+                          >
+                            <CancelIcon fontSize="small" className={styles.cancelIcon} />
+                          </IconButton>
+                        </Box>
+                      ))}
                     </Box>
-                  ))}
+                  )
+                }
+                endDecorator={
+                  <Stack direction="row" width="100%" justifyContent="flex-end">
+                    {/* download button for downloading chat log */}
+                    <Button onClick={handleDownloadChatFile} className={styles.iconButton}>
+                      <DownloadIcon />
+                    </Button>
+
+                    {/* Attach file(s) button */}
+                    <label htmlFor="file-upload" className={styles.attachFileIcon}>
+                      <input
+                        ref={fileUploadRef}
+                        id="file-upload"
+                        type="file"
+                        accept={acceptedFileTypes.join(',')}
+                        onChange={handleFileUpload}
+                        className={styles.fileInput}
+                        multiple
+                      />
+                      <AttachFileOutlinedIcon className={styles.attachFileIcon} />
+                    </label>
+
+                    {/* Send button */}
+                    <Button
+                      onClick={handleSubmitQuestion}
+                      disabled={!question.trim() && files.length === 0} // Disable if no text or file is present
+                      className={styles.iconButton}
+                    >
+                      <SendIcon />
+                    </Button>
+                  </Stack>
+                }
+                />
                 </Box>
-              )
-            }
-            endDecorator={
-              <Stack direction="row" width="100%" justifyContent="flex-end">
-                {/* download button for downloading chat */}
-                <Button onClick={handleDownloadChatFile} className={styles.iconButton}>
-                  <DownloadIcon />
-                </Button>
-
-                {/* Attach file(s) button */}
-                <label htmlFor="file-upload" className={styles.attachFileIcon}>
-                  <input
-                    ref={fileUploadRef}
-                    id="file-upload"
-                    type="file"
-                    accept={acceptedFileTypes.join(',')}
-                    onChange={handleFileUpload}
-                    className={styles.fileInput}
-                    multiple
+                
+                {/* Notification popup for successful clipboard copy */}
+                  <Snackbar
+                    open={snackbarOpen}
+                    autoHideDuration={3000}
+                    onClose={handleCloseSnackbar}
+                    message={snackbarMessage}
+                    anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
+                    className={styles.snackbar}
                   />
-                  <AttachFileOutlinedIcon className={styles.attachFileIcon} />
-                </label>
+              {/* Disclaimer at the bottom */}
+                  <Box 
+                  sx={{
+                    position: 'fixed',
+                    bottom: '10px', 
+                    left: '50%', 
+                    transform: 'translateX(-50%)',
+                      }}
+                    >
+                    <Typography variant="caption" 
+                    sx={{
+                      fontFamily: 'sans-serif'
+                    }}>
+                      Disclaimer: 5iveBot is AI, not a human expert—double-check critical information!
+                    </Typography>
+                </Box>       
+              </Box>
+            </>
+            )
+          };
 
-                {/* Send button */}
-                <Button
-                  onClick={handleSubmitQuestion}
-                  disabled={!question.trim() && files.length === 0} // Disable if no text or file is present
-                  className={styles.iconButton}
-                >
-                  <SendIcon />
-                </Button>
-              </Stack>
-            }
-          />
-        </Box>
-
-        {/* Notification popup for successful clipboard copy */}
-        <Snackbar
-          open={snackbarOpen}
-          autoHideDuration={3000}
-          onClose={handleCloseSnackbar}
-          message={snackbarMessage}
-          anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
-          className={styles.snackbar}
-        />
-      </Box>
-    </>
-  );
-}
 
 export default ChatBox;
