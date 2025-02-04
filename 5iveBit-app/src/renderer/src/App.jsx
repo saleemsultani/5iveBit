@@ -14,6 +14,7 @@ import RegisterUser from './components/User/RegisterUser';
 import LoginUser from './components/User/LoginUser';
 import UserProfile from './components/User/UserProfile';
 import { AuthProvider } from './contexts/authContext';
+import EnisaStandards from './components/dashboard/EnisaStandards';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
               <Route path="/iso-standards" element={<IsoStandards />} />
               <Route path="/cybercrime-response" element={<CybercrimeResponse />} />
               <Route path="/cyber-news" element={<CyberSecurityNews />} />
+              <Route path="/enisa-standards" element={<EnisaStandards />} />
               {/* user related */}
               <Route path="/register-user" element={<RegisterUser />} />
               <Route path="/login-user" element={<LoginUser />} />
