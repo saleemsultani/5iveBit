@@ -5,7 +5,8 @@ export const handleURLScanQuery = async (promptInput, updatedMessages, setcurren
   console.log('handleURLScanQuery called with promptInput:', promptInput);
 
   // Check if the promptInput contains URL scan related terms
-  const relevantTerms = /(https?:\/\/[^\s]+)/i;
+  const relevantTerms = /(https?:\/\/[^\s]+|www\.[^\s]+)/i;
+
   if (relevantTerms.test(promptInput)) {
     console.log('URL scan relevant terms found in promptInput.');
 
