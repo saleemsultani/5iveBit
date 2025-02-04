@@ -2,7 +2,9 @@ import { Box, Typography, IconButton } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import styles from './BestPractices.module.css';
 
+//Main component for displaying Best Practices guidelines
 function BestPractices() {
+  //Best Practices section and it's contents
   const bestPracticesSections = [
     {
       id: 'basics',
@@ -62,9 +64,11 @@ function BestPractices() {
   ];
 
   return (
+    //Main container for the Best Practices page
     <Box className={styles.bestPracticesWrapper}>
+      {/* Header section with navigation and title */}
       <Box className={styles.headerSection}>
-        {/* Back Navigation */}
+        {/* Back Navigation with conditional navigation based on entry point */}
         <Box className={styles.navigation}>
           <IconButton
             onClick={() => {
@@ -83,7 +87,9 @@ function BestPractices() {
         </Typography>
       </Box>
 
+      {/* Main content area with scrollable sections */}
       <Box className={styles.mainContent}>
+        {/* Introduction alert box explaining the section */}
         <Box className={styles.alertBox}>
           <Typography variant="h5" className={styles.alertTitle}>
             Protect Your Business with Cybersecurity Guidelines
@@ -95,13 +101,16 @@ function BestPractices() {
           </Typography>
         </Box>
 
+        {/* Container for all section cards */}
         <Box className={styles.contentContainer}>
+          {/* Map through each section and create a card */}
           {bestPracticesSections.map((section) => (
             <Box key={section.id} className={styles.sectionCard}>
               <Typography variant="h6" className={styles.sectionTitle}>
                 {section.title}
               </Typography>
               <Box className={styles.contentList}>
+                {/* Map through content items in each section */}
                 {section.content.map((item, index) => (
                   <Box key={index} className={styles.listItem}>
                     <Box className={styles.bullet} />

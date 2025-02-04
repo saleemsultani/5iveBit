@@ -2,7 +2,9 @@ import { Box, Typography, IconButton } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import styles from './CybercrimeResponse.module.css';
 
+// Main component for displaying Cybercrime response guidelines
 function CybercrimeResponse() {
+  //Cybercrime response and it's contents
   const cybercrimeResponseSections = [
     {
       id: 'understanding',
@@ -117,9 +119,12 @@ function CybercrimeResponse() {
   ];
 
   return (
+    // Main container for the Cybercrime response page
     <Box className={styles.cybercrimeResponseWrapper}>
+      {/* Header section with navigation and title */}
       <Box className={styles.headerSection}>
         <Box className={styles.navigation}>
+          {/* Back button with conditional navigation based on entry point */}
           <IconButton
             onClick={() => {
               const urlParams = new URLSearchParams(window.location.search);
@@ -136,8 +141,9 @@ function CybercrimeResponse() {
           Understanding & Reporting Cybercrime
         </Typography>
       </Box>
-
+      {/* Main content area with scrollable sections */}
       <Box className={styles.mainContent}>
+        {/* Introduction alert box explaining the cybercrime response */}
         <Box className={styles.alertBox}>
           <Typography variant="h5" className={styles.alertTitle}>
             Rapid Response to Cybercrime: A Practical Guide
@@ -150,13 +156,16 @@ function CybercrimeResponse() {
           </Typography>
         </Box>
 
+        {/* Container for all response section cards */}
         <Box className={styles.contentContainer}>
+          {/* Map through each section and create a card */}
           {cybercrimeResponseSections.map((section) => (
             <Box key={section.id} className={styles.sectionCard}>
               <Typography variant="h6" className={styles.sectionTitle}>
                 {section.title}
               </Typography>
               <Box className={styles.contentList}>
+                {/* Map through content items in each section */}
                 {section.content.map((item, index) => (
                   <Box key={index} className={styles.listItem}>
                     <Box className={styles.bullet} />

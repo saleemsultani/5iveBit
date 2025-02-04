@@ -2,7 +2,9 @@ import { Box, Typography, IconButton } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import styles from './NistStandards.module.css';
 
+// Main component for displaying NIST cybersecurity standards and guidelines
 function NistStandards() {
+  //NIST framework sections and it's content
   const nistSections = [
     {
       id: 'intro',
@@ -73,9 +75,12 @@ function NistStandards() {
   ];
 
   return (
+    // Main container for the NIST standards page
     <Box className={styles.nistStandardsWrapper}>
+      {/* Header section with navigation and title */}
       <Box className={styles.headerSection}>
         <Box className={styles.navigation}>
+          {/* Back button with conditional navigation based on entry point */}
           <IconButton
             onClick={() => {
               const urlParams = new URLSearchParams(window.location.search);
@@ -93,7 +98,9 @@ function NistStandards() {
         </Typography>
       </Box>
 
+      {/* Main content area with scrollable sections */}
       <Box className={styles.mainContent}>
+        {/* Introduction alert box explaining the framework */}
         <Box className={styles.alertBox}>
           <Typography variant="h5" className={styles.alertTitle}>
             A Practical Guide to the NIST Cybersecurity Framework
@@ -106,13 +113,16 @@ function NistStandards() {
           </Typography>
         </Box>
 
+        {/* Container for all framework section cards */}
         <Box className={styles.contentContainer}>
+          {/* Map through each section and create a card */}
           {nistSections.map((section) => (
             <Box key={section.id} className={styles.sectionCard}>
               <Typography variant="h6" className={styles.sectionTitle}>
                 {section.title}
               </Typography>
               <Box className={styles.contentList}>
+                {/* Map through content items in each section */}
                 {section.content.map((item, index) => (
                   <Box key={index} className={styles.listItem}>
                     <Box className={styles.bullet} />
