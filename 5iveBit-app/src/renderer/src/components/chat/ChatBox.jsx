@@ -11,6 +11,9 @@ import { formatMessage, isLikelyCode } from './ChatFormatCode';
 import { useState, useRef, useEffect } from 'react';
 import StartChat from './StartChat';
 import generateReport from '../shared/GenerateReport';
+import { handleCVEQuery } from '../../CVE/cveHandler';
+import { handleURLScanQuery } from '../../URL-Scan/urlScanHandler';
+import { handlePortScanQuery } from '../../portScanner/portScanner';
 
 // ChatBox component handles the chat interface including message display and input
 function ChatBox() {
@@ -270,23 +273,23 @@ function ChatBox() {
   };
 
   //for report generation types 
-  const getResponseType = (content) => {
-    
-    // Check console log patterns indicating specific responses in relevant information is found
-    if (content.includes('Relevant terms found in promptInput.')) {
+  const getResponseType = async (promptInput, updatedMessages, setcurrentChat) => {
+    const cveResponse = await handleCVEQuery(promptInput, updatedMessages, setcurrentChat);
+    if (cveResponse !== null) {
       return 'cveResponse';
     }
-    
-    if (content.includes('URL scan relevant terms found in promptInput.')) {
+  
+    const URLScanResponse = await handleURLScanQuery(promptInput, updatedMessages, setcurrentChat);
+    if (URLScanResponse !== null) {
       return 'urlScan';
     }
-    
-    if (content.includes('Relevant terms found in promptInput for port scanning.')) {
+  
+    const portScanResponse = await handlePortScanQuery(promptInput, updatedMessages, setcurrentChat);
+    if (portScanResponse !== null) {
       return 'portScan';
     }
-    
-    //if not then do not render button
-    return null;
+  
+    return null; // No relevant terms found
   };
 
   return (
