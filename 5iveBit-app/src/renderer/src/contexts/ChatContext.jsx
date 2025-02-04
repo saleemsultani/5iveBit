@@ -51,6 +51,14 @@ function ChatsProvider({ children }) {
 
   // update chats state with all the chats from database
   const updateChats = async function () {
+    // // // avoid updating chats if current messages content is set to Thinking...
+    // if (
+    //   currentChat?.mrssages?.role === 'assistant' &&
+    //   currentChat?.messages?.content === 'Thinking...'
+    // ) {
+    //   console.log('current chat.messages.content is set to Thinking... avoid updating chats');
+    //   return;
+    // }
     try {
       const res = await window.api.getAllChats();
       const parsedChats = JSON.parse(res.chats);
@@ -67,10 +75,10 @@ function ChatsProvider({ children }) {
   // updates current chat from the dataBase
   // chat data is object which has id and messages array
   const updateCurrentChat = async function (chatData) {
-    console.log(chatData);
+    console.log('this is update chat data', chatData);
     try {
       const res = await window.api.updateChat(JSON.stringify(chatData));
-      console.log(res);
+      console.log('this is response after api is called', res);
       const parsedMessages = JSON.parse(res.messages);
       if (res.success) {
         setcurrentChat({
@@ -79,7 +87,7 @@ function ChatsProvider({ children }) {
         });
       }
     } catch (error) {
-      console.log('error', error);
+      console.log('error in updating chat', error);
     }
   };
 
@@ -140,7 +148,12 @@ function ChatsProvider({ children }) {
       }));
 
       // Use the new handleCVEQuery function
-      const cveResponse = await handleCVEQuery(promptInput, updatedMessages, setcurrentChat);
+      const cveResponse = await handleCVEQuery(
+        promptInput,
+        updatedMessages,
+        setcurrentChat,
+        updateCurrentChat
+      );
       if (cveResponse !== null) {
         return cveResponse;
       }
@@ -148,7 +161,8 @@ function ChatsProvider({ children }) {
       const URLScanResponse = await handleURLScanQuery(
         promptInput,
         updatedMessages,
-        setcurrentChat
+        setcurrentChat,
+        updateCurrentChat
       );
       if (URLScanResponse !== null) {
         return URLScanResponse;
@@ -158,7 +172,8 @@ function ChatsProvider({ children }) {
       const portScanResponse = await handlePortScanQuery(
         promptInput,
         updatedMessages,
-        setcurrentChat
+        setcurrentChat,
+        updateCurrentChat
       );
       if (portScanResponse !== null) {
         return portScanResponse;
@@ -234,7 +249,7 @@ function ChatsProvider({ children }) {
         };
 
         // save the changes done in currentChat in the DB
-        // console.log(newChat);
+        // console.log('type of data.messages.content ', data.messages.content);
         updateCurrentChat({ chatId: newChat._id, messages: newChat.messages }); // Using the new state
         return newChat;
       });

@@ -42,7 +42,12 @@ const findInUsePort = (startPort, endPort, host = '127.0.0.1') => {
 };
 
 // Main function to handle port scan queries
-export const handlePortScanQuery = async (promptInput, updatedMessages, setcurrentChat) => {
+export const handlePortScanQuery = async (
+  promptInput,
+  updatedMessages,
+  setcurrentChat,
+  updateCurrentChat
+) => {
   console.log('handlePortScanQuery called with promptInput:', promptInput);
 
   // Check if the promptInput contains relevant terms for port scanning
@@ -144,10 +149,21 @@ export const handlePortScanQuery = async (promptInput, updatedMessages, setcurre
       throw new Error('No message content in data');
     }
 
-    setcurrentChat((current) => ({
-      ...current,
-      messages: [...updatedMessages, { role: 'assistant', content: data.message.content }]
-    }));
+    // Update chat with the AI's response
+    // //////////////////
+    setcurrentChat((current) => {
+      const newChat = {
+        ...current,
+        messages: [...updatedMessages, { role: 'assistant', content: data.message.content }]
+      };
+
+      // save the changes done in currentChat in the DB
+      // console.log('type of data.messages.content ', data.messages.content);
+      updateCurrentChat({ chatId: newChat._id, messages: newChat.messages }); // Using the new state
+      return newChat;
+    });
+
+    // /////////////////
 
     return data.message.content;
   } else {

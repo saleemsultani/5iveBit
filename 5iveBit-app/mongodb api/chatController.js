@@ -65,6 +65,8 @@ export const getAllChats = async () => {
     const decode = JWT.verify(token, process.env.JWT_SECRET);
     const userId = decode._id;
     const chats = await chatModel.find({ user: userId }).select('-user');
+    console.log('this is alll chats: ', chats);
+    console.log('this is all chats, stringified :', chats);
     if (chats) {
       return { success: true, message: 'Chats found successfully', chats: JSON.stringify(chats) };
     }
@@ -92,7 +94,8 @@ export const updateChat = async (event, chatData) => {
       return { success: false, message: 'Chat not found' };
     } else {
       chat.messages = messages;
-      await chat.save();
+      const res = await chat.save();
+      console.log('this is update chat : ', res);
       return {
         success: true,
         message: 'Chat updated successfully',
