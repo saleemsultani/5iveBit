@@ -205,3 +205,23 @@
 .actionIcon:hover {
   color: white;
 }
+
+/* PDF banner styling */
+.pdfBanner {
+  display: flex;
+  justify-content: left;
+  margin: 0 auto 2% 5%;
+  color: #e0e0e0;
+  background-color: #35224b;
+  border-radius: 10px;
+  width: fit-content;
+  padding: 0 10px;
+}
+
+.pdfButton {
+  text-transform: none !important;
+}
+
+.pdfButton:hover {
+  background-color: #4b3069;
+}

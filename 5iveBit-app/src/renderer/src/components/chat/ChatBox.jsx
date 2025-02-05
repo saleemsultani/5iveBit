@@ -311,17 +311,20 @@ function ChatBox() {
                       >
                         <ContentCopyIcon className={styles.actionIcon} />
                       </IconButton>
-                      {index === currentChat.messages.length - 1 && shouldRenderSavePDF && (
-                        <IconButton
-                          onClick={() => savePDF(message.content)}
-                          className={styles.actionButton}
-                        >
-                          <PictureAsPdfIcon className={styles.actionIcon} />
-                        </IconButton>
-                      )}
                     </div>
                   )}
                 </p>
+                {index === currentChat.messages.length - 1 && shouldRenderSavePDF && (
+                  <div className={styles.pdfBanner}>
+                    <Button
+                      onClick={() => savePDF(message.content)}
+                      className={styles.pdfButton}
+                      style={{ color: 'white' }}
+                    >
+                      Click here to export this information as a PDF
+                    </Button>
+                  </div>
+                )}
               </div>
             ))}
           </Box>
