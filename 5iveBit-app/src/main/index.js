@@ -10,6 +10,7 @@ import startMongoDB from '../../automation/startMongoDB';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import {
+  deleteUserController,
   isLogin,
   loginController,
   logoutController,
@@ -240,13 +241,16 @@ ipcMain.handle('update-file', async (event, fileDetails, content) => {
 ipcMain.handle('popup-for-user-in-loop', async (event, options) => {
   const { type, title, message, buttons } = options;
 
-  const result = await dialog.showMessageBox({
+  const activeWindow = BrowserWindow.getFocusedWindow();
+
+  const result = await dialog.showMessageBox(activeWindow, {
     type: type || 'question',
     buttons: buttons || ['Yes', 'No'],
     defaultId: 1, // Index of the default button
     title: title || '5iveBot',
     message: message || 'Do you want to proceed?',
-    cancelId: buttons.length
+    cancelId: buttons.length,
+    modal: true // this block interaction with the app until choice is made
   });
 
   // Detect if the dialog was canceled (via close button or Esc key)
@@ -323,6 +327,7 @@ ipcMain.handle('login-user', loginController);
 ipcMain.handle('logout-user', logoutController);
 ipcMain.handle('check-auth', isLogin);
 ipcMain.handle('update-password', updatePasswordController);
+ipcMain.handle('delete-user', deleteUserController);
 
 // chat
 ipcMain.handle('create-chat', createChat);

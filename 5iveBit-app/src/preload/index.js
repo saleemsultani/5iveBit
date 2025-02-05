@@ -29,6 +29,8 @@ const api = {
   checkAuth: () => ipcRenderer.invoke('check-auth'),
   // Update Password
   updatePassword: (userData) => ipcRenderer.invoke('update-password', userData),
+  // delete User
+  deleteUser: () => ipcRenderer.invoke('delete-user'),
 
   // chat
   // Create Chat

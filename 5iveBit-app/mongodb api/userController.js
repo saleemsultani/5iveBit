@@ -2,6 +2,7 @@ import userModel from './userModel';
 import { comparePassword, hashPassword } from './authHelper';
 import JWT from 'jsonwebtoken';
 import { tokenManager } from './tokenManager';
+import chatModel from './chatModel';
 
 export const registerController = async (event, userData) => {
   try {
@@ -211,5 +212,39 @@ export const updatePasswordController = async (event, userData) => {
       message: 'Error in updating password',
       error
     };
+  }
+};
+
+// Delete User
+export const deleteUserController = async () => {
+  // check if user is loged in
+  const token = tokenManager.getToken();
+  if (!token) {
+    return { success: false, message: 'Unauthorized: Please log in' };
+  }
+
+  try {
+    const decode = JWT.verify(token, process.env.JWT_SECRET);
+    const userId = decode._id;
+    // Check if user exists
+    const user = await userModel.findById(userId);
+    if (!user) {
+      return { success: false, message: 'User not found' };
+    }
+
+    // Delete all chats associated with the user
+    await chatModel.deleteMany({ user: userId });
+    console.log('Deleting chats associated with User');
+
+    //delete the user
+    await userModel.findByIdAndDelete(userId);
+
+    // log the user out
+    tokenManager.deleteToken();
+
+    return { success: true, message: `User and it's associated chats deleted` };
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    return { success: false, message: 'Error deleting user', error: error.message };
   }
 };

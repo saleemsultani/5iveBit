@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useAuth } from '../../contexts/authContext';
+import { useChats } from '../../contexts/ChatContext';
 
 const inpputBorderStyle = {
   '& .MuiOutlinedInput-root': {
@@ -25,6 +26,7 @@ const inpputBorderStyle = {
 const UserProfile = () => {
   const navigate = useNavigate();
   const [auth, setAuth] = useAuth();
+  const { setChats, setcurrentChat } = useChats();
   const [currPassword, setCurrPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
@@ -45,7 +47,29 @@ const UserProfile = () => {
     if (type === 'confirm') setShowConfirmPassword(!showConfirmPassword);
   };
 
-  console.log(auth);
+  async function deleteAccount() {
+    const popUpResponse = await window.api.askUserPopup({
+      type: 'warning',
+      title: 'Delete Account',
+      message: `Are you sure you want to delete your account?\nYou will no longer have access to your chat History!`,
+      buttons: ['Cancel', 'Delete']
+    });
+
+    if (popUpResponse === 'Delete') {
+      console.log('Deleteing account...');
+      const res = await window.api.deleteUser();
+      console.log(res);
+      if (res.success) {
+        console.log('afte set auth');
+        navigate('/dashboard');
+        console.log('afte navigating');
+        setAuth({ ...auth, user: null });
+      }
+    } else {
+      // do nothing if dellete is not selected
+      return;
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -219,27 +243,34 @@ const UserProfile = () => {
           Back
         </Button>
       </ButtonGroup>
-      <Button
-        variant="contained"
-        className={styles.logOutButton}
-        onClick={async () => {
-          try {
-            console.log('logging out...');
-            const res = await window.api.logoutUser();
-            if (res.success) {
-              setAuth({
-                user: null,
-                token: ''
-              });
-              navigate('/dashboard');
+      {/* log out and delete buttons */}
+      <ButtonGroup className={styles.logoutDeleteButtonsContainer}>
+        <Button
+          variant="contained"
+          className={styles.logOutButton}
+          onClick={async () => {
+            try {
+              console.log('logging out...');
+              const res = await window.api.logoutUser();
+              if (res.success) {
+                setAuth({
+                  user: null,
+                  token: ''
+                });
+                navigate('/dashboard');
+              }
+            } catch (error) {
+              console.log(error);
             }
-          } catch (error) {
-            console.log(error);
-          }
-        }}
-      >
-        Log out
-      </Button>
+          }}
+        >
+          Log out
+        </Button>
+
+        <Button variant="contained" className={styles.deleteAccountButton} onClick={deleteAccount}>
+          Delete Account
+        </Button>
+      </ButtonGroup>
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={3000}
