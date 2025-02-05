@@ -39,6 +39,8 @@ const api = {
   getAllChats: () => ipcRenderer.invoke('get-all-chats'),
   // update chat
   updateChat: (chatData) => ipcRenderer.invoke('update-chat', chatData),
+  // Delete chat
+  deleteChat: (chatId) => ipcRenderer.invoke('delete-chat', chatId),
 
   // save PDF
   savePDF: (content) => ipcRenderer.invoke('save-pdf', content)

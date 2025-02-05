@@ -17,7 +17,7 @@ import {
   registerController,
   updatePasswordController
 } from '../../mongodb api/userController';
-import { createChat, getAllChats, updateChat } from '../../mongodb api/chatController';
+import { createChat, deleteChat, getAllChats, updateChat } from '../../mongodb api/chatController';
 import puppeteer from 'puppeteer';
 
 // Config .env
@@ -324,6 +324,7 @@ ipcMain.handle('delete-user', deleteUserController);
 ipcMain.handle('create-chat', createChat);
 ipcMain.handle('get-all-chats', getAllChats);
 ipcMain.handle('update-chat', updateChat);
+ipcMain.handle('delete-chat', deleteChat);
 
 // PDF generation
 ipcMain.handle('save-pdf', async (_, content) => {

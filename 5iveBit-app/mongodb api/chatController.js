@@ -119,3 +119,30 @@ export const updateChat = async (event, chatData) => {
     return { success: false, message: 'Error in updating chat', error: error.message };
   }
 };
+
+// Delete Chat
+export const deleteChat = async (event, chatId) => {
+  // check the login token
+  const token = tokenManager.getToken();
+  if (!token) {
+    return { success: false, message: 'You are not logged in' };
+  }
+  try {
+    // find the chat with it's id and delete it
+    const chat = await chatModel.findById(chatId);
+    if (!chat) {
+      return { success: false, message: 'Chat not found' };
+    } else {
+      // delete the chat
+      const res = await chat.deleteOne();
+      console.log('this is delete chat : ', res);
+      return {
+        success: true,
+        message: 'Chat deleted successfully'
+      };
+    }
+  } catch (error) {
+    console.log('Error in deleting chat:', error);
+    return { success: false, message: 'Error in deleting chat', error: error.message };
+  }
+};

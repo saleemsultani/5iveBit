@@ -65,7 +65,6 @@
   color: white;
 }
 
-
 /* user level container */
 .rightBarContainer .userLevel {
   display: none;
@@ -99,4 +98,35 @@
   color: white;
 }
 
+/*  */
 
+.chatItemContainer {
+  display: flex;
+  color: white;
+  align-items: center;
+  gap: 4px; /* Adjust spacing to make them look connected */
+  background-color: #862e9c;
+  border-radius: 8px;
+  overflow: hidden; /* Prevents unnecessary spacing */
+}
+
+.chatHistoryButton {
+  flex-grow: 1; /* Allows button to take most of the space */
+  text-align: left;
+  background: none;
+
+  width: 70%;
+  padding: 5px;
+  color: white;
+  text-align: center;
+  border: none;
+  border-radius: 5px;
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.deleteIcon {
+  padding: 5px;
+  color: white;
+}
