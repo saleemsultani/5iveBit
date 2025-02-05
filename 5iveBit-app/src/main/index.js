@@ -18,6 +18,7 @@ import {
   updatePasswordController
 } from '../../mongodb api/userController';
 import { createChat, getAllChats, updateChat } from '../../mongodb api/chatController';
+import puppeteer from 'puppeteer';
 
 // Config .env
 dotenv.config();
@@ -333,3 +334,37 @@ ipcMain.handle('delete-user', deleteUserController);
 ipcMain.handle('create-chat', createChat);
 ipcMain.handle('get-all-chats', getAllChats);
 ipcMain.handle('update-chat', updateChat);
+
+// PDF generation
+ipcMain.handle('save-pdf', async (_, content) => {
+  try {
+    const downloadsFolder = getDownloadsFolder();
+
+    const { filePath } = await dialog.showSaveDialog({
+      title: 'Save as PDF',
+      defaultPath: join(downloadsFolder, 'chat.pdf'),
+      buttonLabel: 'Save PDF',
+      filters: [{ name: 'PDF Files', extensions: ['pdf'] }]
+    });
+
+    if (!filePath) {
+      return { success: false, message: 'Save cancelled by user.' };
+    }
+
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+
+    // Set the content of the page to the HTML content
+    await page.setContent(content);
+
+    // Generate the PDF
+    await page.pdf({ path: filePath, format: 'A4' });
+
+    await browser.close();
+
+    return { success: true, message: 'PDF saved successfully!' };
+  } catch (error) {
+    console.error('Failed to save PDF:', error);
+    return { success: false, message: 'Failed to save PDF.' };
+  }
+});

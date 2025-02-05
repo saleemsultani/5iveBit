@@ -56,7 +56,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 8px;
+  gap: 4px;
 }
 
 /* Copy button size adjustment */
@@ -184,4 +184,44 @@
   cursor: pointer;
   color: #ffffff;
   margin-top: 4px;
+}
+
+.messageActions {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.actionButton {
+  padding: 4px !important;
+  min-width: 0 !important;
+}
+
+.actionIcon {
+  font-size: 1rem !important;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.actionIcon:hover {
+  color: white;
+}
+
+/* PDF banner styling */
+.pdfBanner {
+  display: flex;
+  justify-content: left;
+  margin: 0 auto 2% 5%;
+  color: #e0e0e0;
+  background-color: #35224b;
+  border-radius: 10px;
+  width: fit-content;
+  padding: 0 10px;
+}
+
+.pdfButton {
+  text-transform: none !important;
+}
+
+.pdfButton:hover {
+  background-color: #4b3069;
 }

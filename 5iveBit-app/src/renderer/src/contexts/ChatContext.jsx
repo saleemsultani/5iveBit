@@ -1,7 +1,7 @@
 import { useState, createContext, useContext, useEffect } from 'react';
 import { WrapperPrompt } from './prompts';
 import { beginnerPrompt, intermediatePrompt, expertPrompt } from './UserLevelPrompts';
-import { handleCVEQuery } from '../CVE/cveHandler';
+import { handleCVEQuery, setShouldRenderSavePDF } from '../CVE/cveHandler';
 import { handlePortScanQuery } from '../portScanner/portScanner';
 import { handleSecuritySuggestion } from './SecuritySuggestion';
 import { handleURLScanQuery } from '../URL-Scan/urlScanHandler';
@@ -151,6 +151,7 @@ function ChatsProvider({ children }) {
         return cveResponse;
       }
 
+      // Use the new handleURLScanQuery function
       const URLScanResponse = await handleURLScanQuery(
         promptInput,
         updatedMessages,
@@ -171,6 +172,10 @@ function ChatsProvider({ children }) {
       if (portScanResponse !== null) {
         return portScanResponse;
       }
+
+      // Reset shouldRenderSavePDF if not handled by special cases
+      setShouldRenderSavePDF(false);
+
       let finalPrompt = promptInput;
       try {
         // Get security-enhanced prompt if applicable
