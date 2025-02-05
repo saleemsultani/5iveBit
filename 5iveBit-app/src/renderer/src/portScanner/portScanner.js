@@ -151,7 +151,6 @@ export const handlePortScanQuery = async (
     }
 
     // Update chat with the AI's response
-    // //////////////////
     setcurrentChat((current) => {
       const newChat = {
         ...current,
@@ -163,8 +162,6 @@ export const handlePortScanQuery = async (
       updateCurrentChat({ chatId: newChat._id, messages: newChat.messages }); // Using the new state
       return newChat;
     });
-
-    // /////////////////
 
     // Set shouldRenderSavePDF to true if certain conditions are met
     setShouldRenderSavePDF(true);
