@@ -314,17 +314,19 @@ function ChatBox() {
                     </div>
                   )}
                 </p>
-                {index === currentChat.messages.length - 1 && shouldRenderSavePDF && (
-                  <div className={styles.pdfBanner}>
-                    <Button
-                      onClick={() => savePDF(message.content)}
-                      className={styles.pdfButton}
-                      style={{ color: 'white' }}
-                    >
-                      Click here to export this information as a PDF
-                    </Button>
-                  </div>
-                )}
+                {!message.isThinking &&
+                  index === currentChat.messages.length - 1 &&
+                  shouldRenderSavePDF && (
+                    <div className={styles.pdfBanner}>
+                      <Button
+                        onClick={() => savePDF(message.content)}
+                        className={styles.pdfButton}
+                        style={{ color: 'white' }}
+                      >
+                        Click here to export this information as a PDF
+                      </Button>
+                    </div>
+                  )}
               </div>
             ))}
           </Box>
