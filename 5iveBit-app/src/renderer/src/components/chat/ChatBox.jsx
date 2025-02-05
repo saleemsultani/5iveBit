@@ -12,6 +12,7 @@ import { useState, useRef, useEffect } from 'react';
 import StartChat from './StartChat';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import { shouldRenderSavePDF } from '../../CVE/cveHandler';
+import { marked } from 'marked'; // Correctly import marked
 
 // ChatBox component handles the chat interface including message display and input
 function ChatBox() {
@@ -270,10 +271,11 @@ function ChatBox() {
     setSnackbarOpen(false);
   };
 
-  // Modify the savePDF function to accept content parameter
+  // Modify the savePDF function to convert markdown to HTML before saving
   const savePDF = async (content) => {
     try {
-      const result = await window.api.savePDF(content);
+      const htmlContent = marked(content); // Convert markdown to HTML
+      const result = await window.api.savePDF(htmlContent);
       setSnackbarMessage(result.message);
       setSnackbarOpen(true);
     } catch (error) {

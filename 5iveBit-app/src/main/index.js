@@ -18,7 +18,7 @@ import {
   updatePasswordController
 } from '../../mongodb api/userController';
 import { createChat, getAllChats, updateChat } from '../../mongodb api/chatController';
-import PDFDocument from 'pdfkit';
+import puppeteer from 'puppeteer';
 
 // Config .env
 dotenv.config();
@@ -351,30 +351,18 @@ ipcMain.handle('save-pdf', async (_, content) => {
       return { success: false, message: 'Save cancelled by user.' };
     }
 
-    const doc = new PDFDocument();
-    const stream = fs.createWriteStream(filePath);
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
 
-    doc.pipe(stream);
+    // Set the content of the page to the HTML content
+    await page.setContent(content);
 
-    // Add title
-    doc.fontSize(20).text('5iveBot Chat Export', { align: 'center' });
-    doc.moveDown();
+    // Generate the PDF
+    await page.pdf({ path: filePath, format: 'A4' });
 
-    // Add content with proper formatting
-    doc.fontSize(12);
-    content.split('\n').forEach((line) => {
-      doc.text(line.trim());
-      doc.moveDown(0.5);
-    });
+    await browser.close();
 
-    doc.end();
-
-    return new Promise((resolve, reject) => {
-      stream.on('finish', () => {
-        resolve({ success: true, message: 'PDF saved successfully!' });
-      });
-      stream.on('error', reject);
-    });
+    return { success: true, message: 'PDF saved successfully!' };
   } catch (error) {
     console.error('Failed to save PDF:', error);
     return { success: false, message: 'Failed to save PDF.' };
