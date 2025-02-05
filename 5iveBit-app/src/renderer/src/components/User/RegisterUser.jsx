@@ -48,6 +48,7 @@ const RegisterUser = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // send request for registering new user along with necessary data
       let res = await window.api.registerUser(
         JSON.stringify({
           firstName,
@@ -62,6 +63,7 @@ const RegisterUser = () => {
         setSnackbarOpen(true);
         setSnackbarMessage(res.message);
         setSoverity('success');
+        // navigate to login page
         navigate('/login-user');
       } else {
         setSnackbarOpen(true);
@@ -90,6 +92,7 @@ const RegisterUser = () => {
         <Typography variant="h4" className={styles.title}>
           Create an account
         </Typography>
+        {/* register user form */}
         <form onSubmit={handleSubmit}>
           <Box className={styles.inputGroupName}>
             <StyledInput

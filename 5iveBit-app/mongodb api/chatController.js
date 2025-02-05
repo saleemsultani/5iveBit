@@ -3,14 +3,18 @@ import { tokenManager } from './tokenManager';
 import userModel from './userModel';
 import JWT from 'jsonwebtoken';
 
+// create new chat
 export const createChat = async (event, chatData) => {
   const { messages } = chatData;
+
+  // check the login token (whether or not the user is loged in)
   const token = tokenManager.getToken();
 
   if (!token) {
     return { success: false, message: 'You are not logged in' };
   }
 
+  //  decode the token to extract user ID
   try {
     const decode = JWT.verify(token, process.env.JWT_SECRET);
     const userId = decode._id;
@@ -56,17 +60,21 @@ export const createChat = async (event, chatData) => {
   }
 };
 
+// Get All chats
 export const getAllChats = async () => {
+  // check the login token (whether or not the user is loged in)
   const token = tokenManager.getToken();
   if (!token) {
     return { success: false, message: 'You are not loged in' };
   }
   try {
+    // decode the token to find userId
     const decode = JWT.verify(token, process.env.JWT_SECRET);
     const userId = decode._id;
+
+    // Find all chats for the user
     const chats = await chatModel.find({ user: userId }).select('-user');
-    console.log('this is alll chats: ', chats);
-    console.log('this is all chats, stringified :', chats);
+
     if (chats) {
       return { success: true, message: 'Chats found successfully', chats: JSON.stringify(chats) };
     }
@@ -83,16 +91,19 @@ export const getAllChats = async () => {
 export const updateChat = async (event, chatData) => {
   const { chatId, messages } = JSON.parse(chatData);
 
+  // check the login token
   const token = tokenManager.getToken();
   if (!token) {
     return { success: false, message: 'You are not logged in' };
   }
 
   try {
+    // find the chat with it's id and update it
     const chat = await chatModel.findById(chatId);
     if (!chat) {
       return { success: false, message: 'Chat not found' };
     } else {
+      // set chat messages to the messages passed by user and then save it
       chat.messages = messages;
       const res = await chat.save();
       console.log('this is update chat : ', res);

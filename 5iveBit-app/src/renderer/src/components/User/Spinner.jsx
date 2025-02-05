@@ -8,9 +8,11 @@ const Spinner = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // set an interval of 1 sec
     const interval = setInterval(() => {
       setCount((prevValue) => --prevValue);
     }, 1000);
+    // when counts reach 0 then noavigate to login user page and tehn clear interval
     count === 0 && navigate('/login-user');
     return () => clearInterval(interval);
   }, [count, navigate]);

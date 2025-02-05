@@ -4,11 +4,11 @@ import JWT from 'jsonwebtoken';
 import { tokenManager } from './tokenManager';
 import chatModel from './chatModel';
 
+// Register a new user
 export const registerController = async (event, userData) => {
   try {
+    // parse the data passed by user
     const { firstName, lastName, email, password, subscribe } = JSON.parse(userData);
-    console.log('this is user data');
-    console.log(userData);
 
     //validations
     if (!firstName) {
@@ -24,18 +24,19 @@ export const registerController = async (event, userData) => {
       return { success: false, message: 'Password is Required' };
     }
 
-    //check user
+    //check user validation
     const exisitingUser = await userModel.findOne({ email });
-    //exisiting user
+    //Check if the user already exist (i.e user is already registered)
     if (exisitingUser) {
       return {
         success: false,
         message: 'Already Register please login'
       };
     }
-    //register user
+
+    // encrypt the password before saving it to database
     const hashedPassword = await hashPassword(password);
-    //save
+    //register the user
     const user = await new userModel({
       firstName,
       lastName,
@@ -65,18 +66,20 @@ export const registerController = async (event, userData) => {
   }
 };
 
-//POST LOGIN
+// LOGIN User
 export const loginController = async (event, userData) => {
   try {
     const { email, password } = userData;
+
     //validation
+    // check if email and password are provided
     if (!email || !password) {
       return {
         success: false,
         message: 'Invalid email or password'
       };
     }
-    //check user
+    //check whether user exists
     const user = await userModel.findOne({ email });
     if (!user) {
       return {
@@ -84,6 +87,7 @@ export const loginController = async (event, userData) => {
         message: 'Email is not registerd'
       };
     }
+    //check whether password is correct
     const match = await comparePassword(password, user.password);
     if (!match) {
       return {
@@ -91,8 +95,8 @@ export const loginController = async (event, userData) => {
         message: 'Invalid Password'
       };
     }
-    // const JWT_SECRET = 'kjfoi093';
-    //token
+
+    //Set a login Token and then save it
     const token = await JWT.sign({ _id: user._id }, process.env.JWT_SECRET);
 
     tokenManager.saveToken(token); //store the token
@@ -122,8 +126,11 @@ export const loginController = async (event, userData) => {
 // log out
 export const logoutController = async () => {
   try {
+    // check for the token(i.e whether the user is logged in)
     const token = tokenManager.getToken();
-    tokenManager.deleteToken(token);
+
+    // if the token exists then delete the login token
+    if (token) tokenManager.deleteToken(token);
     return {
       success: true,
       message: 'logout successfully'
@@ -135,15 +142,18 @@ export const logoutController = async () => {
 
 // check if user is log in
 export const isLogin = async () => {
+  // check for the token
   const token = tokenManager.getToken();
   if (!token) {
     return { success: false, message: 'You are not loged in' };
   }
 
+  // decode the token with user's id to extract user data
   try {
     const decode = JWT.verify(token, process.env.JWT_SECRET);
     const user = await userModel.findById(decode._id);
 
+    // return all the necessary user related data
     return {
       success: true,
       user: JSON.stringify({
@@ -191,8 +201,10 @@ export const updatePasswordController = async (event, userData) => {
       };
     }
 
-    //update password
+    // encrypt the password before saving it to Data base
     const hashedPassword = await hashPassword(newPassword);
+
+    //update password
     user.password = hashedPassword;
     await user.save();
     return {
@@ -224,6 +236,7 @@ export const deleteUserController = async () => {
   }
 
   try {
+    // decode the token to extract user's id
     const decode = JWT.verify(token, process.env.JWT_SECRET);
     const userId = decode._id;
     // Check if user exists

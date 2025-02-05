@@ -47,7 +47,11 @@ const UserProfile = () => {
     if (type === 'confirm') setShowConfirmPassword(!showConfirmPassword);
   };
 
+  // handle account deleteion
+
   async function deleteAccount() {
+    // print a popup for user confirmation if usr is trying to delte account
+    // the option object is the details passed to popup
     const popUpResponse = await window.api.askUserPopup({
       type: 'warning',
       title: 'Delete Account',
@@ -55,8 +59,10 @@ const UserProfile = () => {
       buttons: ['Cancel', 'Delete']
     });
 
+    // if the user selects delete then delete user account
     if (popUpResponse === 'Delete') {
       console.log('Deleteing account...');
+      // call delete user to delete the user and all chats associated with user
       const res = await window.api.deleteUser();
       console.log(res);
       if (res.success) {
@@ -71,6 +77,7 @@ const UserProfile = () => {
     }
   }
 
+  // handle the update form for user profile
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Trim inputs to avoid accidental spaces
@@ -111,8 +118,6 @@ const UserProfile = () => {
     // Make the API request to update the password
     try {
       const res = await window.api.updatePassword(userData);
-      console.log('this is res inside userProfile');
-      console.log(res);
       if (res.success) {
         setSnackbarOpen(true);
         setSoverity('success');
