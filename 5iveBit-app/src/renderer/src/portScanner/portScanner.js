@@ -52,7 +52,7 @@ export const handlePortScanQuery = async (
   console.log('handlePortScanQuery called with promptInput:', promptInput);
 
   // Check if the promptInput contains relevant terms for port scanning
-  const relevantTerms = /(port|open|scan|check)/i;
+  const relevantTerms = /port/i;
   if (relevantTerms.test(promptInput)) {
     console.log('Relevant terms found in promptInput for port scanning.');
 
