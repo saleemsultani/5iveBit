@@ -10,6 +10,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import { formatMessage, isLikelyCode } from './ChatFormatCode';
 import { useState, useRef, useEffect } from 'react';
 import StartChat from './StartChat';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 
 // ChatBox component handles the chat interface including message display and input
 function ChatBox() {
@@ -268,6 +269,19 @@ function ChatBox() {
     setSnackbarOpen(false);
   };
 
+  // Modify the savePDF function to accept content parameter
+  const savePDF = async (content) => {
+    try {
+      const result = await window.api.savePDF(content);
+      setSnackbarMessage(result.message);
+      setSnackbarOpen(true);
+    } catch (error) {
+      console.error('Error saving PDF:', error);
+      setSnackbarMessage('Failed to save PDF');
+      setSnackbarOpen(true);
+    }
+  };
+
   return (
     <>
       <Box className={styles.chatBoxContainer}>
@@ -289,12 +303,20 @@ function ChatBox() {
                     )}
                   </span>
                   {message.role === 'assistant' && !message.isThinking && (
-                    <IconButton
-                      onClick={() => copyToClipboard(message.content)}
-                      className={styles.copyButton}
-                    >
-                      <ContentCopyIcon className={styles.copyIcon} />
-                    </IconButton>
+                    <div className={styles.messageActions}>
+                      <IconButton
+                        onClick={() => copyToClipboard(message.content)}
+                        className={styles.actionButton}
+                      >
+                        <ContentCopyIcon className={styles.actionIcon} />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => savePDF(message.content)}
+                        className={styles.actionButton}
+                      >
+                        <PictureAsPdfIcon className={styles.actionIcon} />
+                      </IconButton>
+                    </div>
                   )}
                 </p>
               </div>

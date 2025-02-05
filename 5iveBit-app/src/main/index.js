@@ -18,6 +18,7 @@ import {
   updatePasswordController
 } from '../../mongodb api/userController';
 import { createChat, getAllChats, updateChat } from '../../mongodb api/chatController';
+import PDFDocument from 'pdfkit';
 
 // Config .env
 dotenv.config();
@@ -333,3 +334,49 @@ ipcMain.handle('delete-user', deleteUserController);
 ipcMain.handle('create-chat', createChat);
 ipcMain.handle('get-all-chats', getAllChats);
 ipcMain.handle('update-chat', updateChat);
+
+// PDF generation
+ipcMain.handle('save-pdf', async (_, content) => {
+  try {
+    const downloadsFolder = getDownloadsFolder();
+
+    const { filePath } = await dialog.showSaveDialog({
+      title: 'Save as PDF',
+      defaultPath: join(downloadsFolder, 'chat.pdf'),
+      buttonLabel: 'Save PDF',
+      filters: [{ name: 'PDF Files', extensions: ['pdf'] }]
+    });
+
+    if (!filePath) {
+      return { success: false, message: 'Save cancelled by user.' };
+    }
+
+    const doc = new PDFDocument();
+    const stream = fs.createWriteStream(filePath);
+
+    doc.pipe(stream);
+
+    // Add title
+    doc.fontSize(20).text('5iveBot Chat Export', { align: 'center' });
+    doc.moveDown();
+
+    // Add content with proper formatting
+    doc.fontSize(12);
+    content.split('\n').forEach((line) => {
+      doc.text(line.trim());
+      doc.moveDown(0.5);
+    });
+
+    doc.end();
+
+    return new Promise((resolve, reject) => {
+      stream.on('finish', () => {
+        resolve({ success: true, message: 'PDF saved successfully!' });
+      });
+      stream.on('error', reject);
+    });
+  } catch (error) {
+    console.error('Failed to save PDF:', error);
+    return { success: false, message: 'Failed to save PDF.' };
+  }
+});

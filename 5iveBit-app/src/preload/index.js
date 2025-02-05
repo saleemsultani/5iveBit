@@ -38,7 +38,10 @@ const api = {
   // get All chats
   getAllChats: () => ipcRenderer.invoke('get-all-chats'),
   // update chat
-  updateChat: (chatData) => ipcRenderer.invoke('update-chat', chatData)
+  updateChat: (chatData) => ipcRenderer.invoke('update-chat', chatData),
+
+  // save PDF
+  savePDF: (content) => ipcRenderer.invoke('save-pdf', content)
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to
