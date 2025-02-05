@@ -11,6 +11,7 @@ import { formatMessage, isLikelyCode } from './ChatFormatCode';
 import { useState, useRef, useEffect } from 'react';
 import StartChat from './StartChat';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import { shouldRenderSavePDF } from '../../CVE/cveHandler';
 
 // ChatBox component handles the chat interface including message display and input
 function ChatBox() {
@@ -310,12 +311,14 @@ function ChatBox() {
                       >
                         <ContentCopyIcon className={styles.actionIcon} />
                       </IconButton>
-                      <IconButton
-                        onClick={() => savePDF(message.content)}
-                        className={styles.actionButton}
-                      >
-                        <PictureAsPdfIcon className={styles.actionIcon} />
-                      </IconButton>
+                      {index === currentChat.messages.length - 1 && shouldRenderSavePDF && (
+                        <IconButton
+                          onClick={() => savePDF(message.content)}
+                          className={styles.actionButton}
+                        >
+                          <PictureAsPdfIcon className={styles.actionIcon} />
+                        </IconButton>
+                      )}
                     </div>
                   )}
                 </p>

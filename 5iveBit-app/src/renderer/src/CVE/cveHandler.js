@@ -2,6 +2,12 @@ import { fetchCVEByID } from './cveSearchAPI';
 import { fetchCVEsByVendorAndProduct } from './openCVEAPI';
 import { WrapperPrompt } from '../contexts/prompts';
 
+export let shouldRenderSavePDF = false;
+
+export const setShouldRenderSavePDF = (value) => {
+  shouldRenderSavePDF = value;
+};
+
 export const handleCVEQuery = async (
   promptInput,
   updatedMessages,
@@ -169,6 +175,9 @@ export const handleCVEQuery = async (
     });
 
     // /////////////////
+
+    // Set shouldRenderSavePDF to true if certain conditions are met
+    setShouldRenderSavePDF(true);
 
     return data.message.content;
   } else {

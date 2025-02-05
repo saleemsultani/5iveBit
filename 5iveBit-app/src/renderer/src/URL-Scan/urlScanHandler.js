@@ -1,5 +1,6 @@
 import { WrapperPrompt } from '../contexts/prompts';
 import { scanURL, getAnalysisResults } from './urlScanAPI';
+import { setShouldRenderSavePDF } from '../CVE/cveHandler';
 
 export const handleURLScanQuery = async (
   promptInput,
@@ -114,6 +115,9 @@ export const handleURLScanQuery = async (
       updateCurrentChat({ chatId: newChat._id, messages: newChat.messages }); // Using the new state
       return newChat;
     });
+
+    // Set shouldRenderSavePDF to true if certain conditions are met
+    setShouldRenderSavePDF(true);
 
     return data.message.content;
   } else {
