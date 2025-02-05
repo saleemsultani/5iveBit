@@ -1,4 +1,4 @@
-import { Box, Button, Stack, IconButton, Snackbar } from '@mui/material';
+import { Box, Button, Stack, IconButton, Snackbar, Typography } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import SendIcon from '@mui/icons-material/Send';
 import Textarea from '@mui/joy/Textarea';
@@ -406,6 +406,25 @@ function ChatBox() {
           anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
           className={styles.snackbar}
         />
+
+        {/* Disclaimer at the bottom */}
+        <Box
+          sx={{
+            position: 'fixed',
+            bottom: '10px',
+            left: '50%',
+            transform: 'translateX(-50%)'
+          }}
+        >
+          <Typography
+            variant="caption"
+            sx={{
+              fontFamily: 'sans-serif'
+            }}
+          >
+            Disclaimer: 5iveBot is AI, not a human expert—double-check critical information!
+          </Typography>
+        </Box>
       </Box>
     </>
   );
