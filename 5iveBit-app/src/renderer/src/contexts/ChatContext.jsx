@@ -140,7 +140,7 @@ function ChatsProvider({ children }) {
         ]
       }));
 
-      // Use the new handleCVEQuery function
+      // Check if the user query is about CVEs
       const cveResponse = await handleCVEQuery(
         promptInput,
         updatedMessages,
@@ -151,7 +151,7 @@ function ChatsProvider({ children }) {
         return cveResponse;
       }
 
-      // Use the new handleURLScanQuery function
+      // Check if the user query is about URL scanning
       const URLScanResponse = await handleURLScanQuery(
         promptInput,
         updatedMessages,
@@ -162,7 +162,7 @@ function ChatsProvider({ children }) {
         return URLScanResponse;
       }
 
-      // Use the new handlePortScanQuery function
+      // Check if the user query is about port scanning
       const portScanResponse = await handlePortScanQuery(
         promptInput,
         updatedMessages,
@@ -174,6 +174,7 @@ function ChatsProvider({ children }) {
       }
 
       // Reset shouldRenderSavePDF if not handled by special cases
+      // This is to prevent the Report Generation being offered for normal messages
       setShouldRenderSavePDF(false);
 
       let finalPrompt = promptInput;
@@ -187,7 +188,8 @@ function ChatsProvider({ children }) {
       } catch (error) {
         console.error('Error in security suggestion handler:', error);
       }
-      //Prompt Levels
+
+      // User experience level prompt
       let levelPrompt = '';
       if (currentLevel === 'beginner') {
         levelPrompt = beginnerPrompt;
@@ -234,6 +236,7 @@ function ChatsProvider({ children }) {
         throw new Error('Invalid JSON response');
       }
 
+      // Check if the response is valid
       if (!data.message || !data.message.content) {
         console.error('No message content in data:', data);
         throw new Error('No message content in data');

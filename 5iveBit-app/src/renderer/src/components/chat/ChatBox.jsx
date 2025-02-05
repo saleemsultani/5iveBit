@@ -55,7 +55,8 @@ function ChatBox() {
     }
   }
 
-  // /////////////////////////////////////////////////
+  // Handle updating a file - ask user for confirmation before updating the file
+  // Human-in-the-loop
   const handleUpdateFile = async (content) => {
     try {
       const options = {
@@ -75,7 +76,6 @@ function ChatBox() {
       console.error('An error occurred while saving the file:', error);
     }
   };
-  // /////////////////////////////////////////////////
 
   //Current accepted file types for upload
   const acceptedFileTypes = [
@@ -125,6 +125,7 @@ function ChatBox() {
         return;
       }
 
+      // Filter out files that are not of the accepted file types
       const validFiles = uploadedFiles.filter((file) => {
         const fileName = file.name.toLowerCase();
         return acceptedFileTypes.some((ext) => fileName.endsWith(ext));
@@ -133,8 +134,7 @@ function ChatBox() {
       if (validFiles.length > 0) {
         setFiles((prev) => [...prev, ...validFiles]);
 
-        // //////////////////////////////////////////
-        // take a note of each uploaded file
+        // Keep track of each uploaded file
         validFiles.forEach((file) => {
           console.log('file Path: ', file.path);
           const filePath = file.path;
@@ -145,8 +145,6 @@ function ChatBox() {
             return [...curr, { filePath, fileName, fileExtension }];
           });
         });
-
-        // //////////////////////////////////////////
 
         if (validFiles.length === uploadedFiles.length) {
           setSnackbarMessage('File(s) uploaded');
@@ -160,7 +158,7 @@ function ChatBox() {
     }
   };
 
-  //Read file(s) as text - file(s) is pasted into chat as text for chatbot to read - multiple files will appear as one user message
+  //Read file(s) as text - file(s) is pasted into chat as text for chatbot to process - multiple files will appear as one user message
   const readFileContent = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -227,14 +225,14 @@ function ChatBox() {
         }
       }
 
-      // If there is a question to send
+      // Check if there is a question to send
       if (messageParts.length > 0) {
         const combinedMessage = messageParts.join('\n\n-\n\n');
 
         // Clear the question input before sending - no longer appears in message input box
         setQuestion('');
 
-        //Sends message
+        // Send the message to the chatbot
         await generateAnswer(combinedMessage);
       }
     } finally {
@@ -422,7 +420,7 @@ function ChatBox() {
               fontFamily: 'sans-serif'
             }}
           >
-            Disclaimer: 5iveBot is AI, not a human expert—double-check critical information!
+            Disclaimer: 5iveBot AI can make mistakes. Verify all information before taking action.
           </Typography>
         </Box>
       </Box>

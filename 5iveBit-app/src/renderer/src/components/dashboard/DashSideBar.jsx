@@ -23,8 +23,9 @@ function DashSideBar() {
   const [auth, setAuth] = useAuth();
   const navigate = useNavigate();
 
+  // Function to open email client with survey questions
   const handleSurveyClick = () => {
-    const subject = encodeURIComponent(" Quick Feedback on 5iveBot App");
+    const subject = encodeURIComponent(' Quick Feedback on 5iveBot App');
     const body = encodeURIComponent(
       `Hi there!
 
@@ -57,10 +58,10 @@ function DashSideBar() {
       Best regards,  
 
       The 5iveBit Team`
-        );
+    );
 
-  window.location.href = `mailto:contact.5iveBit@gmail.com?subject=${subject}&body=${body}`;
-};
+    window.location.href = `mailto:contact.5iveBit@gmail.com?subject=${subject}&body=${body}`;
+  };
 
   return (
     <Box className={styles.dashSideBarContainer} sx={{ overflowX: 'hidden' }}>

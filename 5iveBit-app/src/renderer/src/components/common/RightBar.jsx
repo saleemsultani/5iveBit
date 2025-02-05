@@ -14,6 +14,7 @@ function RightbarButton({ children, buttonText, onClick }) {
   );
 }
 
+// RightBar Component is the side bar of the chat interface
 function RightBar() {
   const [openHistory, setOpenHistory] = useState(false);
   const {
@@ -40,6 +41,7 @@ function RightBar() {
     setcurrentChat(foundChat);
   };
 
+  // Handle the user level change
   const handleLevelChange = (level) => {
     setCurrentLevel(level);
     setOpenLevelSelect(false);

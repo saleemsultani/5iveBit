@@ -113,9 +113,6 @@ function createWindow() {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'));
   }
-
-  // Open the DevTools. For development purposes only. Comment out when not used.
-  //mainWindow.webContents.openDevTools();
 }
 
 // This method will be called when Electron has finished
@@ -125,9 +122,7 @@ app.whenReady().then(async () => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron');
 
-  // Default open or close DevTools by F12 in development
-  // and ignore CommandOrControl + R in production.
-  // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
+  // Register global shortcuts for the app
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window);
   });
@@ -177,9 +172,6 @@ app.on('window-all-closed', () => {
   }
 });
 
-// In this file you can include the rest of your app"s specific main process
-// code. You can also put them in separate files and require them here.
-
 // Handle save-file event from renderer process
 ipcMain.handle('save-file', async (_, content) => {
   try {
@@ -211,8 +203,6 @@ ipcMain.handle('save-file', async (_, content) => {
   }
 });
 
-// /////////////////////////////////////////////
-
 // Listen for the file update request from the renderer process
 ipcMain.handle('update-file', async (event, fileDetails, content) => {
   console.log(fileDetails);
@@ -235,8 +225,6 @@ ipcMain.handle('update-file', async (event, fileDetails, content) => {
     };
   }
 });
-
-// ///////////////////////////////////////////////
 
 // pop-for-user-in-loop
 ipcMain.handle('popup-for-user-in-loop', async (event, options) => {
@@ -290,6 +278,7 @@ ipcMain.handle('check-port-status', async (_, port, host) => {
   return await checkPortStatus(port, host);
 });
 
+// Find available port in a range
 ipcMain.handle('find-available-port', async (_, startPort, endPort, host = '127.0.0.1') => {
   for (let port = startPort; port <= endPort; port++) {
     const status = await checkPortStatus(port, host);
@@ -300,6 +289,7 @@ ipcMain.handle('find-available-port', async (_, startPort, endPort, host = '127.
   throw new Error('No available ports found in range');
 });
 
+// Find in-use port in a range
 ipcMain.handle('find-in-use-port', async (_, startPort, endPort, host = '127.0.0.1') => {
   try {
     let scannedPorts = 0;
@@ -309,7 +299,7 @@ ipcMain.handle('find-in-use-port', async (_, startPort, endPort, host = '127.0.0
       if (status === 'open') {
         return port;
       }
-      // Optional: Add progress logging
+      // Add progress logging
       if (scannedPorts % 100 === 0) {
         console.log(`Scanned ${scannedPorts} ports...`);
       }

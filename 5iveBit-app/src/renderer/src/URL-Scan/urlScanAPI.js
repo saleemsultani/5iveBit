@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+// Scan URL
 export const scanURL = async (url) => {
   const encodedParams = new URLSearchParams();
   encodedParams.set('url', url);
@@ -24,6 +25,7 @@ export const scanURL = async (url) => {
   }
 };
 
+// Get URL scan results
 export const getAnalysisResults = async (analysisId) => {
   const options = {
     method: 'GET',
