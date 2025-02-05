@@ -62,7 +62,6 @@ function RightBar() {
         {/* Top Buttons */}
         <Box className={styles.topSection}>
           <RightbarButton buttonText="New Chat" onClick={handleNewChat} />
-          <RightbarButton buttonText="Reports" />
 
           {/* Chat History Button */}
           <RightbarButton
