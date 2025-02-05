@@ -9,6 +9,7 @@ export default function PrivateRoute() {
 
   useEffect(() => {
     const authCheck = async () => {
+      // check the authentication i.e the whether user is loged in or not
       const res = await window.api.checkAuth();
       if (res.success) {
         setOk(true);

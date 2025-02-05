@@ -4,17 +4,20 @@ import React from 'react';
 function AskUserButtons({ options }) {
   return (
     <>
+      {/* map through options array and generate those many buttons */}
       {options.map((option, index) => {
         const { label, onclick, color, bgcolor } = option;
         return (
           <Button
-            sx={{ backgroundColor: bgcolor,
+            sx={{
+              backgroundColor: bgcolor,
               color: color,
               margin: '2px',
               transition: 'transform 0.2s ease-in-out', // Smooth transition for hover effect
               '&:hover': {
                 transform: 'translateY(-1px)' // Moves the button up slightly
-              }}}
+              }
+            }}
             key={index}
             onClick={(e) => {
               if (onclick) {

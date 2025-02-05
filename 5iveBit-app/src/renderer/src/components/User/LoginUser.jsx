@@ -37,21 +37,25 @@ const LoginUser = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // call the loginUser for logging user in
       const res = await window.api.loginUser({
         email,
         password
       });
-      console.log('res inside login: ', res);
+
       if (res.success) {
         const parsedUser = JSON.parse(res.user);
+        // set authentication context with login token and user data
         setAuth({
           ...auth,
           user: parsedUser,
           token: res.token
         });
+        // set snackbar properties
         setSnackbarOpen(true);
         setSnackbarMessage(res.message);
         setSoverity('success');
+        // navigate to dashboard
         navigate('/dashboard');
       } else {
         setSnackbarOpen(true);
@@ -73,6 +77,7 @@ const LoginUser = () => {
           <Typography variant="h4" className={styles.title}>
             Login
           </Typography>
+          {/* Login Form */}
           <form onSubmit={handleSubmit} style={{ width: '40%' }}>
             <Box className={styles.inputGroup}>
               <StyledInput
@@ -109,6 +114,7 @@ const LoginUser = () => {
           </form>
         </Paper>
       </Box>
+      {/* snackbar for popup */}
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={3000}
